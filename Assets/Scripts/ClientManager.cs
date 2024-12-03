@@ -1,0 +1,118 @@
+using System;
+using UnityEngine;
+using WebSocketSharp;
+using Newtonsoft.Json;
+
+public class ClientManager : MonoBehaviour
+{
+    public static ClientManager Instance;
+    public StateGamePlayer stateGame = StateGamePlayer.Idle;
+    private WebSocket ws;
+    
+    public string serverURL = "ws://127.0.0.1:5555"; // Địa chỉ server WebSocket
+
+    private void Awake()
+    {
+        Instance = this;
+        ws = new WebSocket(serverURL);
+        
+        ws.OnOpen += (sender, e) =>
+        {
+            //RequestPacket packet = new RequestPacket(PacketType.UpdateStore);
+            //HandelDataAndSend(packet);
+        };
+
+        ws.OnMessage += (sender, e) =>
+        {
+            try
+            {
+                RequestPacket packet = RequestPacket.fromJson(e.Data);
+                // Xử lý dữ liệu theo packetType
+                switch (packet.packetType)
+                {
+                    case PacketType.ResponseBuy:
+                        GameManager.instance.HanderBuy(packet.abstractData);
+                        stateGame = StateGamePlayer.Idle;
+                        break;
+            
+                    case PacketType.ResponseSell:
+                        GameManager.instance.HanderSell(packet.abstractData);
+                        stateGame = StateGamePlayer.Idle;
+                        break;
+            
+                    case PacketType.ResponseUpdateStore:
+                        GameManager.instance.HanderUpdateStore(packet.updateStoreData);
+                        break;
+                }
+            }
+            catch (JsonException jsonEx)
+            {
+                Debug.LogError("Lỗi khi deserialize JSON: " + jsonEx.Message);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Lỗi xảy ra trong OnMessage: " + ex.Message);
+            }
+        };
+
+
+        ws.OnError += (sender, e) =>
+        {
+            //Todo error
+            Debug.LogError("WebSocket Error: " + e.Message);
+        };
+
+        ws.OnClose += (sender, e) =>
+        {
+            //Todo close
+            Debug.Log("Connection closed: " + e.Reason);
+        };
+    }
+    
+    void Start()
+    {
+        ws.Connect();
+    }
+    
+    // Đóng gói tập tin và chuẩn bị gửi
+    public bool HandelDataAndSend(RequestPacket requestPacket)
+    {   
+        
+        if (stateGame == StateGamePlayer.Idle)
+        {
+            if (requestPacket.packetType != PacketType.UpdateStore)
+            {
+                stateGame = StateGamePlayer.Waiting;
+            }
+            SendDataToServer(RequestPacket.toJson(requestPacket));
+            return true;
+        }
+        else
+        {
+            Debug.LogWarning("State game is currently " + stateGame);
+            return false;
+        }
+
+    }
+
+    // Gửi dữ liệu JSON đến server qua WebSocket
+    private void SendDataToServer(string jsonData)
+    {
+        if (ws.IsAlive)
+        {
+            ws.Send(jsonData);
+        }
+        else
+        {
+            Debug.LogError("WebSocket is not open. Cannot send data.");
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (ws != null && ws.IsAlive)
+        {
+            ws.Close();
+        }
+    }
+}
