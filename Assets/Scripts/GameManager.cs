@@ -36,4 +36,14 @@ public class GameManager : MonoBehaviour
                         Debug.Log(data);
                 }
         }
+
+        public void RequestGetPlayerCanAttack()
+        {
+                
+        }
+
+        public void HanderResultAttack()
+        {
+                
+        }
 }

@@ -14,8 +14,16 @@ public enum ItemType
     Gold = 0, 
     Iron = 1, 
     Food = 2
+    
 }
 
+public enum SolierType
+{
+    Melee = 0,
+    Arrow = 1,
+    Cavalry = 2,    
+    Citizen = 3
+}
 public enum StateGamePlayer
 {
     Idle = 0, 

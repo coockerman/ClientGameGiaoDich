@@ -1,134 +1,131 @@
-using System;
+using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
     public static Player instance;
-    AssetPlayer assetPlayer;
+    private AssetPlayer assetPlayer;
 
     private void Awake()
     {
         instance = this;
-        assetPlayer = new AssetPlayer(100000, 50, 100, 200);
+
+        // Khởi tạo tài nguyên ban đầu cho người chơi
+        var initialResources = new Dictionary<ItemType, float>
+        {
+            { ItemType.Gold, 50 },
+            { ItemType.Iron, 100 },
+            { ItemType.Food, 200 }
+        };
+        var solierResources = new Dictionary<SolierType, float>
+        {
+            { SolierType.Melee, 0 },
+            { SolierType.Arrow, 0 },
+            { SolierType.Cavalry, 0 },
+            { SolierType.Citizen, 0 }
+        };
+        assetPlayer = new AssetPlayer(100000, initialResources, solierResources); // 100000 là số tiền khởi đầu
     }
 
-        public bool CheckAddAsset(ItemType itemType, float price, float amount)
-        {
-            Debug.Log(assetPlayer.Money + "/" + assetPlayer.Gold + "/" + assetPlayer.Iron + "/" + assetPlayer.Food);
-            return assetPlayer.AddItem(itemType, price, amount);
-        }
+    /// <summary>
+    /// Kiểm tra và thêm tài nguyên khi mua.
+    /// </summary>
+    /// <param name="itemType">Loại tài nguyên.</param>
+    /// <param name="price">Giá mỗi đơn vị tài nguyên.</param>
+    /// <param name="amount">Số lượng tài nguyên.</param>
+    /// <returns>Trả về true nếu mua thành công.</returns>
+    public bool CheckAddAsset(ItemType itemType, float price, float amount)
+    {
+        Debug.Log("Trước giao dịch: " + assetPlayer);
+        bool result = assetPlayer.AddItem(itemType, price, amount);
+        Debug.Log("Sau giao dịch: " + assetPlayer);
+        return result;
+    }
 
-        public bool CheckRemoveAsset(ItemType itemType, float price, float amount)
-        {
-            return assetPlayer.SellItem(itemType, price, amount);
-        }
+    /// <summary>
+    /// Kiểm tra và giảm tài nguyên khi bán.
+    /// </summary>
+    /// <param name="itemType">Loại tài nguyên.</param>
+    /// <param name="price">Giá mỗi đơn vị tài nguyên.</param>
+    /// <param name="amount">Số lượng tài nguyên.</param>
+    /// <returns>Trả về true nếu bán thành công.</returns>
+    public bool CheckRemoveAsset(ItemType itemType, float price, float amount)
+    {
+        Debug.Log("Trước giao dịch: " + assetPlayer);
+        bool result = assetPlayer.SellItem(itemType, price, amount);
+        Debug.Log("Sau giao dịch: " + assetPlayer);
+        return result;
+    }
+
+    /// <summary>
+    /// Lấy số lượng tài nguyên còn lại.
+    /// </summary>
+    /// <param name="itemType">Loại tài nguyên.</param>
+    /// <returns>Số lượng tài nguyên còn lại.</returns>
+    public float GetResourceAmount(ItemType itemType)
+    {
+        return assetPlayer.GetResourceAmount(itemType);
+    }
 }
+
+
+
 
 public class AssetPlayer
 {
-    private float money;
-    private float gold;
-    private float iron;
-    private float food;
-    
-    public AssetPlayer(float money, float gold, float iron, float food)
+    private float money; // Tiền của người chơi
+    private Dictionary<ItemType, float> resources; // Lưu trữ tài nguyên
+    private Dictionary<SolierType, float> soliers;
+    public AssetPlayer(float money, Dictionary<ItemType, float> initialResources, Dictionary<SolierType, float> soliderResources)
     {
         this.money = money;
-        this.gold = gold;
-        this.iron = iron;
-        this.food = food;
+        this.resources = new Dictionary<ItemType, float>(initialResources);
+        this.soliers = new Dictionary<SolierType, float>(soliderResources);
     }
 
-    public float Money { get => money; }
-    public float Gold { get => gold; }
-    public float Iron { get => iron; }
-    public float Food { get => food; }
+    public float Money => money;
 
     public bool AddItem(ItemType itemType, float price, float amount)
     {
-        if (money < price * amount) return false;
-        RemoveMoney(price * amount);
-        
-        if (itemType == ItemType.Gold)
-            AddGold(amount);
-        else if(itemType == ItemType.Iron)
-            AddIron(amount);
-        else if(itemType == ItemType.Food)
-            AddFood(amount);
-        
+        if (price <= 0 || amount <= 0 || money < price * amount) return false;
+
+        // Trừ tiền và thêm tài nguyên
+        money -= price * amount;
+        if (resources.ContainsKey(itemType))
+        {
+            resources[itemType] += amount;
+        }
+        else
+        {
+            resources[itemType] = amount; // Nếu tài nguyên chưa tồn tại
+        }
         return true;
     }
 
     public bool SellItem(ItemType itemType, float price, float amount)
     {
-        if (itemType == ItemType.Gold)
-            return RemoveGold(amount);
-        else if (itemType == ItemType.Iron)
-            return RemoveIron(amount);
-        else if (itemType == ItemType.Food)
-            return RemoveFood(amount);
-        
-        AddMoney(price * amount);
-        return true;
-    }
-    
-    public void AddMoney(float amount)
-    {
-        money += amount;
-    }
+        if (price <= 0 || amount <= 0) return false;
 
-    public bool RemoveMoney(float amount)
-    {
-        if (money >= amount)
+        // Kiểm tra tồn tại tài nguyên và đủ số lượng để bán
+        if (resources.ContainsKey(itemType) && resources[itemType] >= amount)
         {
-            money -= amount;
+            resources[itemType] -= amount;
+            money += price * amount;
             return true;
         }
         return false;
     }
 
-    public void AddGold(float amount)
+    public float GetResourceAmount(ItemType itemType)
     {
-        gold += amount;
+        return resources.ContainsKey(itemType) ? resources[itemType] : 0f;
     }
 
-    public bool RemoveGold(float amount)
+    public override string ToString()
     {
-        if (gold >= amount)
-        {
-            gold -= amount;
-            return true;
-        }
-        return false;
-    }
-
-    public void AddIron(float amount)
-    {
-        iron += amount;
-    }
-
-    public bool RemoveIron(float amount)
-    {
-        if (iron >= amount)
-        {
-            iron -= amount;
-            return true;
-        }
-        return false;
-    }
-
-    public void AddFood(float amount)
-    {
-        food += amount;
-    }
-
-    public bool RemoveFood(float amount)
-    {
-        if (food >= amount)
-        {
-            food -= amount;
-            return true;
-        }
-        return false;
+        string resourceInfo = string.Join(", ", resources.Select(r => $"{r.Key}: {r.Value}"));
+        return $"Money: {money}, Resources: [{resourceInfo}]";
     }
 }
+
