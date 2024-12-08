@@ -6,7 +6,15 @@ public enum PacketType
     ResponseSell = 3, 
     UpdateStore = 4, 
     ResponseUpdateStore = 5, 
-    Bankrupt = 6
+    Bankrupt = 6,
+    ResponseFindOpponent = 7,
+    DayPlay = 8,
+    ResponsePlayerCanAttack = 9,
+    AttackPlayer = 10,
+    ResponseInformationAfterDay = 11,
+    ResponsePlayerAttack = 12,
+    InformationPlayer = 13,
+    ResponseResultAndResource = 14
 }
 
 public enum ItemType

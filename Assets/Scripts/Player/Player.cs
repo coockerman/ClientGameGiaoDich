@@ -28,13 +28,6 @@ public class Player : MonoBehaviour
         assetPlayer = new AssetPlayer(100000, initialResources, solierResources); // 100000 là số tiền khởi đầu
     }
 
-    /// <summary>
-    /// Kiểm tra và thêm tài nguyên khi mua.
-    /// </summary>
-    /// <param name="itemType">Loại tài nguyên.</param>
-    /// <param name="price">Giá mỗi đơn vị tài nguyên.</param>
-    /// <param name="amount">Số lượng tài nguyên.</param>
-    /// <returns>Trả về true nếu mua thành công.</returns>
     public bool CheckAddAsset(ItemType itemType, float price, float amount)
     {
         Debug.Log("Trước giao dịch: " + assetPlayer);
@@ -43,13 +36,6 @@ public class Player : MonoBehaviour
         return result;
     }
 
-    /// <summary>
-    /// Kiểm tra và giảm tài nguyên khi bán.
-    /// </summary>
-    /// <param name="itemType">Loại tài nguyên.</param>
-    /// <param name="price">Giá mỗi đơn vị tài nguyên.</param>
-    /// <param name="amount">Số lượng tài nguyên.</param>
-    /// <returns>Trả về true nếu bán thành công.</returns>
     public bool CheckRemoveAsset(ItemType itemType, float price, float amount)
     {
         Debug.Log("Trước giao dịch: " + assetPlayer);
@@ -58,11 +44,6 @@ public class Player : MonoBehaviour
         return result;
     }
 
-    /// <summary>
-    /// Lấy số lượng tài nguyên còn lại.
-    /// </summary>
-    /// <param name="itemType">Loại tài nguyên.</param>
-    /// <returns>Số lượng tài nguyên còn lại.</returns>
     public float GetResourceAmount(ItemType itemType)
     {
         return assetPlayer.GetResourceAmount(itemType);
