@@ -31,17 +31,17 @@ public class ClientManager : MonoBehaviour
                 switch (packet.packetType)
                 {
                     case PacketType.ResponseBuy:
-                        GameManager.instance.HanderBuy(packet.abstractData);
+                        GameManager.instance.HandleBuy(packet.abstractData);
                         stateGame = StateGamePlayer.Idle;
                         break;
             
                     case PacketType.ResponseSell:
-                        GameManager.instance.HanderSell(packet.abstractData);
+                        GameManager.instance.HandleSell(packet.abstractData);
                         stateGame = StateGamePlayer.Idle;
                         break;
             
                     case PacketType.ResponseUpdateStore:
-                        GameManager.instance.HanderUpdateStore(packet.updateStoreData);
+                        GameManager.instance.HandleUpdateStore(packet.updateStoreData);
                         break;
                 }
             }
@@ -64,7 +64,7 @@ public class ClientManager : MonoBehaviour
 
         ws.OnClose += (sender, e) =>
         {
-            //Todo close
+            
             Debug.Log("Connection closed: " + e.Reason);
         };
     }

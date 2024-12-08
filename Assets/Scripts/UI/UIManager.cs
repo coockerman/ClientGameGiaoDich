@@ -5,14 +5,10 @@ public class UIManager : MonoBehaviour
 {
         public void BuyGold()
         {
-                AbstractData newBuy = new AbstractData(true, ItemType.Gold, 20, 100);
-                RequestPacket newRequest = new RequestPacket(PacketType.Buy, newBuy);
-                ClientManager.Instance.HandelDataAndSend(newRequest);
+                GameManager.instance.RequestBuy(true, ItemType.Gold, 20, 10);
         }
         public void SellGold()
         {
-                AbstractData newSell = new AbstractData(true, ItemType.Gold, 20, 90);
-                RequestPacket newRequest = new RequestPacket(PacketType.Sell, newSell);
-                ClientManager.Instance.HandelDataAndSend(newRequest);
+                GameManager.instance.RequestSell(true, ItemType.Gold, 20, 10);
         }
 }

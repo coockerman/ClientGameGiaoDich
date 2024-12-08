@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
                 instance = this;
         }
 
-        public void HanderBuy(AbstractData data)
+        public void HandleBuy(AbstractData data)
         {
                 if (data.isStatus == true)
                 {
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
                         Debug.Log("Hết đồ");
                 }
         }
-        public void HanderSell(AbstractData data)
+        public void HandleSell(AbstractData data)
         {
                 if (data.isStatus == true)
                 {
@@ -29,21 +29,37 @@ public class GameManager : MonoBehaviour
                 }
         }
 
-        public void HanderUpdateStore(UpdateStoreData data)
+        public void HandleUpdateStore(UpdateStoreData data)
         {
                 if (data != null)
                 {
                         Debug.Log(data);
                 }
         }
-
-        public void RequestGetPlayerCanAttack()
+        public void RequestBuy(bool status, ItemType itemType, int price, int count)
+        {
+                AbstractData newBuy = new AbstractData(status, itemType, price, count);
+                RequestPacket newRequest = new RequestPacket(PacketType.Buy, newBuy);
+                ClientManager.Instance.HandelDataAndSend(newRequest);
+        }
+        public void RequestSell(bool status, ItemType itemType, int price, int count)
+        {
+                AbstractData newSell = new AbstractData(status, itemType, price, count);
+                RequestPacket newRequest = new RequestPacket(PacketType.Sell, newSell);
+                ClientManager.Instance.HandelDataAndSend(newRequest);
+        }
+        public void RequestBrankup()
+        {
+                
+        }
+        public void HandleResultAttack()
+        {
+                
+        }
+        public void HandleGetPlayerCanAttack()
         {
                 
         }
 
-        public void HanderResultAttack()
-        {
-                
-        }
+        
 }

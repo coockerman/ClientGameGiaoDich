@@ -30,17 +30,13 @@ public class Player : MonoBehaviour
 
     public bool CheckAddAsset(ItemType itemType, float price, float amount)
     {
-        Debug.Log("Trước giao dịch: " + assetPlayer);
         bool result = assetPlayer.AddItem(itemType, price, amount);
-        Debug.Log("Sau giao dịch: " + assetPlayer);
         return result;
     }
 
     public bool CheckRemoveAsset(ItemType itemType, float price, float amount)
     {
-        Debug.Log("Trước giao dịch: " + assetPlayer);
         bool result = assetPlayer.SellItem(itemType, price, amount);
-        Debug.Log("Sau giao dịch: " + assetPlayer);
         return result;
     }
 
