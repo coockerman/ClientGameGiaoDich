@@ -5,7 +5,7 @@ public class RequestPacket
         public PacketType packetType;
         public AbstractData abstractData;
         public UpdateStoreData updateStoreData;
-        
+        public float dayPlay;
         public RequestPacket()
         {
                 
@@ -15,6 +15,12 @@ public class RequestPacket
                 this.packetType = packetType;
                 this.abstractData = new AbstractData(true);
                 this.updateStoreData = null;
+        }
+
+        public RequestPacket(PacketType packetType, float dayPlay)
+        {
+                this.packetType = packetType;
+                this.dayPlay = dayPlay;
         }
         public RequestPacket(PacketType packetType, AbstractData abstractData)
         {

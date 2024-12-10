@@ -40,19 +40,38 @@ public class GameManager : MonoBehaviour
         {
                 AbstractData newBuy = new AbstractData(status, itemType, price, count);
                 RequestPacket newRequest = new RequestPacket(PacketType.Buy, newBuy);
-                ClientManager.Instance.HandelDataAndSend(newRequest);
+                ClientManager.Instance.HandelDataAndSend(newRequest, true);
         }
         public void RequestSell(bool status, ItemType itemType, int price, int count)
         {
                 AbstractData newSell = new AbstractData(status, itemType, price, count);
                 RequestPacket newRequest = new RequestPacket(PacketType.Sell, newSell);
-                ClientManager.Instance.HandelDataAndSend(newRequest);
+                ClientManager.Instance.HandelDataAndSend(newRequest, true);
+        }
+
+        public void RequestUpdateStore()
+        {
+                RequestPacket request = new RequestPacket(PacketType.UpdateStore);
+                ClientManager.Instance.HandelDataAndSend(request, false);
         }
         public void RequestBrankup()
         {
-                
+                RequestPacket request = new RequestPacket(PacketType.Bankrupt);
+                ClientManager.Instance.HandelDataAndSend(request, false);
         }
-        public void HandleResultAttack()
+
+        public void RequestDayPlay()
+        {
+                RequestPacket request = new RequestPacket(PacketType.DayPlay);
+                ClientManager.Instance.HandelDataAndSend(request, false);
+        }
+
+        public void RequestAttackPlayer()
+        {
+                RequestPacket request = new RequestPacket(PacketType.AttackPlayer);
+                ClientManager.Instance.HandelDataAndSend(request, false);
+        }
+        public void HandlePlayerCanAttack()
         {
                 
         }

@@ -32,6 +32,12 @@ public enum SolierType
     Cavalry = 2,    
     Citizen = 3
 }
+
+public enum TypeObj
+{
+    Item = 0,
+    Solier = 1
+}
 public enum StateGamePlayer
 {
     Idle = 0, 

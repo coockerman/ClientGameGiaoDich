@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
@@ -6,7 +7,10 @@ public class Player : MonoBehaviour
 {
     public static Player instance;
     private AssetPlayer assetPlayer;
-
+    
+    private float day = 0;
+    public float Day { get { return day; } set { day = value; } }
+    
     private void Awake()
     {
         instance = this;
@@ -28,21 +32,40 @@ public class Player : MonoBehaviour
         assetPlayer = new AssetPlayer(100000, initialResources, solierResources); // 100000 là số tiền khởi đầu
     }
 
+    private void Start()
+    {
+        day = 0;
+    }
+
     public bool CheckAddAsset(ItemType itemType, float price, float amount)
     {
         bool result = assetPlayer.AddItem(itemType, price, amount);
         return result;
     }
-
     public bool CheckRemoveAsset(ItemType itemType, float price, float amount)
     {
-        bool result = assetPlayer.SellItem(itemType, price, amount);
+        bool result = assetPlayer.RemoveItem(itemType, price, amount);
+        return result;
+    }
+    public bool CheckAddAsset(SolierType solierType, float amount)
+    {
+        bool result = assetPlayer.AddSolider(solierType, amount);
+        return result;
+    }
+    public bool CheckRemoveAsset(SolierType solierType, float amount)
+    {
+        bool result = assetPlayer.RemoveSolider(solierType, amount);
         return result;
     }
 
     public float GetResourceAmount(ItemType itemType)
     {
         return assetPlayer.GetResourceAmount(itemType);
+    }
+
+    public float GetSolierAmount(SolierType solierType)
+    {
+        return assetPlayer.GetSolierAmount(solierType);
     }
 }
 
@@ -80,7 +103,7 @@ public class AssetPlayer
         return true;
     }
 
-    public bool SellItem(ItemType itemType, float price, float amount)
+    public bool RemoveItem(ItemType itemType, float price, float amount)
     {
         if (price <= 0 || amount <= 0) return false;
 
@@ -93,12 +116,46 @@ public class AssetPlayer
         }
         return false;
     }
+    public bool AddSolider(SolierType solierType, float amount)
+    {
+        // Trừ tiền và thêm tài nguyên
+        if (soliers.ContainsKey(solierType))
+        {
+            soliers[solierType] += amount;
+        }
+        else
+        {
+            soliers[solierType] = amount; // Nếu tài nguyên chưa tồn tại
+        }
+        return true;
+    }
+
+    public bool RemoveSolider(SolierType solierType, float amount)
+    {
+        if (soliers.ContainsKey(solierType))
+        {
+            if (soliers[solierType] >= amount)
+            {
+                soliers[solierType] -= amount;
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public float GetResourceAmount(ItemType itemType)
     {
         return resources.ContainsKey(itemType) ? resources[itemType] : 0f;
     }
 
+    public float GetSolierAmount(SolierType solierType)
+    {
+        return soliers.ContainsKey(solierType) ? soliers[solierType] : 0f;
+    }
     public override string ToString()
     {
         string resourceInfo = string.Join(", ", resources.Select(r => $"{r.Key}: {r.Value}"));

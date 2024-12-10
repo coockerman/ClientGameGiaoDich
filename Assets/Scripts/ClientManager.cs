@@ -43,6 +43,10 @@ public class ClientManager : MonoBehaviour
                     case PacketType.ResponseUpdateStore:
                         GameManager.instance.HandleUpdateStore(packet.updateStoreData);
                         break;
+                    
+                    case PacketType.ResponseFindOpponent:
+                        
+                        break;
                 }
             }
             catch (JsonException jsonEx)
@@ -75,24 +79,18 @@ public class ClientManager : MonoBehaviour
     }
     
     // Đóng gói tập tin và chuẩn bị gửi
-    public bool HandelDataAndSend(RequestPacket requestPacket)
-    {   
-        
-        if (stateGame == StateGamePlayer.Idle)
+    public void HandelDataAndSend(RequestPacket requestPacket, bool isLock)
+    {
+        if (isLock)
         {
-            if (requestPacket.packetType != PacketType.UpdateStore)
+            if (stateGame == StateGamePlayer.Waiting)
             {
-                stateGame = StateGamePlayer.Waiting;
+                Debug.Log("Waiting for request");
+                return;
             }
-            SendDataToServer(RequestPacket.toJson(requestPacket));
-            return true;
+            stateGame = StateGamePlayer.Waiting;
         }
-        else
-        {
-            Debug.LogWarning("State game is currently " + stateGame);
-            return false;
-        }
-
+        SendDataToServer(RequestPacket.toJson(requestPacket));
     }
 
     // Gửi dữ liệu JSON đến server qua WebSocket
