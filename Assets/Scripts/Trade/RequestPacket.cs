@@ -6,6 +6,7 @@ public class RequestPacket
         public AbstractData abstractData;
         public UpdateStoreData updateStoreData;
         public float dayPlay;
+        public string namePlayer;
         public RequestPacket()
         {
                 
@@ -34,6 +35,12 @@ public class RequestPacket
                 this.packetType = packetType;
                 this.abstractData = null;
                 this.updateStoreData = updateStoreData;
+        }
+
+        public RequestPacket(PacketType packetType, string namePlayer)
+        {
+                this.packetType = packetType;
+                this.namePlayer = namePlayer;
         }
         public static string toJson(RequestPacket requestPacket)
         {

@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class Builder : MonoBehaviour
 {
+        public static Builder instance;
+
+        private void Awake()
+        {
+                instance = this;
+        }
+
         public List<ScriptableBuild> listBuild = new List<ScriptableBuild>();
         public List<UITransformBuild> listUITransformBuild = new List<UITransformBuild>();
         public float timeDay = 15f;

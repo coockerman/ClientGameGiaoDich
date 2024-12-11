@@ -8,12 +8,16 @@ public class UIOpenBuild : MonoBehaviour
 {
         public Button btnOpenBuild;
         public Button btnExit;
+        public TextMeshProUGUI txtOrder;
         public TextMeshProUGUI txtTitle;
+        public TextMeshProUGUI txtStatus;
 
-        public void Init(string title, UnityAction openBuild)
+        public void Init(string order, string title, string status, UnityAction openBuild)
         {
                 Clear();
+                txtOrder.text = order;
                 txtTitle.text = title;
+                txtStatus.text = status;
                 btnOpenBuild.onClick.AddListener(openBuild);
                 btnExit.onClick.AddListener(OffOpenBuild);
         }
@@ -25,7 +29,9 @@ public class UIOpenBuild : MonoBehaviour
         }
         void Clear()
         {
+                txtOrder.text = "";
                 txtTitle.text = "";
+                txtStatus.text = "";
                 btnOpenBuild.onClick.RemoveAllListeners();
                 btnExit.onClick.RemoveAllListeners();
         }

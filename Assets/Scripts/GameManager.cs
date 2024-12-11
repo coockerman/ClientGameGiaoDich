@@ -36,6 +36,18 @@ public class GameManager : MonoBehaviour
                         Debug.Log(data);
                 }
         }
+
+        public void HandleGetNamePlayer(string namePlayer)
+        {
+                if (namePlayer != "")
+                {
+                        Player.instance.SetupNamePlayer(namePlayer);
+                }
+                else
+                {
+                        Debug.Log("Can get name player");
+                }
+        }
         public void RequestBuy(bool status, ItemType itemType, int price, int count)
         {
                 AbstractData newBuy = new AbstractData(status, itemType, price, count);
@@ -71,14 +83,7 @@ public class GameManager : MonoBehaviour
                 RequestPacket request = new RequestPacket(PacketType.AttackPlayer);
                 ClientManager.Instance.HandelDataAndSend(request, false);
         }
-        public void HandlePlayerCanAttack()
-        {
-                
-        }
-        public void HandleGetPlayerCanAttack()
-        {
-                
-        }
+        
 
         
 }

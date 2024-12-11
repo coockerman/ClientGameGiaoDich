@@ -7,14 +7,14 @@ public class Player : MonoBehaviour
 {
     public static Player instance;
     private AssetPlayer assetPlayer;
-    
-    private float day = 0;
-    public float Day { get { return day; } set { day = value; } }
+    private string namePlayer;
+    private int day = 1;
+    public int Day { get { return day; } set { day = value; } }
     
     private void Awake()
     {
         instance = this;
-
+        
         // Khởi tạo tài nguyên ban đầu cho người chơi
         var initialResources = new Dictionary<ItemType, float>
         {
@@ -34,9 +34,13 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        day = 0;
     }
 
+    public void SetupNamePlayer(string namePlayer)
+    {
+        this.namePlayer = namePlayer;
+        UIManager.instance.uiInformation.Init(namePlayer, day);
+    }
     public bool CheckAddAsset(ItemType itemType, float price, float amount)
     {
         bool result = assetPlayer.AddItem(itemType, price, amount);
@@ -67,6 +71,11 @@ public class Player : MonoBehaviour
     {
         return assetPlayer.GetSolierAmount(solierType);
     }
+
+    public float GetMoneyAmount()
+    {
+        return assetPlayer.Money;
+    }
 }
 
 
@@ -88,7 +97,7 @@ public class AssetPlayer
 
     public bool AddItem(ItemType itemType, float price, float amount)
     {
-        if (price <= 0 || amount <= 0 || money < price * amount) return false;
+        if (price < 0 || amount <= 0 || money < price * amount) return false;
 
         // Trừ tiền và thêm tài nguyên
         money -= price * amount;
@@ -100,18 +109,20 @@ public class AssetPlayer
         {
             resources[itemType] = amount; // Nếu tài nguyên chưa tồn tại
         }
+        UIManager.instance.UpdateUIViewItems();
         return true;
     }
 
     public bool RemoveItem(ItemType itemType, float price, float amount)
     {
-        if (price <= 0 || amount <= 0) return false;
+        if (price < 0 || amount <= 0) return false;
 
         // Kiểm tra tồn tại tài nguyên và đủ số lượng để bán
         if (resources.ContainsKey(itemType) && resources[itemType] >= amount)
         {
             resources[itemType] -= amount;
             money += price * amount;
+            UIManager.instance.UpdateUIViewItems();
             return true;
         }
         return false;
@@ -127,6 +138,7 @@ public class AssetPlayer
         {
             soliers[solierType] = amount; // Nếu tài nguyên chưa tồn tại
         }
+        UIManager.instance.UpdateUIViewItems();
         return true;
     }
 
@@ -137,6 +149,7 @@ public class AssetPlayer
             if (soliers[solierType] >= amount)
             {
                 soliers[solierType] -= amount;
+                UIManager.instance.UpdateUIViewItems();
                 return true;
             }
             return false;

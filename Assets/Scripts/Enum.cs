@@ -14,7 +14,9 @@ public enum PacketType
     ResponseInformationAfterDay = 11,
     ResponsePlayerAttack = 12,
     InformationPlayer = 13,
-    ResponseResultAndResource = 14
+    ResponseResultAndResource = 14,
+    NamePlayer = 15,
+    ResponseNamePlayer = 16
 }
 
 public enum ItemType

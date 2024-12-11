@@ -27,7 +27,7 @@ public class UITransformBuild : MonoBehaviour
                         btnClickBuilding.onClick.RemoveAllListeners();
                         btnClickBuilding.onClick.AddListener(() =>
                         {
-                                
+                                //Todo build
                         });
                 }
                 else
@@ -40,11 +40,16 @@ public class UITransformBuild : MonoBehaviour
                         {
                                 if (CheckOpenCanBuild())
                                 {
-                                        UIManager.instance.OnUIOpenBuild(GetItemOpenBuild(), () => { OpenBuild(); });
+                                        UIManager.instance.OnUIOpenBuild("Khu đất thứ: " + order.ToString(), 
+                                                GetItemOpenBuild(), 
+                                                "Bạn có thể mở ô đất",
+                                                () => { OpenBuild(); });
                                 }
                                 else
                                 {
-                                        UIManager.instance.OnUIOpenBuild(GetItemOpenBuild()+ "(Bạn ko đủ nguyên liệu)",
+                                        UIManager.instance.OnUIOpenBuild("Khu đất thứ: " + order.ToString(),
+                                                GetItemOpenBuild(),
+                                                "Thiếu nguyên liệu rồi",
                                                 () =>
                                                 {
                                                         Debug.Log("Ko đủ nguyên liệu");

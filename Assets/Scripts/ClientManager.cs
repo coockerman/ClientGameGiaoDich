@@ -47,6 +47,9 @@ public class ClientManager : MonoBehaviour
                     case PacketType.ResponseFindOpponent:
                         
                         break;
+                    case PacketType.ResponseNamePlayer:
+                        GameManager.instance.HandleGetNamePlayer(packet.namePlayer);
+                        break;
                 }
             }
             catch (JsonException jsonEx)
