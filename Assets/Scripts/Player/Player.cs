@@ -7,10 +7,10 @@ public class Player : MonoBehaviour
 {
     public static Player instance;
     private AssetPlayer assetPlayer;
-    private string namePlayer;
+    private string namePlayer = "default";
     private int day = 1;
     public int Day { get { return day; } set { day = value; } }
-    
+    public string NamePlayer {get {return namePlayer; }}
     private void Awake()
     {
         instance = this;

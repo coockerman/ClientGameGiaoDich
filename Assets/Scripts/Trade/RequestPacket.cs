@@ -20,6 +20,12 @@ public class RequestPacket
                 this.updateStoreData = null;
         }
 
+        public RequestPacket(PacketType packetType, string namePlayer, string messagePlayer)
+        {
+                this.packetType = packetType;
+                this.namePlayer = namePlayer;
+                this.messagePlayer = messagePlayer;
+        }
         public RequestPacket(PacketType packetType, float dayPlay)
         {
                 this.packetType = packetType;

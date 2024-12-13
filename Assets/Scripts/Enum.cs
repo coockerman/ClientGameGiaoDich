@@ -48,3 +48,9 @@ public enum StateGamePlayer
     Waiting = 1, 
     Processing = 2
 }
+
+public enum PlayerRole
+{
+    Self,
+    Opponent
+}

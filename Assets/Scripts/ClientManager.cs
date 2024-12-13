@@ -51,7 +51,7 @@ public class ClientManager : MonoBehaviour
                         GameManager.instance.HandleGetNamePlayer(packet.namePlayer);
                         break;
                     case PacketType.ResponseMessagePlayer:
-                        
+                        GameManager.instance.HandelMessagePlayer(packet.namePlayer, packet.messagePlayer);
                         break;
                 }
             }

@@ -48,6 +48,14 @@ public class GameManager : MonoBehaviour
                         Debug.Log("Can get name player");
                 }
         }
+
+        public void HandelMessagePlayer(string namePlayer, string message)
+        {
+                if (namePlayer != Player.instance.NamePlayer)
+                {
+                        UIChat.instance.CheckAddMessageOpponent(namePlayer, message);
+                }
+        }
         public void RequestBuy(bool status, ItemType itemType, int price, int count)
         {
                 AbstractData newBuy = new AbstractData(status, itemType, price, count);
@@ -64,6 +72,12 @@ public class GameManager : MonoBehaviour
         public void RequestUpdateStore()
         {
                 RequestPacket request = new RequestPacket(PacketType.UpdateStore);
+                ClientManager.Instance.HandelDataAndSend(request, false);
+        }
+
+        public void RequestMessage(string namePlayer, string message)
+        {
+                RequestPacket request = new RequestPacket(PacketType.MessagePlayer, namePlayer, message);
                 ClientManager.Instance.HandelDataAndSend(request, false);
         }
         public void RequestBrankup()
