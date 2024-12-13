@@ -50,6 +50,9 @@ public class ClientManager : MonoBehaviour
                     case PacketType.ResponseNamePlayer:
                         GameManager.instance.HandleGetNamePlayer(packet.namePlayer);
                         break;
+                    case PacketType.ResponseMessagePlayer:
+                        
+                        break;
                 }
             }
             catch (JsonException jsonEx)

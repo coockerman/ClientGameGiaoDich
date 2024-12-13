@@ -16,7 +16,9 @@ public enum PacketType
     InformationPlayer = 13,
     ResponseResultAndResource = 14,
     NamePlayer = 15,
-    ResponseNamePlayer = 16
+    ResponseNamePlayer = 16,
+    MessagePlayer = 17,
+    ResponseMessagePlayer = 18
 }
 
 public enum ItemType

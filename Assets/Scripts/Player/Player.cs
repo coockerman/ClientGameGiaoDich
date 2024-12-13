@@ -29,13 +29,18 @@ public class Player : MonoBehaviour
             { SolierType.Cavalry, 0 },
             { SolierType.Citizen, 0 }
         };
-        assetPlayer = new AssetPlayer(100000, initialResources, solierResources); // 100000 là số tiền khởi đầu
+        assetPlayer = new AssetPlayer(10000, initialResources, solierResources); // 100000 là số tiền khởi đầu
     }
 
     private void Start()
     {
     }
 
+    public void UpDayPlayer()
+    {
+        day += 1;
+        UIManager.instance.uiInformation.UpdateDayPlayer(day);
+    }
     public void SetupNamePlayer(string namePlayer)
     {
         this.namePlayer = namePlayer;

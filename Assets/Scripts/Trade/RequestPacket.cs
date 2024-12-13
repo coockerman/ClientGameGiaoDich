@@ -7,6 +7,8 @@ public class RequestPacket
         public UpdateStoreData updateStoreData;
         public float dayPlay;
         public string namePlayer;
+        public string messagePlayer;
+        
         public RequestPacket()
         {
                 
