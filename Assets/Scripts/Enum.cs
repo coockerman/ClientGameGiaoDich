@@ -13,12 +13,13 @@ public enum PacketType
     AttackPlayer = 10,
     ResponseInformationAfterDay = 11,
     ResponsePlayerAttack = 12,
-    InformationPlayer = 13,
+    RegisterPlayer = 13,
     ResponseResultAndResource = 14,
     NamePlayer = 15,
     ResponseNamePlayer = 16,
     MessagePlayer = 17,
-    ResponseMessagePlayer = 18
+    ResponseMessagePlayer = 18,
+    ResponseRegisterPlayer = 19
 }
 
 public enum ItemType
@@ -53,4 +54,9 @@ public enum PlayerRole
 {
     Self,
     Opponent
+}
+
+public enum TypeItemTrade
+{
+    Buy, Sell
 }

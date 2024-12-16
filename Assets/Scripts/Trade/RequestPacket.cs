@@ -8,7 +8,7 @@ public class RequestPacket
         public float dayPlay;
         public string namePlayer;
         public string messagePlayer;
-        
+        public bool isRegisterPlayer;
         public RequestPacket()
         {
                 
@@ -20,6 +20,12 @@ public class RequestPacket
                 this.updateStoreData = null;
         }
 
+        public RequestPacket(PacketType packetType, string namePlayer, bool isRegisterPlayer)
+        {
+                this.packetType = packetType;
+                this.namePlayer = namePlayer;
+                this.isRegisterPlayer = isRegisterPlayer;
+        }
         public RequestPacket(PacketType packetType, string namePlayer, string messagePlayer)
         {
                 this.packetType = packetType;

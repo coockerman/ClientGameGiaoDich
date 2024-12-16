@@ -7,4 +7,5 @@ public class ScriptableObj : ScriptableObject
         public ItemType itemType;
         public SolierType solierType;
         public Sprite sprite;
+        public string nameObj;
 }

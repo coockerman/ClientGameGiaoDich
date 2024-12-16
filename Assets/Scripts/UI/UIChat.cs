@@ -9,17 +9,20 @@ using Random = UnityEngine.Random;
 public class UIChat : MonoBehaviour
 {
     public static UIChat instance;
+    private RectTransform rect;
 
     private void Awake()
     {
         instance = this;
+        rect =  content.gameObject.GetComponent<RectTransform>();
     }
 
     public UIPrefabMessage prefabMessage;
     public Transform content;
     public TMP_InputField messageField;
+    public Scrollbar scrollbarVertical;
     List<UIPrefabMessage> messages = new List<UIPrefabMessage>();
-
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
@@ -57,7 +60,9 @@ public class UIChat : MonoBehaviour
     void AddChatOpponent(string nameOpponent, string value)
     {
         UIPrefabMessage newMessage = Instantiate(this.prefabMessage, content);
-        newMessage.InitMessage(PlayerRole.Opponent, GetRandomColor(), nameOpponent, value);
+        messages.Add(newMessage);
+        newMessage.InitMessage(PlayerRole.Opponent, Color.green, nameOpponent, value);
+        UpdateSizeContent();
     }
 
     Color GetRandomColor()
@@ -72,8 +77,18 @@ public class UIChat : MonoBehaviour
     void AddChatSefl(string value)
     {
         UIPrefabMessage newMessage = Instantiate(this.prefabMessage, content);
+        messages.Add(newMessage);
         string namePlayer = Player.instance.NamePlayer;
         newMessage.InitMessage(PlayerRole.Self, Color.yellow, namePlayer, value);
         GameManager.instance.RequestMessage(namePlayer, value);
+
+        UpdateSizeContent();
+    }
+
+    void UpdateSizeContent()
+    {
+        if (messages.Count <= 10) return;
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 40 * messages.Count);
+        scrollbarVertical.value = 0;
     }
 }

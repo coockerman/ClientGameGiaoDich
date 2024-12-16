@@ -51,7 +51,11 @@ public class ClientManager : MonoBehaviour
                         GameManager.instance.HandleGetNamePlayer(packet.namePlayer);
                         break;
                     case PacketType.ResponseMessagePlayer:
-                        GameManager.instance.HandelMessagePlayer(packet.namePlayer, packet.messagePlayer);
+                        GameManager.instance.HandleMessagePlayer(packet.namePlayer, packet.messagePlayer);
+                        break;
+                    case PacketType.ResponseRegisterPlayer:
+                        GameManager.instance.HandleRegisterPlayer(packet.namePlayer, packet.isRegisterPlayer);
+                        stateGame = StateGamePlayer.Idle;
                         break;
                 }
             }

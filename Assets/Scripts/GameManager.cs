@@ -1,103 +1,165 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-        public static GameManager instance;
+    public static GameManager instance;
 
-        private void Awake()
-        {
-                instance = this;
-        }
+    // Hàng đợi các hành động cần xử lý trên main thread
+    private readonly Queue<Action> mainThreadActions = new Queue<Action>();
 
-        public void HandleBuy(AbstractData data)
-        {
-                if (data.isStatus == true)
-                {
-                        Player.instance.CheckAddAsset(data.itemType, data.price, data.count);
-                }
-                else
-                {
-                        Debug.Log("Hết đồ");
-                }
-        }
-        public void HandleSell(AbstractData data)
-        {
-                if (data.isStatus == true)
-                {
-                        Player.instance.CheckRemoveAsset(data.itemType, data.price, data.count);
-                }
-        }
+    private void Awake()
+    {
+        instance = this;
+    }
 
-        public void HandleUpdateStore(UpdateStoreData data)
+    private void Update()
+    {
+        // Xử lý tất cả các hành động trong hàng đợi
+        while (mainThreadActions.Count > 0)
         {
-                if (data != null)
-                {
-                        Debug.Log(data);
-                }
+            mainThreadActions.Dequeue()?.Invoke();
         }
+    }
 
-        public void HandleGetNamePlayer(string namePlayer)
+    // Hàm tiện ích để thêm hành động vào hàng đợi
+    public void RunOnMainThread(Action action)
+    {
+        Debug.Log("RunOnMainThread");
+        lock (mainThreadActions)
         {
-                if (namePlayer != "")
-                {
-                        Player.instance.SetupNamePlayer(namePlayer);
-                }
-                else
-                {
-                        Debug.Log("Can get name player");
-                }
+            mainThreadActions.Enqueue(action);
         }
+    }
 
-        public void HandelMessagePlayer(string namePlayer, string message)
+    // Các hàm Handle...
+    public void HandleBuy(AbstractData data)
+    {
+        RunOnMainThread(() =>
         {
-                if (namePlayer != Player.instance.NamePlayer)
-                {
-                        UIChat.instance.CheckAddMessageOpponent(namePlayer, message);
-                }
-        }
-        public void RequestBuy(bool status, ItemType itemType, int price, int count)
-        {
-                AbstractData newBuy = new AbstractData(status, itemType, price, count);
-                RequestPacket newRequest = new RequestPacket(PacketType.Buy, newBuy);
-                ClientManager.Instance.HandelDataAndSend(newRequest, true);
-        }
-        public void RequestSell(bool status, ItemType itemType, int price, int count)
-        {
-                AbstractData newSell = new AbstractData(status, itemType, price, count);
-                RequestPacket newRequest = new RequestPacket(PacketType.Sell, newSell);
-                ClientManager.Instance.HandelDataAndSend(newRequest, true);
-        }
+            if (data.isStatus)
+            {
+                Player.instance.CheckAddAsset(data.itemType, data.price, data.count);
+            }
+            else
+            {
+                Debug.Log("Hết đồ");
+            }
+        });
+    }
 
-        public void RequestUpdateStore()
+    public void HandleSell(AbstractData data)
+    {
+        RunOnMainThread(() =>
         {
-                RequestPacket request = new RequestPacket(PacketType.UpdateStore);
-                ClientManager.Instance.HandelDataAndSend(request, false);
-        }
+            if (data.isStatus)
+            {
+                Player.instance.CheckRemoveAsset(data.itemType, data.price, data.count);
+            }
+        });
+    }
 
-        public void RequestMessage(string namePlayer, string message)
+    public void HandleUpdateStore(UpdateStoreData data)
+    {
+        RunOnMainThread(() =>
         {
-                RequestPacket request = new RequestPacket(PacketType.MessagePlayer, namePlayer, message);
-                ClientManager.Instance.HandelDataAndSend(request, false);
-        }
-        public void RequestBrankup()
-        {
-                RequestPacket request = new RequestPacket(PacketType.Bankrupt);
-                ClientManager.Instance.HandelDataAndSend(request, false);
-        }
+            if (data != null)
+            {
+                UIManager.instance.UpdateStoreData(data);
+            }
+        });
+    }
 
-        public void RequestDayPlay()
+    public void HandleGetNamePlayer(string namePlayer)
+    {
+        RunOnMainThread(() =>
         {
-                RequestPacket request = new RequestPacket(PacketType.DayPlay);
-                ClientManager.Instance.HandelDataAndSend(request, false);
-        }
+            if (!string.IsNullOrEmpty(namePlayer))
+            {
+                Player.instance.SetupNamePlayer(namePlayer);
+            }
+            else
+            {
+                Debug.Log("Can't get name player");
+            }
+        });
+    }
 
-        public void RequestAttackPlayer()
+    public void HandleMessagePlayer(string namePlayer, string message)
+    {
+        RunOnMainThread(() =>
         {
-                RequestPacket request = new RequestPacket(PacketType.AttackPlayer);
-                ClientManager.Instance.HandelDataAndSend(request, false);
-        }
-        
+            if (namePlayer != Player.instance.NamePlayer)
+            {
+                UIChat.instance.CheckAddMessageOpponent(namePlayer, message);
+            }
+        });
+    }
 
-        
+    public void HandleRegisterPlayer(string namePlayer, bool isRegister)
+    {
+        RunOnMainThread(() =>
+        {
+            if (isRegister)
+            {
+                Player.instance.SetupNamePlayer(namePlayer);
+            }
+            else
+            {
+                Debug.Log("Can't register player");
+            }
+        });
+    }
+
+    // Các hàm Request gửi yêu cầu
+    public void RequestBuy(bool status, ItemType itemType, int price, int count)
+    {
+        AbstractData newBuy = new AbstractData(status, itemType, count, price);
+        RequestPacket newRequest = new RequestPacket(PacketType.Buy, newBuy);
+        ClientManager.Instance.HandelDataAndSend(newRequest, true);
+    }
+
+    public void RequestSell(bool status, ItemType itemType, int price, int count)
+    {
+        AbstractData newSell = new AbstractData(status, itemType, count, price);
+        RequestPacket newRequest = new RequestPacket(PacketType.Sell, newSell);
+        ClientManager.Instance.HandelDataAndSend(newRequest, true);
+    }
+
+    public void RequestUpdateStore()
+    {
+        RequestPacket request = new RequestPacket(PacketType.UpdateStore);
+        ClientManager.Instance.HandelDataAndSend(request, false);
+    }
+
+    public void RequestMessage(string namePlayer, string message)
+    {
+        RequestPacket request = new RequestPacket(PacketType.MessagePlayer, namePlayer, message);
+        ClientManager.Instance.HandelDataAndSend(request, false);
+    }
+
+    public void RequestBrankup()
+    {
+        RequestPacket request = new RequestPacket(PacketType.Bankrupt);
+        ClientManager.Instance.HandelDataAndSend(request, false);
+    }
+
+    public void RequestDayPlay()
+    {
+        RequestPacket request = new RequestPacket(PacketType.DayPlay);
+        ClientManager.Instance.HandelDataAndSend(request, false);
+    }
+
+    public void RequestAttackPlayer()
+    {
+        RequestPacket request = new RequestPacket(PacketType.AttackPlayer);
+        ClientManager.Instance.HandelDataAndSend(request, false);
+    }
+
+    public void RequestRegisterPlayer(string namePlayer)
+    {
+        RequestPacket request = new RequestPacket(PacketType.RegisterPlayer, namePlayer);
+        ClientManager.Instance.HandelDataAndSend(request, true);
+    }
 }

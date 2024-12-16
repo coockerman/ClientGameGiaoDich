@@ -9,6 +9,7 @@ public class UIPrefabMessage : MonoBehaviour
     
     public void InitMessage(PlayerRole playerRole, Color colorName, string txtName, string txtValue)
     {
+        Debug.Log("d");
         if (playerRole == PlayerRole.Self)
         {
             gameObject.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.UpperLeft;
@@ -23,12 +24,13 @@ public class UIPrefabMessage : MonoBehaviour
         {
             gameObject.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.UpperRight;
             
+            UIPrefabText newNamePlayer = Instantiate(prefabText, transform);
+            newNamePlayer.InitText(colorName, txtName);
             
             UIPrefabText message = Instantiate(prefabText, transform);
             message.InitText(Color.black, txtValue);
             
-            UIPrefabText newNamePlayer = Instantiate(prefabText, transform);
-            newNamePlayer.InitText(colorName, txtName);
+            
         }
         
     }

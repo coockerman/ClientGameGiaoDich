@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     public static Player instance;
     private AssetPlayer assetPlayer;
-    private string namePlayer = "default";
+    private string namePlayer;
     private int day = 1;
     public int Day { get { return day; } set { day = value; } }
     public string NamePlayer {get {return namePlayer; }}
@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
     }
     public void SetupNamePlayer(string namePlayer)
     {
+        UIManager.instance.uiRegisterName.gameObject.SetActive(false);
         this.namePlayer = namePlayer;
         UIManager.instance.uiInformation.Init(namePlayer, day);
     }

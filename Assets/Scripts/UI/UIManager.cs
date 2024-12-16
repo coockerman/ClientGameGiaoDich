@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,7 +13,10 @@ public class UIManager : MonoBehaviour
         public bool isInitUIViewItems = false;
         public UIViewItemPrefab uiViewMoney;
         public UIInformation uiInformation;
-        List<UIViewItemPrefab> uiViewItemPrefabs = new List<UIViewItemPrefab>();
+        public UIRegisterName uiRegisterName;
+        public UIShop uiShop;
+        private List<UIViewItemPrefab> uiViewItemPrefabs = new List<UIViewItemPrefab>();
+        private bool isInitImgShop = false;
         private void Awake()
         {
                 instance = this;
@@ -75,6 +77,23 @@ public class UIManager : MonoBehaviour
         public void OffUIOpenBuild()
         {
                 UiOpenBuild.OffOpenBuild();
+        }
+
+        public void OnUIShop()
+        {
+                uiShop.gameObject.SetActive(true);
+                
+        }
+
+        public void UpdateStoreData(UpdateStoreData data)
+        {
+                if (!isInitImgShop)
+                {
+                        isInitImgShop = true;
+                        uiShop.UpdateStoreData(data, scriptableObjs);
+                }
+                else 
+                        uiShop.UpdateStoreData(data);
         }
         public void SendBuyGold()
         {
