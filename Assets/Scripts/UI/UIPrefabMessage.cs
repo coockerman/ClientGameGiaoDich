@@ -29,8 +29,13 @@ public class UIPrefabMessage : MonoBehaviour
             
             UIPrefabText message = Instantiate(prefabText, transform);
             message.InitText(Color.black, txtValue);
+        }
+        else if (playerRole == PlayerRole.SelfError)
+        {
+            gameObject.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.UpperLeft;
             
-            
+            UIPrefabText message = Instantiate(prefabText, transform);
+            message.InitText(Color.red, txtValue);
         }
         
     }

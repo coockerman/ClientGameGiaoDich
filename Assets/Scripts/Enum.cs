@@ -43,7 +43,7 @@ public enum TypeObj
     Item = 0,
     Solier = 1
 }
-public enum StateGamePlayer
+public enum StateTrade
 {
     Idle = 0, 
     Waiting = 1, 
@@ -53,7 +53,8 @@ public enum StateGamePlayer
 public enum PlayerRole
 {
     Self,
-    Opponent
+    Opponent,
+    SelfError
 }
 
 public enum TypeItemTrade

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,12 +9,12 @@ using Random = UnityEngine.Random;
 
 public class UIChat : MonoBehaviour
 {
-    public static UIChat instance;
     private RectTransform rect;
-
+    private float lastMessageTime = 0f; // Thời gian gửi tin nhắn lần trước
+    private float messageCooldown = 1f; // Thời gian chờ giữa 2 lần gửi (1 giây)
+    
     private void Awake()
     {
-        instance = this;
         rect =  content.gameObject.GetComponent<RectTransform>();
     }
 
@@ -38,24 +39,44 @@ public class UIChat : MonoBehaviour
     
     public void CheckAddMessageSelf()
     {
-        string txtMessage = messageField.text;
-        if (txtMessage.Length >= 36)
+        float currentTime = Time.time;
+        // Kiểm tra xem có ít nhất 1 giây giữa 2 lần gửi không
+        if (currentTime - lastMessageTime < messageCooldown)
         {
-            Debug.Log("Quá dài");
+            AddChatError("Nhắn chậm một chút nhen");
+            return;
+        }
+
+        // Cập nhật thời gian gửi tin nhắn lần này
+        lastMessageTime = currentTime;
+
+        string txtMessage = messageField.text.Trim();
+        if (txtMessage.Length >= 48)
+        {
+            AddChatError("Bạn không được gửi quá 48 kí tự");
+        }
+        else if (txtMessage == "")
+        {
+            AddChatError("Không thể gửi khoảng trống");
         }
         else
         {
             AddChatSefl(txtMessage);
             messageField.text = "";
+            messageField.ActivateInputField();
         }
     }
-    public void ClientList()
+    public void ClearListMessages()
     {
-        foreach (UIPrefabMessage prefabMessage in messages) 
+        if (messages.Count > 0)
         {
-            Destroy(prefabMessage.gameObject);
+            foreach (UIPrefabMessage prefabMessage in messages) 
+            {
+                Destroy(prefabMessage.gameObject);
+            }
+            messages.Clear();
+            UpdateSizeContent();
         }
-        messages.Clear();
     }
     void AddChatOpponent(string nameOpponent, string value)
     {
@@ -78,17 +99,60 @@ public class UIChat : MonoBehaviour
     {
         UIPrefabMessage newMessage = Instantiate(this.prefabMessage, content);
         messages.Add(newMessage);
+        
         string namePlayer = Player.instance.NamePlayer;
         newMessage.InitMessage(PlayerRole.Self, Color.yellow, namePlayer, value);
+        
         GameManager.instance.RequestMessage(namePlayer, value);
 
         UpdateSizeContent();
     }
 
+    void AddChatError(string messageError)
+    {
+        UIPrefabMessage newMessage = Instantiate(this.prefabMessage, content);
+        messages.Add(newMessage);
+        
+        string namePlayer = Player.instance.NamePlayer;
+        newMessage.InitMessage(PlayerRole.SelfError, Color.red, namePlayer, messageError);
+
+        UpdateSizeContent();
+    }
     void UpdateSizeContent()
     {
-        if (messages.Count <= 10) return;
-        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 40 * messages.Count);
-        scrollbarVertical.value = 0;
+        if (messages.Count <= 10)
+        {
+            rect.sizeDelta = new Vector2(rect.sizeDelta.x, 400);
+            scrollbarVertical.value = 1;
+        }
+        else
+        {
+            rect.sizeDelta = new Vector2(rect.sizeDelta.x, 40 * messages.Count);
+            scrollbarVertical.value = 0;
+        }
     }
+
+    public void OnChat()
+    {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        if (rectTransform == null)
+        {
+            Debug.LogError("OnChat: Đối tượng không có RectTransform.");
+            return;
+        }
+
+        // Lưu lại vị trí hiện tại (đích đến)
+        Vector2 targetPosition = rectTransform.anchoredPosition;
+
+        // Đặt vị trí ban đầu ở ngoài màn hình (bên trái)
+        Vector2 offScreenPosition = new Vector2(rectTransform.rect.width, rectTransform.anchoredPosition.y);
+        rectTransform.anchoredPosition = offScreenPosition;
+
+        // Bật đối tượng
+        gameObject.SetActive(true);
+
+        // Lướt vào vị trí hiện tại
+        rectTransform.DOAnchorPos(targetPosition, 1f).SetEase(Ease.OutExpo);
+    }
+
 }

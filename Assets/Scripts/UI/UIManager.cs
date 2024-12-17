@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,12 +11,19 @@ public class UIManager : MonoBehaviour
         public List<ScriptableObj> scriptableObjs;
         public UIOpenBuild UiOpenBuild;
         public UIViewItemPrefab UiViewItemPrefab;
-        public Transform UIViewItem;
+        public Transform UIViewItemContent;
+        
+        public GameObject UIViewListBtn;
+        public GameObject UIViewItem;
+        
         public bool isInitUIViewItems = false;
+        
         public UIViewItemPrefab uiViewMoney;
         public UIInformation uiInformation;
         public UIRegisterName uiRegisterName;
+        public UIChat uiChat;
         public UIShop uiShop;
+        
         private List<UIViewItemPrefab> uiViewItemPrefabs = new List<UIViewItemPrefab>();
         private bool isInitImgShop = false;
         private void Awake()
@@ -36,13 +45,13 @@ public class UIManager : MonoBehaviour
                         {
                                 if (scriptableObj.typeObj == TypeObj.Item)
                                 {
-                                        UIViewItemPrefab newViewItem = Instantiate(UiViewItemPrefab, UIViewItem);
+                                        UIViewItemPrefab newViewItem = Instantiate(UiViewItemPrefab, UIViewItemContent);
                                         ItemType itemType = scriptableObj.itemType;
                                         newViewItem.Init(TypeObj.Item, itemType, scriptableObj.sprite, (int) Player.instance.GetResourceAmount(itemType));
                                         uiViewItemPrefabs.Add(newViewItem);
                                 }else if (scriptableObj.typeObj == TypeObj.Solier)
                                 {
-                                        UIViewItemPrefab newViewItem = Instantiate(UiViewItemPrefab, UIViewItem);
+                                        UIViewItemPrefab newViewItem = Instantiate(UiViewItemPrefab, UIViewItemContent);
                                         SolierType solierType = scriptableObj.solierType;
                                         newViewItem.Init(TypeObj.Solier, solierType, scriptableObj.sprite, (int) Player.instance.GetSolierAmount(solierType));
                                         uiViewItemPrefabs.Add(newViewItem);
@@ -74,17 +83,64 @@ public class UIManager : MonoBehaviour
                 UiOpenBuild.Init(order, title, status, callback);
         }
 
+        public void HandleUpdateUIRegisterFinish(string namePlayer)
+        {
+                UIManager.instance.uiInformation.Init(namePlayer, 1);
+                UIManager.instance.OnUIChat();
+                uiRegisterName.SetTextDialogRegister("Đăng kí thành công", Color.green);
+                uiRegisterName.CloseUIRegister(1.5f);
+                uiInformation.OnUIInformation();
+                OnUIViewItem();
+                OnUIListBtn();
+        }
         public void OffUIOpenBuild()
         {
                 UiOpenBuild.OffOpenBuild();
         }
 
-        public void OnUIShop()
+        public void OnUIViewItem()
         {
-                uiShop.gameObject.SetActive(true);
-                
+                SlideFromTop(UIViewItem);
         }
 
+        public void OnUIListBtn()
+        {
+                SlideFromTop(UIViewListBtn);
+        }
+
+        // Hàm xử lý hiệu ứng trượt từ trên xuống
+        private void SlideFromTop(GameObject uiElement)
+        {
+                RectTransform rectTransform = uiElement.GetComponent<RectTransform>();
+                if (rectTransform == null)
+                {
+                        Debug.LogError("SlideFromTop: Đối tượng không có RectTransform.");
+                        return;
+                }
+
+                // Lưu vị trí hiện tại (đích đến)
+                Vector2 targetPosition = rectTransform.anchoredPosition;
+
+                // Đặt vị trí ban đầu (trên màn hình)
+                Vector2 offScreenPosition = new Vector2(targetPosition.x, rectTransform.rect.height + 100); // 100 là khoảng cách tùy chỉnh
+                rectTransform.anchoredPosition = offScreenPosition;
+
+                // Bật đối tượng
+                uiElement.SetActive(true);
+
+                // Tạo hiệu ứng trượt từ trên xuống
+                rectTransform.DOAnchorPos(targetPosition, 0.5f).SetEase(Ease.OutBounce); // Lướt xuống với hiệu ứng nẩy nhẹ
+        }
+        public void OnUIShop()
+        {
+                uiShop.OnShop();
+        }
+
+        public void OnUIChat()
+        {
+                uiChat.OnChat();
+        }
+        
         public void UpdateStoreData(UpdateStoreData data)
         {
                 if (!isInitImgShop)

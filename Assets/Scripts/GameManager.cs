@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -78,6 +79,7 @@ public class GameManager : MonoBehaviour
             if (!string.IsNullOrEmpty(namePlayer))
             {
                 Player.instance.SetupNamePlayer(namePlayer);
+                
             }
             else
             {
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour
         {
             if (namePlayer != Player.instance.NamePlayer)
             {
-                UIChat.instance.CheckAddMessageOpponent(namePlayer, message);
+                UIManager.instance.uiChat.CheckAddMessageOpponent(namePlayer, message);
             }
         });
     }
@@ -104,10 +106,11 @@ public class GameManager : MonoBehaviour
             if (isRegister)
             {
                 Player.instance.SetupNamePlayer(namePlayer);
+                UIManager.instance.HandleUpdateUIRegisterFinish(namePlayer);
             }
             else
             {
-                Debug.Log("Can't register player");
+                UIManager.instance.uiRegisterName.SetTextDialogRegister("Tên người chơi đã tồn tại", Color.red);
             }
         });
     }

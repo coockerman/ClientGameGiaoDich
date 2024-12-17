@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class UIShop : MonoBehaviour
@@ -160,8 +161,37 @@ public class UIShop : MonoBehaviour
         GameManager.instance.RequestBuy(true, itemType, (int) price, 1);
     }
 
+    public void OnShop()
+    {
+        CanvasGroup canvasGroup = GetOrAddCanvasGroup();
+        gameObject.SetActive(true); // Bật đối tượng
+
+        // Reset trạng thái alpha và scale trước khi mở
+        canvasGroup.alpha = 0;
+        transform.localScale = Vector3.zero;
+
+        // Tạo hiệu ứng làm mờ dần và phóng to
+        canvasGroup.DOFade(1, 0.5f); // Làm mờ dần trong 0.5 giây
+        transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack); // Phóng to với easing mượt
+    }
+
     public void ExitShop()
     {
-        gameObject.SetActive(false);
+        CanvasGroup canvasGroup = GetOrAddCanvasGroup();
+
+        // Tạo hiệu ứng làm mờ dần và thu nhỏ
+        canvasGroup.DOFade(0, 0.5f); // Làm mờ dần trong 0.5 giây
+        transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack) // Thu nhỏ mượt
+            .OnComplete(() => gameObject.SetActive(false)); // Tắt đối tượng sau khi hiệu ứng kết thúc
+    }
+
+    private CanvasGroup GetOrAddCanvasGroup()
+    {
+        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+        return canvasGroup;
     }
 }

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 public class ClientManager : MonoBehaviour
 {
     public static ClientManager Instance;
-    public StateGamePlayer stateGame = StateGamePlayer.Idle;
+    public StateTrade stateGame = StateTrade.Idle;
     private WebSocket ws;
     
     public string serverURL = "ws://127.0.0.1:5555"; // Địa chỉ server WebSocket
@@ -32,12 +32,12 @@ public class ClientManager : MonoBehaviour
                 {
                     case PacketType.ResponseBuy:
                         GameManager.instance.HandleBuy(packet.abstractData);
-                        stateGame = StateGamePlayer.Idle;
+                        stateGame = StateTrade.Idle;
                         break;
             
                     case PacketType.ResponseSell:
                         GameManager.instance.HandleSell(packet.abstractData);
-                        stateGame = StateGamePlayer.Idle;
+                        stateGame = StateTrade.Idle;
                         break;
             
                     case PacketType.ResponseUpdateStore:
@@ -55,7 +55,7 @@ public class ClientManager : MonoBehaviour
                         break;
                     case PacketType.ResponseRegisterPlayer:
                         GameManager.instance.HandleRegisterPlayer(packet.namePlayer, packet.isRegisterPlayer);
-                        stateGame = StateGamePlayer.Idle;
+                        stateGame = StateTrade.Idle;
                         break;
                 }
             }
@@ -93,12 +93,12 @@ public class ClientManager : MonoBehaviour
     {
         if (isLock)
         {
-            if (stateGame == StateGamePlayer.Waiting)
+            if (stateGame == StateTrade.Waiting)
             {
                 Debug.Log("Waiting for request");
                 return;
             }
-            stateGame = StateGamePlayer.Waiting;
+            stateGame = StateTrade.Waiting;
         }
         SendDataToServer(RequestPacket.toJson(requestPacket));
     }

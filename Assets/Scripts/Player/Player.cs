@@ -43,9 +43,7 @@ public class Player : MonoBehaviour
     }
     public void SetupNamePlayer(string namePlayer)
     {
-        UIManager.instance.uiRegisterName.gameObject.SetActive(false);
         this.namePlayer = namePlayer;
-        UIManager.instance.uiInformation.Init(namePlayer, day);
     }
     public bool CheckAddAsset(ItemType itemType, float price, float amount)
     {
