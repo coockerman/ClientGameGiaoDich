@@ -26,7 +26,8 @@ public class UIManager : MonoBehaviour
         public UIChat uiChat;
         public UIShop uiShop;
         public UIBuilding uiBuilding;
-
+        public UIViewListGround uiViewListGround;
+        
         public TextMeshProUGUI uiInfoConnectText;
         
         private List<UIViewItemPrefab> uiViewItemPrefabs = new List<UIViewItemPrefab>();
@@ -93,11 +94,14 @@ public class UIManager : MonoBehaviour
 
         public void HandleUpdateUIRegisterFinish(string namePlayer)
         {
-                UIManager.instance.uiInformation.Init(namePlayer, 1);
-                UIManager.instance.OnUIChat();
+                uiInformation.Init(namePlayer, 1);
+                
+                OnUIChat();
+                
                 uiRegisterName.SetTextDialogRegister("Đăng kí thành công", Color.green);
                 uiRegisterName.CloseUIRegister(1.5f);
                 uiInformation.OnUIInformation();
+                uiViewListGround.OnUIViewListGround();
                 OnUIViewItem();
                 OnUIListBtn();
         }
@@ -204,14 +208,6 @@ public class UIManager : MonoBehaviour
                 }
                 else 
                         uiShop.UpdateStoreData(data);
-        }
-        public void SendBuyGold()
-        {
-                GameManager.instance.RequestBuy(true, ItemType.Gold, 20, 10);
-        }
-        public void SendSellGold()
-        {
-                GameManager.instance.RequestSell(true, ItemType.Gold, 20, 10);
         }
 
         public void SendUpdateStore()

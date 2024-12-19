@@ -18,6 +18,7 @@ public class UIBuilding : MonoBehaviour
     public TextMeshProUGUI nameBuild;
     public TextMeshProUGUI countProduct;
     public TextMeshProUGUI typeBuild;
+    public TextMeshProUGUI dialogErrorBuild;
     
     public Transform boxComboItemNeed;
     public GameObject prefabComboItemNeed;
@@ -29,12 +30,14 @@ public class UIBuilding : MonoBehaviour
     void InitListBuild(UITransformBuild transformBuild)
     {
         CleanUIListView();
+        SetupUIViewBuildingInfo(listBuild[0], transformBuild);
         if (isInit == false)
         {
             foreach (ScriptableBuild build in listBuild)
             {
                 ScriptableBuild localBuild = build;
                 Button newListBtn = Instantiate(prefabBtnBuilding, boxBtnBuilding);
+                newListBtn.GetComponent<Image>().sprite = build.btnSprite;
                 newListBtn.onClick.AddListener(() =>
                 {
                     SetupUIViewBuildingInfo(localBuild, transformBuild);
@@ -64,10 +67,12 @@ public class UIBuilding : MonoBehaviour
     {
         CleanUIView();
         imgBuild.sprite = build.buildSprite;
+        imgBuild.gameObject.SetActive(true);
         description.text = build.Decliption;
         nameBuild.text = build.NamedBuildTarget;
         countProduct.text = "Sản lượng mỗi ngày: " + build.CountProduct.ToString() ;
         typeBuild.text = "Loại công trình: Khai thác";
+        
         if (build.ComboItemNeedBuild.Count > 0)
         {
             foreach (ComboItemNeed comboItemNeed in build.ComboItemNeedBuild)
@@ -79,13 +84,48 @@ public class UIBuilding : MonoBehaviour
                 comboItems.Add(newComboItem);
             }
         }
-        building.onClick.AddListener(() =>
+
+        if (CheckBuilding(build))
         {
-            transformBuild.Building(build);
-            OffUIBuilding();
-        });
+            building.gameObject.SetActive(true);
+            building.onClick.AddListener(() =>
+            {
+                RemoveAssetToBuild(build.ComboItemNeedBuild);
+                
+                transformBuild.Building(build);
+                
+                OffUIBuilding();
+                
+            });
+            dialogErrorBuild.text = "";
+        }
+        else
+        {
+            building.gameObject.SetActive(false);
+            dialogErrorBuild.text = "Thiếu nguyên liệu";
+        }
+        
     }
 
+    void RemoveAssetToBuild(List<ComboItemNeed> comboItemNeeds)
+    {
+        foreach (ComboItemNeed comboItem in comboItemNeeds)
+        {
+            Player.instance.CheckRemoveAsset(comboItem.ItemType, 0, comboItem.Count);
+        }
+    }
+    bool CheckBuilding(ScriptableBuild build)
+    {
+        foreach (ComboItemNeed comboItem in build.ComboItemNeedBuild)
+        {
+            if (comboItem.Count > Player.instance.GetResourceAmount(comboItem.ItemType))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
     void CleanUIListView()
     {
         if (buttonList.Count > 0)
@@ -108,11 +148,14 @@ public class UIBuilding : MonoBehaviour
             comboItems.Clear();
         }
         imgBuild.sprite = null;
+        imgBuild.gameObject.SetActive(false);
         description.text = "";
         nameBuild.text = "";
         countProduct.text = "";
         typeBuild.text = "";
+        dialogErrorBuild.text = "";
         building.onClick.RemoveAllListeners();
+        building.gameObject.SetActive(false);
     }
     public void OnUIBuilding(UITransformBuild transformBuild)
     {
@@ -122,8 +165,8 @@ public class UIBuilding : MonoBehaviour
 
     public void OffUIBuilding()
     {
-        gameObject.SetActive(false);
         CleanUIListView();
         CleanUIView();
+        gameObject.SetActive(false);
     }
 }

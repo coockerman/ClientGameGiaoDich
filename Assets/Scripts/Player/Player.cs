@@ -6,10 +6,16 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     public static Player instance;
+
+    [SerializeField] private float countGoldDefault = 10;
+    [SerializeField] private float countIronDefault = 50;
+    [SerializeField] private float countFoodDefault = 350;
+    [SerializeField] private float countMoneyDefault = 1000;
+    
     private AssetPlayer assetPlayer;
     private string namePlayer;
     private int day = 1;
-    public int Day { get { return day; } set { day = value; } }
+    public int Day { get { return day; } }
     public string NamePlayer {get {return namePlayer; }}
     private void Awake()
     {
@@ -23,9 +29,9 @@ public class Player : MonoBehaviour
         // Khởi tạo tài nguyên ban đầu cho người chơi
         var initialResources = new Dictionary<ItemType, float>
         {
-            { ItemType.Gold, 50 },
-            { ItemType.Iron, 100 },
-            { ItemType.Food, 200 }
+            { ItemType.Gold, countGoldDefault },
+            { ItemType.Iron, countIronDefault },
+            { ItemType.Food, countFoodDefault }
         };
         var solierResources = new Dictionary<SolierType, float>
         {
@@ -34,12 +40,13 @@ public class Player : MonoBehaviour
             { SolierType.Cavalry, 0 },
             { SolierType.Citizen, 0 }
         };
-        assetPlayer = new AssetPlayer(10000, initialResources, solierResources); // 100000 là số tiền khởi đầu
+        assetPlayer = new AssetPlayer(countMoneyDefault, initialResources, solierResources); // 10000 là số tiền khởi đầu
     }
     public void UpDayPlayer()
     {
         day += 1;
         UIManager.instance.uiInformation.UpdateDayPlayer(day);
+        UIManager.instance.UpdateUIViewItems();
     }
     public void SetupNamePlayer(string namePlayer)
     {
@@ -55,6 +62,7 @@ public class Player : MonoBehaviour
         bool result = assetPlayer.RemoveItem(itemType, price, amount);
         return result;
     }
+
     public bool CheckAddAsset(SolierType solierType, float amount)
     {
         bool result = assetPlayer.AddSolider(solierType, amount);

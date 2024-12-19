@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 173e30f180e143a5a853782d5a757522, type: 3}
-  m_Name: BuildIron
+  m_Name: BuildFood
   m_EditorClassIdentifier: 
-  NamedBuildTarget: "M\u1ECF s\u1EAFt"
+  NamedBuildTarget: "Khu ch\u1EE3"
   Decliption: 
-  CountProduct: 3
+  CountProduct: 10
   typeObj: 0
-  ItemType: 1
+  ItemType: 2
   SolierType: 0
-  btnSprite: {fileID: 21300000, guid: 063703ff804797b49a7fe3e19f377d27, type: 3}
-  buildSprite: {fileID: 21300000, guid: 7732e135b2a67514aa8f0ad487b30192, type: 3}
+  btnSprite: {fileID: 21300000, guid: 348eac80f01b478418bc18621fce239f, type: 3}
+  buildSprite: {fileID: 21300000, guid: 9eb4f18ca8a9102418922b364aa7a7f3, type: 3}
   ComboItemNeedBuild:
   - ItemType: 0
-    Count: 12
+    Count: 3
   - ItemType: 1
-    Count: 40
+    Count: 15
   - ItemType: 2
-    Count: 300
+    Count: 100
   ComboSoliderNeedBuild: []
   ComboItemNeedCreateProduct: []
   ComboSoliderNeedCreateProduct: []

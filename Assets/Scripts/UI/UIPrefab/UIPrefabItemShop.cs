@@ -31,6 +31,31 @@ public class UIPrefabItemShop : MonoBehaviour
             handleObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Mua 1";
         }
     }
+    public void InitItemShop(TypeItemTrade typeTrade, Sprite imgItem, string nameItem, ItemType itemType, float priceSell, UnityAction callback)
+    {
+        CleanItemShop();
+        if (typeTrade == TypeItemTrade.Sell)
+        {
+            img.sprite = imgItem;
+            nameObj.text = nameItem;
+
+            if (Player.instance.GetResourceAmount(itemType) > 0)
+            {
+                statusObj.text = "Còn hàng";
+                handleObj.onClick.AddListener(callback);
+            }
+            else
+            {
+                statusObj.text = "Hết hàng";
+            }
+            
+            countObj.text = "Bạn có: " + Player.instance.GetResourceAmount(itemType).ToString();
+            priceObj.text = "Giá bán: " + priceSell.ToString();
+            
+            handleObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Bán 1";
+        }
+    }
+    
 
     void CleanItemShop()
     {

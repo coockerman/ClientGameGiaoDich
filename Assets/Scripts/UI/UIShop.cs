@@ -1,18 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class UIShop : MonoBehaviour
 {
     public UIPrefabItemShop prefabItemShop;
-    public Transform shopList;
-    
+    public Transform shopListBuy;
+    public Transform shopListSell;
+    public Button buyButtonListShop;
+    public Button sellButtonListShop;
     private TypeItemTrade typeTrade = TypeItemTrade.Buy;
-    private List<UIPrefabItemShop> itemShopList = new List<UIPrefabItemShop>();
+    private List<UIPrefabItemShop> itemShopListBuy = new List<UIPrefabItemShop>();
+    private List<UIPrefabItemShop> itemShopListSell = new List<UIPrefabItemShop>();
     private UpdateStoreData dataStore;
     private List<ScriptableObj> listImgItem = new List<ScriptableObj>();
-    
+
+    private void Start()
+    {
+        buyButtonListShop.onClick.AddListener(OnShopListBuy);
+        sellButtonListShop.onClick.AddListener(OnShopListSell);
+    }
 
     public void UpdateStoreData(UpdateStoreData data, List<ScriptableObj> listImgItem)
     {
@@ -26,7 +37,18 @@ public class UIShop : MonoBehaviour
         dataStore = data;
         UpdateUIData();
     }
-    
+
+    public void OnShopListBuy()
+    {
+        shopListBuy.gameObject.SetActive(true);
+        shopListSell.gameObject.SetActive(false);
+    }
+
+    public void OnShopListSell()
+    {
+        shopListBuy.gameObject.SetActive(false);
+        shopListSell.gameObject.SetActive(true);
+    }
     void InitUIData()
     {
         InitDataBuy();
@@ -52,9 +74,9 @@ public class UIShop : MonoBehaviour
         // Lặp qua từng loại ItemType để cập nhật dữ liệu
         foreach (var (type, index) in itemTypes)
         {
-            if (index < itemShopList.Count) // Kiểm tra index hợp lệ
+            if (index < itemShopListBuy.Count) // Kiểm tra index hợp lệ
             {
-                UIPrefabItemShop itemShop = itemShopList[index];
+                UIPrefabItemShop itemShop = itemShopListBuy[index];
                 ScriptableObj objFind = FindScriptableObject(type);
 
                 if (objFind != null) // Chỉ cập nhật nếu tìm thấy ScriptableObj
@@ -97,7 +119,54 @@ public class UIShop : MonoBehaviour
 
     void UpdateDataSell()
     {
-        
+        // Tạo danh sách các cặp ItemType và vị trí tương ứng trong itemShopList
+        var itemTypes = new (ItemType type, int index)[]
+        {
+            (ItemType.Gold, 0),
+            (ItemType.Iron, 1),
+            (ItemType.Food, 2)
+        };
+
+        // Lặp qua từng loại ItemType để cập nhật dữ liệu
+        foreach (var (type, index) in itemTypes)
+        {
+            if (index < itemShopListSell.Count) // Kiểm tra index hợp lệ
+            {
+                UIPrefabItemShop itemShop = itemShopListSell[index];
+                ScriptableObj objFind = FindScriptableObject(type);
+
+                if (objFind != null) // Chỉ cập nhật nếu tìm thấy ScriptableObj
+                {
+                    float priceSell = 0;
+
+                    // Lấy dữ liệu từ dataStore tương ứng
+                    switch (type)
+                    {
+                        case ItemType.Gold:
+                            priceSell = dataStore.itemGold.priceSell;
+                            break;
+
+                        case ItemType.Iron:
+                            priceSell = dataStore.itemIron.priceSell;
+                            break;
+
+                        case ItemType.Food:
+                            priceSell = dataStore.itemFood.priceSell;
+                            break;
+                    }
+
+                    // Cập nhật thông tin UI
+                    itemShop.InitItemShop(
+                        TypeItemTrade.Sell,
+                        objFind.sprite,
+                        objFind.nameObj,
+                        type,
+                        priceSell,
+                        () => SellOneItem(type, priceSell)
+                    );
+                }
+            }
+        }
     }
     ScriptableObj FindScriptableObject(ItemType itemType)
     {
@@ -123,23 +192,23 @@ public class UIShop : MonoBehaviour
                 // Tìm ScriptableObj tương ứng để khởi tạo
                 if (itemImg.itemType == ItemType.Gold)
                 {
-                    CreateItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemGold.priceBuy, dataStore.itemGold.countInStock, ItemType.Gold);
+                    CreateBuyItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemGold.priceBuy, dataStore.itemGold.countInStock, ItemType.Gold);
                 }
                 else if (itemImg.itemType == ItemType.Iron)
                 {
-                    CreateItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemIron.priceBuy, dataStore.itemIron.countInStock, ItemType.Iron);
+                    CreateBuyItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemIron.priceBuy, dataStore.itemIron.countInStock, ItemType.Iron);
                 }
                 else if (itemImg.itemType == ItemType.Food)
                 {
-                    CreateItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemFood.priceBuy, dataStore.itemFood.countInStock, ItemType.Food);
+                    CreateBuyItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemFood.priceBuy, dataStore.itemFood.countInStock, ItemType.Food);
                 }
             }
         }
     }
 
-    void CreateItemShopUI(TypeItemTrade tradeType, ScriptableObj itemImg, float price, int countInStock, ItemType itemType)
+    void CreateBuyItemShopUI(TypeItemTrade tradeType, ScriptableObj itemImg, float price, int countInStock, ItemType itemType)
     {
-        UIPrefabItemShop itemShop = Instantiate(prefabItemShop, shopList.transform);
+        UIPrefabItemShop itemShop = Instantiate(prefabItemShop, shopListBuy.transform);
         itemShop.InitItemShop(
             tradeType, 
             itemImg.sprite, 
@@ -148,17 +217,54 @@ public class UIShop : MonoBehaviour
             price, 
             () => BuyOneItem(itemType, price)
         );
-        itemShopList.Add(itemShop);
+        itemShopListBuy.Add(itemShop);
     }
 
     void InitDataSell()
     {
-        
+        foreach (ScriptableObj itemImg in listImgItem)
+        {
+            if (itemImg.typeObj == TypeObj.Item)
+            {
+                // Tìm ScriptableObj tương ứng để khởi tạo
+                if (itemImg.itemType == ItemType.Gold)
+                {
+                    CreateSellItemShopUI(TypeItemTrade.Sell, itemImg, dataStore.itemGold.priceSell, ItemType.Gold);
+                }
+                else if (itemImg.itemType == ItemType.Iron)
+                {
+                    CreateSellItemShopUI(TypeItemTrade.Sell, itemImg, dataStore.itemIron.priceSell, ItemType.Iron);
+                }
+                else if (itemImg.itemType == ItemType.Food)
+                {
+                    CreateSellItemShopUI(TypeItemTrade.Sell, itemImg, dataStore.itemFood.priceSell, ItemType.Food);
+                }
+            }
+        }
     }
 
+    void CreateSellItemShopUI(TypeItemTrade tradeType, ScriptableObj itemImg, float priceSell, ItemType itemType)
+    {
+        UIPrefabItemShop itemShop = Instantiate(prefabItemShop, shopListSell.transform);
+        itemShop.InitItemShop(
+            tradeType, 
+            itemImg.sprite, 
+            itemImg.nameObj, 
+            itemType, 
+            priceSell, 
+            () => SellOneItem(itemType, priceSell)
+        );
+        itemShopListSell.Add(itemShop);
+    }
+    
     void BuyOneItem(ItemType itemType, float price)
     {
         GameManager.instance.RequestBuy(true, itemType, (int) price, 1);
+    }
+
+    void SellOneItem(ItemType itemType, float price)
+    {
+        GameManager.instance.RequestSell(true, itemType, (int) price, 1);
     }
 
     public void OnShop()
