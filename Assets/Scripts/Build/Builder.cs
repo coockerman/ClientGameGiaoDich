@@ -41,4 +41,9 @@ public class Builder : MonoBehaviour
                         }
                 }
         }
+
+        public void OnBuilder()
+        {
+                gameObject.SetActive(true);
+        }
 }

@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
         public UIShop uiShop;
         public UIBuilding uiBuilding;
         public UIViewListGround uiViewListGround;
+        public Builder builder;
         
         public TextMeshProUGUI uiInfoConnectText;
         
@@ -102,6 +103,7 @@ public class UIManager : MonoBehaviour
                 uiRegisterName.CloseUIRegister(1.5f);
                 uiInformation.OnUIInformation();
                 uiViewListGround.OnUIViewListGround();
+                builder.OnBuilder();
                 OnUIViewItem();
                 OnUIListBtn();
         }

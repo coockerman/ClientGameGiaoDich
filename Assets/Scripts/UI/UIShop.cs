@@ -66,9 +66,9 @@ public class UIShop : MonoBehaviour
         // Tạo danh sách các cặp ItemType và vị trí tương ứng trong itemShopList
         var itemTypes = new (ItemType type, int index)[]
         {
-            (ItemType.Gold, 0),
+            (ItemType.Food, 0),
             (ItemType.Iron, 1),
-            (ItemType.Food, 2)
+            (ItemType.Gold, 2)
         };
 
         // Lặp qua từng loại ItemType để cập nhật dữ liệu
@@ -122,9 +122,9 @@ public class UIShop : MonoBehaviour
         // Tạo danh sách các cặp ItemType và vị trí tương ứng trong itemShopList
         var itemTypes = new (ItemType type, int index)[]
         {
-            (ItemType.Gold, 0),
+            (ItemType.Food, 0),
             (ItemType.Iron, 1),
-            (ItemType.Food, 2)
+            (ItemType.Gold, 2)
         };
 
         // Lặp qua từng loại ItemType để cập nhật dữ liệu

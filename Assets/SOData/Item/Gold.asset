@@ -16,3 +16,4 @@ MonoBehaviour:
   itemType: 0
   solierType: 0
   sprite: {fileID: 21300000, guid: a0c46bd0ce09e0d479ad2962809f906f, type: 3}
+  nameObj: "V\xE0ng"

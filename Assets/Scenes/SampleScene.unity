@@ -5458,7 +5458,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &950231872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5471,7 +5471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf80e14a1af4543ac3b8ce797146945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeDay: 15
+  timeDay: 10
 --- !u!4 &950231873
 Transform:
   m_ObjectHideFlags: 0
@@ -6573,8 +6573,9 @@ MonoBehaviour:
   boxBtnBuilding: {fileID: 1737004205}
   prefabBtnBuilding: {fileID: 6294916148931485040, guid: 7066a229183525b44b8aa38bc55739ca, type: 3}
   listBuild:
-  - {fileID: 11400000, guid: 90e747c6df60eee47ae93f2678441a14, type: 2}
+  - {fileID: 11400000, guid: be0333ea5af2b32479aa1bee91bab1c8, type: 2}
   - {fileID: 11400000, guid: 38977c609f016b64ba6971e90f07ef6c, type: 2}
+  - {fileID: 11400000, guid: 90e747c6df60eee47ae93f2678441a14, type: 2}
   imgBuild: {fileID: 1927789664}
   description: {fileID: 851542237}
   nameBuild: {fileID: 2070530840}
@@ -7989,6 +7990,7 @@ MonoBehaviour:
   uiShop: {fileID: 1070049073}
   uiBuilding: {fileID: 1133350359}
   uiViewListGround: {fileID: 2056862776}
+  builder: {fileID: 950231872}
   uiInfoConnectText: {fileID: 800283835}
 --- !u!1 &1433223771
 GameObject:
