@@ -12,6 +12,7 @@ public class UITransformBuild : MonoBehaviour
         public ScriptableBuild scriptableBuild = null;
         public Button btnClickOpenKey;
         public Button btnClickBuilding;
+        public Button btnHaveBuild;
         private void Start()
         {
                 UpdateUIBuild();
@@ -27,7 +28,7 @@ public class UITransformBuild : MonoBehaviour
                         btnClickBuilding.onClick.RemoveAllListeners();
                         btnClickBuilding.onClick.AddListener(() =>
                         {
-                                //Todo build
+                                UIManager.instance.uiBuilding.OnUIBuilding(this);
                         });
                 }
                 else
@@ -65,7 +66,15 @@ public class UITransformBuild : MonoBehaviour
                         
                 }
         }
-        
+
+        public void Building(ScriptableBuild scriptableBuild)
+        {
+                this.scriptableBuild = scriptableBuild;
+                btnHaveBuild.gameObject.GetComponent<Image>().sprite = this.scriptableBuild.buildSprite;
+                btnHaveBuild.gameObject.SetActive(true);
+                btnClickBuilding.onClick.RemoveAllListeners();
+                btnClickBuilding.gameObject.SetActive(false);
+        }
         void ClearBuild()
         {
                 scriptableBuild = null;

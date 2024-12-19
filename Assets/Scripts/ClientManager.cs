@@ -9,17 +9,19 @@ public class ClientManager : MonoBehaviour
     public StateTrade stateGame = StateTrade.Idle;
     private WebSocket ws;
     
-    public string serverURL = "ws://127.0.0.1:5555"; // Địa chỉ server WebSocket
-
     private void Awake()
     {
         Instance = this;
+        
+    }
+    
+    public void InitConnection(string serverURL)
+    {
         ws = new WebSocket(serverURL);
         
         ws.OnOpen += (sender, e) =>
         {
-            //RequestPacket packet = new RequestPacket(PacketType.UpdateStore);
-            //HandelDataAndSend(packet);
+            GameManager.instance.HandelConnection(serverURL);
         };
 
         ws.OnMessage += (sender, e) =>
@@ -67,6 +69,7 @@ public class ClientManager : MonoBehaviour
             {
                 Debug.LogError("Lỗi xảy ra trong OnMessage: " + ex.Message);
             }
+            
         };
 
 
@@ -81,10 +84,7 @@ public class ClientManager : MonoBehaviour
             
             Debug.Log("Connection closed: " + e.Reason);
         };
-    }
-    
-    void Start()
-    {
+        
         ws.Connect();
     }
     

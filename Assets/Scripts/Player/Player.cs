@@ -15,6 +15,11 @@ public class Player : MonoBehaviour
     {
         instance = this;
         
+        
+    }
+
+    public void InitResourcePlayer()
+    {
         // Khởi tạo tài nguyên ban đầu cho người chơi
         var initialResources = new Dictionary<ItemType, float>
         {
@@ -31,11 +36,6 @@ public class Player : MonoBehaviour
         };
         assetPlayer = new AssetPlayer(10000, initialResources, solierResources); // 100000 là số tiền khởi đầu
     }
-
-    private void Start()
-    {
-    }
-
     public void UpDayPlayer()
     {
         day += 1;

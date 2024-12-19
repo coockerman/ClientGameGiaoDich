@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 public class ScriptableBuild : ScriptableObject
 {
         public string NamedBuildTarget;
+        public string Decliption;
         public int CountProduct;
         
         public TypeObj typeObj;

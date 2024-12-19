@@ -12,8 +12,8 @@ public class Builder : MonoBehaviour
                 instance = this;
         }
 
-        public List<ScriptableBuild> listBuild = new List<ScriptableBuild>();
-        public List<UITransformBuild> listUITransformBuild = new List<UITransformBuild>();
+        
+        
         public float timeDay = 15f;
         private float countTimeDay = 0;
         public void SetupListBuild()

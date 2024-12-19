@@ -47,6 +47,11 @@ public class UIRegisterName : MonoBehaviour
         timeOnDialog = 3f;
     }
 
+    public void OnRegisterNameUI()
+    {
+        gameObject.SetActive(true);
+    }
+
     public void CloseUIRegister(float timeClose)
     {
         // Tạo hiệu ứng làm mờ CanvasGroup trước khi tắt

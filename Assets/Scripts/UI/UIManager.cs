@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -8,7 +9,7 @@ using UnityEngine.Serialization;
 public class UIManager : MonoBehaviour
 {
         public static UIManager instance;
-        public List<ScriptableObj> scriptableObjs;
+        [SerializeField] List<ScriptableObj> scriptableObjs;
         public UIOpenBuild UiOpenBuild;
         public UIViewItemPrefab UiViewItemPrefab;
         public Transform UIViewItemContent;
@@ -21,22 +22,29 @@ public class UIManager : MonoBehaviour
         public UIViewItemPrefab uiViewMoney;
         public UIInformation uiInformation;
         public UIRegisterName uiRegisterName;
+        public UIConnection uiConnection;
         public UIChat uiChat;
         public UIShop uiShop;
+        public UIBuilding uiBuilding;
+
+        public TextMeshProUGUI uiInfoConnectText;
         
         private List<UIViewItemPrefab> uiViewItemPrefabs = new List<UIViewItemPrefab>();
         private bool isInitImgShop = false;
+        
         private void Awake()
         {
                 instance = this;
                 
         }
 
-        private void Start()
+        public void FinishConnectionUI(string urlConnect)
         {
                 UpdateUIViewItems();
+                uiConnection.CloseConnectionUI();
+                uiRegisterName.OnRegisterNameUI();
+                uiInfoConnectText.text = "Địa chỉ máy chủ: " + urlConnect;
         }
-
         public void UpdateUIViewItems()
         {
                 if (isInitUIViewItems == false)
@@ -108,6 +116,52 @@ public class UIManager : MonoBehaviour
                 SlideFromTop(UIViewListBtn);
         }
 
+        public ScriptableObj GetImageObjByType(TypeObj typeObj, ItemType itemType, SolierType solierType)
+        {
+                if (typeObj == TypeObj.Solier)
+                {
+                        foreach (ScriptableObj scriptableObj in scriptableObjs)
+                        {
+                                if (scriptableObj.typeObj == TypeObj.Solier)
+                                {
+                                        if(scriptableObj.solierType == solierType) return scriptableObj;
+                                }
+                        }
+                }else if (typeObj == TypeObj.Item)
+                {
+                        foreach (ScriptableObj scriptableObj in scriptableObjs)
+                        {
+                                if (scriptableObj.typeObj == TypeObj.Item)
+                                {
+                                        if(scriptableObj.itemType == itemType) return scriptableObj;
+                                }
+                        }
+                }
+
+                return null;
+        }
+        public ScriptableObj GetImageObjByType(ItemType itemType)
+        {
+                foreach (ScriptableObj scriptableObj in scriptableObjs)
+                {
+                        if (scriptableObj.typeObj == TypeObj.Item)
+                        {
+                                if(scriptableObj.itemType == itemType) return scriptableObj;
+                        }
+                }
+                return null;
+        }
+        public ScriptableObj GetImageObjByType(SolierType solierType)
+        {
+                foreach (ScriptableObj scriptableObj in scriptableObjs)
+                {
+                        if (scriptableObj.typeObj == TypeObj.Solier)
+                        {
+                                if(scriptableObj.solierType == solierType) return scriptableObj;
+                        }
+                }
+                return null;
+        }
         // Hàm xử lý hiệu ứng trượt từ trên xuống
         private void SlideFromTop(GameObject uiElement)
         {

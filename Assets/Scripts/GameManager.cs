@@ -13,6 +13,12 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        
+    }
+
+    private void Start()
+    {
+        UIManager.instance.uiConnection.OnConnectUI();
     }
 
     private void Update()
@@ -34,6 +40,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void HandelConnection(string urlConnect)
+    {
+        Player.instance.InitResourcePlayer();
+        UIManager.instance.FinishConnectionUI(urlConnect);
+    }
     // Các hàm Handle...
     public void HandleBuy(AbstractData data)
     {
