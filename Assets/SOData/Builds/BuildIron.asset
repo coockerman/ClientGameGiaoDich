@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: BuildIron
   m_EditorClassIdentifier: 
   NamedBuildTarget: "M\u1ECF s\u1EAFt"
-  Decliption: 
+  Decliption: "M\u1ECF s\u1EAFt cung c\u1EA5p ngu\u1ED3n s\u1EAFt d\u1ED3i d\xE0o,
+    n\u1EC1n t\u1EA3ng cho x\xE2y d\u1EF1ng v\xE0 ch\u1EBF t\u1EA1o."
   CountProduct: 3
   typeObj: 0
   ItemType: 1

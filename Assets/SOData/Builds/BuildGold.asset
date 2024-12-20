@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: BuildGold
   m_EditorClassIdentifier: 
   NamedBuildTarget: "M\u1ECF v\xE0ng"
-  Decliption: 
+  Decliption: "M\u1ECF v\xE0ng l\xE0 c\xF4ng tr\xECnh cao c\u1EA5p, s\u1EA3n xu\u1EA5t
+    v\xE0ng qu\xFD gi\xE1 \u0111\u1EC3 th\xFAc \u0111\u1EA9y giao d\u1ECBch v\xE0
+    x\xE2y d\u1EF1ng \u0111\u1EBF ch\u1EBF h\xF9ng m\u1EA1nh."
   CountProduct: 1
   typeObj: 0
   ItemType: 0

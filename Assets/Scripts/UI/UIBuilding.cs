@@ -163,7 +163,7 @@ public class UIBuilding : MonoBehaviour
         InitListBuild(transformBuild);
     }
 
-    public void OffUIBuilding()
+    void OffUIBuilding()
     {
         CleanUIListView();
         CleanUIView();

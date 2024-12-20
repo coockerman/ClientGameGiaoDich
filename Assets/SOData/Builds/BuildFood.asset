@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: BuildFood
   m_EditorClassIdentifier: 
   NamedBuildTarget: "Khu ch\u1EE3"
-  Decliption: 
+  Decliption: "Khu ch\u1EE3 l\xE0 n\u01A1i giao d\u1ECBch nh\u1ED9n nh\u1ECBp, gi\xFAp
+    ng\u01B0\u1EDDi ch\u01A1i trao \u0111\u1ED5i t\xE0i nguy\xEAn v\xE0 m\u1EDF r\u1ED9ng
+    kinh t\u1EBF."
   CountProduct: 10
   typeObj: 0
   ItemType: 2

@@ -18,7 +18,7 @@ public class UIPrefabMessage : MonoBehaviour
             newNamePlayer.InitText(colorName, txtName);
             
             UIPrefabText message = Instantiate(prefabText, transform);
-            message.InitText(Color.black, txtValue);
+            message.InitText(Color.white, txtValue);
         }
         else if (playerRole == PlayerRole.Opponent)
         {
@@ -28,14 +28,14 @@ public class UIPrefabMessage : MonoBehaviour
             newNamePlayer.InitText(colorName, txtName);
             
             UIPrefabText message = Instantiate(prefabText, transform);
-            message.InitText(Color.black, txtValue);
+            message.InitText(Color.white, txtValue);
         }
         else if (playerRole == PlayerRole.SelfError)
         {
             gameObject.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.UpperLeft;
             
             UIPrefabText message = Instantiate(prefabText, transform);
-            message.InitText(Color.red, txtValue);
+            message.InitText(Color.yellow, txtValue);
         }
         
     }
