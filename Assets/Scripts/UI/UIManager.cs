@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
         public UIShop uiShop;
         public UIBuilding uiBuilding;
         public UIViewListGround uiViewListGround;
+        public UIInfoVP uiInfoVp;
         public Builder builder;
         
         public TextMeshProUGUI uiInfoConnectText;
@@ -57,13 +58,13 @@ public class UIManager : MonoBehaviour
                                 {
                                         UIViewItemPrefab newViewItem = Instantiate(UiViewItemPrefab, UIViewItemContent);
                                         ItemType itemType = scriptableObj.itemType;
-                                        newViewItem.Init(TypeObj.Item, itemType, scriptableObj.sprite, (int) Player.instance.GetResourceAmount(itemType));
+                                        newViewItem.Init(TypeObj.Item, itemType, scriptableObj.nameObj, scriptableObj.sprite, (int) Player.instance.GetResourceAmount(itemType));
                                         uiViewItemPrefabs.Add(newViewItem);
                                 }else if (scriptableObj.typeObj == TypeObj.Solier)
                                 {
                                         UIViewItemPrefab newViewItem = Instantiate(UiViewItemPrefab, UIViewItemContent);
                                         SolierType solierType = scriptableObj.solierType;
-                                        newViewItem.Init(TypeObj.Solier, solierType, scriptableObj.sprite, (int) Player.instance.GetSolierAmount(solierType));
+                                        newViewItem.Init(TypeObj.Solier, solierType, scriptableObj.nameObj, scriptableObj.sprite, (int) Player.instance.GetSolierAmount(solierType));
                                         uiViewItemPrefabs.Add(newViewItem);
                                 }
                         }

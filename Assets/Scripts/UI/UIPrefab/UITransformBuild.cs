@@ -13,9 +13,11 @@ public class UITransformBuild : MonoBehaviour
         public Button btnClickOpenKey;
         public Button btnClickBuilding;
         public Button btnHaveBuild;
+        public Button btnDestroyBuild;
         private void Start()
         {
                 UpdateUIBuild();
+                
         }
 
         void UpdateUIBuild()
@@ -67,17 +69,38 @@ public class UITransformBuild : MonoBehaviour
                 }
         }
 
+        void ChangeStatusDestroy()
+        {
+                btnDestroyBuild.gameObject.SetActive(!btnDestroyBuild.isActiveAndEnabled);
+        }
         public void Building(ScriptableBuild scriptableBuild)
         {
                 this.scriptableBuild = scriptableBuild;
                 btnHaveBuild.gameObject.GetComponent<Image>().sprite = this.scriptableBuild.buildSprite;
+                btnHaveBuild.onClick.AddListener(ChangeStatusDestroy);
                 btnHaveBuild.gameObject.SetActive(true);
+                
                 btnClickBuilding.onClick.RemoveAllListeners();
                 btnClickBuilding.gameObject.SetActive(false);
+                
+                btnDestroyBuild.onClick.AddListener(ClearBuild);
         }
+        
         void ClearBuild()
         {
                 scriptableBuild = null;
+                btnHaveBuild.gameObject.GetComponent<Image>().sprite = null;
+                btnHaveBuild.onClick.RemoveAllListeners();
+                btnHaveBuild.gameObject.SetActive(false);
+                
+                btnClickBuilding.onClick.AddListener(() =>
+                {
+                        UIManager.instance.uiBuilding.OnUIBuilding(this);
+                });
+                btnClickBuilding.gameObject.SetActive(true);
+                
+                btnDestroyBuild.onClick.RemoveAllListeners();
+                btnDestroyBuild.gameObject.SetActive(false);
         }
 
         void OpenBuild()

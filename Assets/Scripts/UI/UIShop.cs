@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -13,6 +14,7 @@ public class UIShop : MonoBehaviour
     public Transform shopListSell;
     public Button buyButtonListShop;
     public Button sellButtonListShop;
+    public TextMeshProUGUI nameShop;
     private TypeItemTrade typeTrade = TypeItemTrade.Buy;
     private List<UIPrefabItemShop> itemShopListBuy = new List<UIPrefabItemShop>();
     private List<UIPrefabItemShop> itemShopListSell = new List<UIPrefabItemShop>();
@@ -38,14 +40,16 @@ public class UIShop : MonoBehaviour
         UpdateUIData();
     }
 
-    public void OnShopListBuy()
+    void OnShopListBuy()
     {
+        nameShop.text = "Cửa hàng mua vật phẩm";
         shopListBuy.gameObject.SetActive(true);
         shopListSell.gameObject.SetActive(false);
     }
 
-    public void OnShopListSell()
+    void OnShopListSell()
     {
+        nameShop.text = "Bán vật phẩm";
         shopListBuy.gameObject.SetActive(false);
         shopListSell.gameObject.SetActive(true);
     }
@@ -110,7 +114,8 @@ public class UIShop : MonoBehaviour
                         objFind.nameObj,
                         countInStock,
                         priceBuy,
-                        () => BuyOneItem(type, priceBuy)
+                        () => BuyItem(type, priceBuy, 1),
+                        () => BuyItem(type, priceBuy, 10)
                     );
                 }
             }
@@ -162,7 +167,8 @@ public class UIShop : MonoBehaviour
                         objFind.nameObj,
                         type,
                         priceSell,
-                        () => SellOneItem(type, priceSell)
+                        () => SellItem(type, priceSell, 1),
+                        () => SellItem(type, priceSell, 10)
                     );
                 }
             }
@@ -215,7 +221,8 @@ public class UIShop : MonoBehaviour
             itemImg.nameObj, 
             countInStock, 
             price, 
-            () => BuyOneItem(itemType, price)
+            () => BuyItem(itemType, price, 1),
+            () => BuyItem(itemType, price, 10)
         );
         itemShopListBuy.Add(itemShop);
     }
@@ -252,26 +259,29 @@ public class UIShop : MonoBehaviour
             itemImg.nameObj, 
             itemType, 
             priceSell, 
-            () => SellOneItem(itemType, priceSell)
+            () => SellItem(itemType, priceSell, 1),
+            () => SellItem(itemType, priceSell, 10)
         );
         itemShopListSell.Add(itemShop);
     }
     
-    void BuyOneItem(ItemType itemType, float price)
+    void BuyItem(ItemType itemType, float price, float count)
     {
-        GameManager.instance.RequestBuy(true, itemType, (int) price, 1);
+        GameManager.instance.RequestBuy(true, itemType, (int) price, (int)count);
     }
 
-    void SellOneItem(ItemType itemType, float price)
+    
+    void SellItem(ItemType itemType, float price, float count)
     {
-        GameManager.instance.RequestSell(true, itemType, (int) price, 1);
+        GameManager.instance.RequestSell(true, itemType, (int) price, (int)count);
     }
-
+    
     public void OnShop()
     {
         CanvasGroup canvasGroup = GetOrAddCanvasGroup();
         gameObject.SetActive(true); // Bật đối tượng
-
+        OnShopListBuy();
+        
         // Reset trạng thái alpha và scale trước khi mở
         canvasGroup.alpha = 0;
         transform.localScale = Vector3.zero;
