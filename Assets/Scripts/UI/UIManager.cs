@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -28,9 +29,13 @@ public class UIManager : MonoBehaviour
         public UIBuilding uiBuilding;
         public UIViewListGround uiViewListGround;
         public UIInfoVP uiInfoVp;
+        public UIPK uiPK;
         public Builder builder;
         
         public TextMeshProUGUI uiInfoConnectText;
+
+        public Button btnOnShop;
+        public Button btnOnPK;
         
         private List<UIViewItemPrefab> uiViewItemPrefabs = new List<UIViewItemPrefab>();
         private bool isInitImgShop = false;
@@ -106,6 +111,9 @@ public class UIManager : MonoBehaviour
                 uiViewListGround.OnUIViewListGround();
                 builder.OnBuilder();
                 OnUIViewItem();
+                
+                btnOnShop.onClick.AddListener(OnUIShop);
+                btnOnPK.onClick.AddListener(OnUIPK);
                 OnUIListBtn();
         }
         public void OffUIOpenBuild()
@@ -113,12 +121,12 @@ public class UIManager : MonoBehaviour
                 UiOpenBuild.OffOpenBuild();
         }
 
-        public void OnUIViewItem()
+        void OnUIViewItem()
         {
                 SlideFromTop(UIViewItem);
         }
 
-        public void OnUIListBtn()
+        void OnUIListBtn()
         {
                 SlideFromTop(UIViewListBtn);
         }
@@ -192,9 +200,17 @@ public class UIManager : MonoBehaviour
                 // Tạo hiệu ứng trượt từ trên xuống
                 rectTransform.DOAnchorPos(targetPosition, 0.5f).SetEase(Ease.OutBounce); // Lướt xuống với hiệu ứng nẩy nhẹ
         }
-        public void OnUIShop()
+        void OnUIShop()
         {
                 uiShop.OnShop();
+        }
+
+        void OnUIPK()
+        {
+                if (Player.instance.Day >= 30)
+                {
+                        uiPK.OnPK();
+                }
         }
 
         public void OnUIChat()

@@ -47,6 +47,14 @@ public class Player : MonoBehaviour
         day += 1;
         UIManager.instance.uiInformation.UpdateDayPlayer(day);
         UIManager.instance.UpdateUIViewItems();
+        
+        SoldierData soldierData = new SoldierData(
+            assetPlayer.GetSolierAmount(SolierType.Melee),
+            assetPlayer.GetSolierAmount(SolierType.Arrow),
+            assetPlayer.GetSolierAmount(SolierType.Cavalry)
+            );
+        
+        GameManager.instance.RequestDayPlay(day, soldierData);
     }
     public void SetupNamePlayer(string namePlayer)
     {

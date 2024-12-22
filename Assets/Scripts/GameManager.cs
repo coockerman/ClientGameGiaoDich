@@ -153,15 +153,15 @@ public class GameManager : MonoBehaviour
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
 
-    public void RequestBrankup()
+    public void RequestFindPlayerCanAttack()
     {
-        RequestPacket request = new RequestPacket(PacketType.Bankrupt);
+        RequestPacket request = new RequestPacket(PacketType.FindPlayerCanAttack);
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
 
-    public void RequestDayPlay()
+    public void RequestDayPlay(float dayPlay, SoldierData soldier)
     {
-        RequestPacket request = new RequestPacket(PacketType.DayPlay);
+        RequestPacket request = new RequestPacket(PacketType.DayPlay, dayPlay, soldier);
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
 

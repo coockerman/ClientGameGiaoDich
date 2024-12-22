@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 public class RequestPacket
@@ -5,10 +6,13 @@ public class RequestPacket
         public PacketType packetType;
         public AbstractData abstractData;
         public UpdateStoreData updateStoreData;
-        public float dayPlay;
         public string namePlayer;
         public string messagePlayer;
+        public float dayPlay;
+        public SoldierData soldierData;
         public bool isRegisterPlayer;
+        public List<InfoPlayer> infoPlayers;
+        
         public RequestPacket()
         {
                 
@@ -32,10 +36,12 @@ public class RequestPacket
                 this.namePlayer = namePlayer;
                 this.messagePlayer = messagePlayer;
         }
-        public RequestPacket(PacketType packetType, float dayPlay)
+
+        public RequestPacket(PacketType packetType, float dayPlay, SoldierData soldierData)
         {
                 this.packetType = packetType;
                 this.dayPlay = dayPlay;
+                this.soldierData = soldierData;
         }
         public RequestPacket(PacketType packetType, AbstractData abstractData)
         {
