@@ -15,7 +15,7 @@ public class ScriptableBuild : ScriptableObject
         public SolierType SolierType;
 
         public string loaiCongTrinh;
-        
+        public float timeBuild;
         public Sprite btnSprite;
         public Sprite buildSprite;
         

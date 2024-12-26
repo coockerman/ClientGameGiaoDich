@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
         
         public GameObject UIViewListBtn;
         public GameObject UIViewItem;
+        public GameObject UIHuongDan;
         
         public bool isInitUIViewItems = false;
         
@@ -34,6 +35,8 @@ public class UIManager : MonoBehaviour
         
         public TextMeshProUGUI uiInfoConnectText;
 
+        public Button btnHuongDan;
+        public Button btnCloseHuongDan;
         public Button btnOnShop;
         public Button btnOnPK;
         
@@ -111,9 +114,12 @@ public class UIManager : MonoBehaviour
                 uiViewListGround.OnUIViewListGround();
                 builder.OnBuilder();
                 OnUIViewItem();
-                
+
+                btnHuongDan.onClick.AddListener(OnUIHuongDan);
+                btnCloseHuongDan.onClick.AddListener(OffUIHuongDan);
                 btnOnShop.onClick.AddListener(OnUIShop);
                 btnOnPK.onClick.AddListener(OnUIPK);
+                
                 OnUIListBtn();
         }
         public void OffUIOpenBuild()
@@ -131,6 +137,7 @@ public class UIManager : MonoBehaviour
                 SlideFromTop(UIViewListBtn);
         }
 
+        
         public ScriptableObj GetImageObjByType(TypeObj typeObj, ItemType itemType, SolierType solierType)
         {
                 if (typeObj == TypeObj.Solier)
@@ -212,7 +219,14 @@ public class UIManager : MonoBehaviour
                         uiPK.OnPK();
                 }
         }
-
+        public void OnUIHuongDan()
+        {
+                UIHuongDan.gameObject.SetActive(true);
+        }
+        public void OffUIHuongDan()
+        {
+                UIHuongDan.gameObject.SetActive(false);
+        }
         public void OnUIChat()
         {
                 uiChat.OnChat();

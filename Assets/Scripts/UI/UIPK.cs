@@ -38,18 +38,20 @@ public class UIPK : MonoBehaviour
             int count = 0;
             foreach (InfoPlayer infoPlayer in listInfo)
             {
-                count++;
-                UIPrefabAttackPlayer newPlayer = Instantiate(prefabAttackPlayer, contentAttackPlayer);
-                newPlayer.Init(count, infoPlayer.namePlayer, infoPlayer.dayPlayer, () =>
+                if (infoPlayer.namePlayer != Player.instance.NamePlayer)
                 {
-                    StartCoroutine(IEAttack(infoPlayer));
-                });
-                listAttackPlayer.Add(newPlayer);
+                    count++;
+                
+                    UIPrefabAttackPlayer newPlayer = Instantiate(prefabAttackPlayer, contentAttackPlayer);
+                    newPlayer.Init(count, infoPlayer.namePlayer, infoPlayer.dayPlayer, () =>
+                    {
+                        StartCoroutine(IEAttack(infoPlayer));
+                    });
+                    listAttackPlayer.Add(newPlayer);
+                }
             }
         }
     }
-
-    
 
     IEnumerator IEAttack(InfoPlayer infoPlayer2)
     {

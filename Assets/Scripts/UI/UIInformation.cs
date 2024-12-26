@@ -12,12 +12,12 @@ public class UIInformation : MonoBehaviour
     public void Init(string namePlayer, int dayPlayer)
     {
         txtNamePlayer.text = namePlayer;
-        txtDayPlayer.text = "Day: " + dayPlayer.ToString();
+        txtDayPlayer.text = "Ngày: " + dayPlayer.ToString();
     }
 
     public void UpdateDayPlayer(int dayPlayer)
     {
-        txtDayPlayer.text = "Day: " + dayPlayer.ToString();
+        txtDayPlayer.text = "Ngày: " + dayPlayer.ToString();
     }
 
     public void OnUIInformation()

@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -14,10 +16,29 @@ public class UITransformBuild : MonoBehaviour
         public Button btnClickBuilding;
         public Button btnHaveBuild;
         public Button btnDestroyBuild;
+        
+        public TextMeshProUGUI txtTimeBuild;
+        public ParticleSystem handleBuilding;
+        public ParticleSystem finishBuild;
+        
+        private float countTimeBuild = 0;
         private void Start()
         {
                 UpdateUIBuild();
                 
+        }
+
+        private void Update()
+        {
+                if (countTimeBuild > 0 && scriptableBuild == null)
+                {
+                        countTimeBuild -= Time.deltaTime;
+                        txtTimeBuild.text = countTimeBuild.ToString("0.0");
+                }
+                else
+                {
+                        txtTimeBuild.text = "";
+                }
         }
 
         void UpdateUIBuild()
@@ -75,17 +96,30 @@ public class UITransformBuild : MonoBehaviour
         }
         public void Building(ScriptableBuild scriptableBuild)
         {
+                StartCoroutine(IEBuilding(scriptableBuild));
+        }
+
+        IEnumerator IEBuilding(ScriptableBuild scriptableBuild)
+        {
+                btnClickBuilding.onClick.RemoveAllListeners();
+                handleBuilding.gameObject.SetActive(true);
+                countTimeBuild = scriptableBuild.timeBuild;
+                
+                yield return new WaitForSeconds(scriptableBuild.timeBuild);
+                
+                handleBuilding.gameObject.SetActive(false);
+                finishBuild.gameObject.SetActive(true);
+                btnClickBuilding.gameObject.SetActive(false);
+                
                 this.scriptableBuild = scriptableBuild;
                 btnHaveBuild.gameObject.GetComponent<Image>().sprite = this.scriptableBuild.buildSprite;
                 btnHaveBuild.onClick.AddListener(ChangeStatusDestroy);
                 btnHaveBuild.gameObject.SetActive(true);
                 
-                btnClickBuilding.onClick.RemoveAllListeners();
-                btnClickBuilding.gameObject.SetActive(false);
-                
                 btnDestroyBuild.onClick.AddListener(ClearBuild);
+                yield return new WaitForSeconds(1f);
+                finishBuild.gameObject.SetActive(false);
         }
-        
         void ClearBuild()
         {
                 scriptableBuild = null;
