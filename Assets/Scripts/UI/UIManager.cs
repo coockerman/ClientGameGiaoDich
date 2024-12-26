@@ -207,7 +207,7 @@ public class UIManager : MonoBehaviour
 
         void OnUIPK()
         {
-                if (Player.instance.Day >= 30)
+                if (Player.instance.Day >= 10)
                 {
                         uiPK.OnPK();
                 }

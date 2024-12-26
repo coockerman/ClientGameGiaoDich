@@ -86,15 +86,6 @@ public class UIChat : MonoBehaviour
         UpdateSizeContent();
     }
 
-    Color GetRandomColor()
-    {
-        int random = Random.Range(0, 5);
-        if(random == 0) return Color.green;
-        else if(random == 1) return Color.red;
-        else if(random == 2) return Color.magenta;
-        else if(random == 3) return Color.gray;
-        else return Color.blue;
-    }
     void AddChatSefl(string value)
     {
         UIPrefabMessage newMessage = Instantiate(this.prefabMessage, content);
@@ -120,6 +111,10 @@ public class UIChat : MonoBehaviour
     }
     void UpdateSizeContent()
     {
+        if (rect == null)
+        {
+            rect =  content.gameObject.GetComponent<RectTransform>();
+        }
         if (messages.Count <= 10)
         {
             rect.sizeDelta = new Vector2(rect.sizeDelta.x, 400);

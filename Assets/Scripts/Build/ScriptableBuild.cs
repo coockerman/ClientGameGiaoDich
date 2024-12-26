@@ -8,10 +8,13 @@ public class ScriptableBuild : ScriptableObject
         public string NamedBuildTarget;
         public string Decliption;
         public int CountProduct;
+        public string nameProduct;
         
         public TypeObj typeObj;
         public ItemType ItemType;
         public SolierType SolierType;
+
+        public string loaiCongTrinh;
         
         public Sprite btnSprite;
         public Sprite buildSprite;

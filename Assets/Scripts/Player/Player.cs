@@ -53,7 +53,7 @@ public class Player : MonoBehaviour
             assetPlayer.GetSolierAmount(SolierType.Arrow),
             assetPlayer.GetSolierAmount(SolierType.Cavalry)
             );
-        
+        Debug.Log(soldierData.Melee + " " + soldierData.Arrow + " " +soldierData.Cavalry);
         GameManager.instance.RequestDayPlay(day, soldierData);
     }
     public void SetupNamePlayer(string namePlayer)
@@ -92,6 +92,10 @@ public class Player : MonoBehaviour
         return assetPlayer.GetSolierAmount(solierType);
     }
 
+    public void AddMoneyAmount(float amount)
+    {
+        assetPlayer.AddMoney(amount);
+    }
     public float GetMoneyAmount()
     {
         return assetPlayer.Money;
@@ -114,6 +118,12 @@ public class AssetPlayer
     }
 
     public float Money => money;
+
+    public void AddMoney(float amount)
+    {
+        UIManager.instance.UpdateUIViewItems();
+        money += amount;
+    }
 
     public bool AddItem(ItemType itemType, float price, float amount)
     {

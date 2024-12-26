@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -99,6 +100,16 @@ public class GameManager : MonoBehaviour
         });
     }
 
+    public void HandleUpdateUIPlayerCanAttack(List<InfoPlayer> listInfo)
+    {
+        RunOnMainThread(() =>
+        {
+            if (listInfo != null)
+            {
+                UIManager.instance.uiPK.InitUI(listInfo);
+            }
+        });
+    }
     public void HandleMessagePlayer(string namePlayer, string message)
     {
         RunOnMainThread(() =>
@@ -126,6 +137,20 @@ public class GameManager : MonoBehaviour
         });
     }
 
+    public void HandleFailConnection()
+    {
+        //Load lại game
+        SceneManager.LoadScene(0);
+    }
+
+    public void HandleFailDeserializeJson()
+    {
+        
+    }
+    public void HandleFailGetMessage()
+    {
+        
+    }
     // Các hàm Request gửi yêu cầu
     public void RequestBuy(bool status, ItemType itemType, int price, int count)
     {
@@ -133,20 +158,17 @@ public class GameManager : MonoBehaviour
         RequestPacket newRequest = new RequestPacket(PacketType.Buy, newBuy);
         ClientManager.Instance.HandelDataAndSend(newRequest, true);
     }
-
     public void RequestSell(bool status, ItemType itemType, int price, int count)
     {
         AbstractData newSell = new AbstractData(status, itemType, count, price);
         RequestPacket newRequest = new RequestPacket(PacketType.Sell, newSell);
         ClientManager.Instance.HandelDataAndSend(newRequest, true);
     }
-
     public void RequestUpdateStore()
     {
         RequestPacket request = new RequestPacket(PacketType.UpdateStore);
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
-
     public void RequestMessage(string namePlayer, string message)
     {
         RequestPacket request = new RequestPacket(PacketType.MessagePlayer, namePlayer, message);
@@ -161,7 +183,7 @@ public class GameManager : MonoBehaviour
 
     public void RequestDayPlay(float dayPlay, SoldierData soldier)
     {
-        RequestPacket request = new RequestPacket(PacketType.DayPlay, dayPlay, soldier);
+        RequestPacket request = new RequestPacket(PacketType.DayPlay, "" + dayPlay, soldier);
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
 

@@ -33,11 +33,21 @@ public class Builder : MonoBehaviour
                 {
                         if (uiTransform.scriptableBuild != null)
                         {
-                                Player.instance.CheckAddAsset(
-                                        uiTransform.scriptableBuild.ItemType,
-                                        0,
-                                        uiTransform.scriptableBuild.CountProduct
+                                if (uiTransform.scriptableBuild.typeObj == TypeObj.Item)
+                                {
+                                        Player.instance.CheckAddAsset(
+                                                uiTransform.scriptableBuild.ItemType,
+                                                0,
+                                                uiTransform.scriptableBuild.CountProduct
                                         );
+                                }else if(uiTransform.scriptableBuild.typeObj == TypeObj.Solier)
+                                {
+                                        Player.instance.CheckAddAsset(
+                                                uiTransform.scriptableBuild.SolierType,
+                                                uiTransform.scriptableBuild.CountProduct
+                                        );
+                                }
+                                
                         }
                 }
         }

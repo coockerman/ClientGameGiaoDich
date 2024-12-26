@@ -16,17 +16,19 @@ MonoBehaviour:
   Decliption: "M\u1ECF v\xE0ng l\xE0 c\xF4ng tr\xECnh cao c\u1EA5p, s\u1EA3n xu\u1EA5t
     v\xE0ng qu\xFD gi\xE1 \u0111\u1EC3 th\xFAc \u0111\u1EA9y giao d\u1ECBch v\xE0
     x\xE2y d\u1EF1ng \u0111\u1EBF ch\u1EBF h\xF9ng m\u1EA1nh."
-  CountProduct: 1
+  CountProduct: 3
+  nameProduct: "V\xE0ng"
   typeObj: 0
   ItemType: 0
   SolierType: 0
+  loaiCongTrinh: "Khai th\xE1c"
   btnSprite: {fileID: 21300000, guid: 3a656decd8fae2e4192e1829435a71f6, type: 3}
   buildSprite: {fileID: 21300000, guid: 2037ee71d7dbbab40bd933eb336e3484, type: 3}
   ComboItemNeedBuild:
   - ItemType: 0
-    Count: 40
+    Count: 35
   - ItemType: 1
-    Count: 60
+    Count: 180
   - ItemType: 2
     Count: 1000
   ComboSoliderNeedBuild: []

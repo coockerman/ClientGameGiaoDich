@@ -16,10 +16,12 @@ MonoBehaviour:
   Decliption: "Khu ch\u1EE3 l\xE0 n\u01A1i giao d\u1ECBch nh\u1ED9n nh\u1ECBp, gi\xFAp
     ng\u01B0\u1EDDi ch\u01A1i trao \u0111\u1ED5i t\xE0i nguy\xEAn v\xE0 m\u1EDF r\u1ED9ng
     kinh t\u1EBF."
-  CountProduct: 10
+  CountProduct: 30
+  nameProduct: "Th\u1EF1c ph\u1EA9m"
   typeObj: 0
   ItemType: 2
   SolierType: 0
+  loaiCongTrinh: "Khai th\xE1c"
   btnSprite: {fileID: 21300000, guid: 348eac80f01b478418bc18621fce239f, type: 3}
   buildSprite: {fileID: 21300000, guid: 9eb4f18ca8a9102418922b364aa7a7f3, type: 3}
   ComboItemNeedBuild:

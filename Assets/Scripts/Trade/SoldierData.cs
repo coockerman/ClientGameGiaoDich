@@ -1,9 +1,9 @@
 
 public class SoldierData 
 {
-    private float Melee;
-    private float Arrow;
-    private float Cavalry;
+    public float Melee;
+    public float Arrow;
+    public float Cavalry;
     public SoldierData() {}
 
     public SoldierData(float melee, float arrow, float cavalry) {

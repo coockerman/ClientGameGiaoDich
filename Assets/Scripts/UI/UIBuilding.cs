@@ -70,8 +70,8 @@ public class UIBuilding : MonoBehaviour
         imgBuild.gameObject.SetActive(true);
         description.text = build.Decliption;
         nameBuild.text = build.NamedBuildTarget;
-        countProduct.text = "Sản lượng mỗi ngày: " + build.CountProduct.ToString() ;
-        typeBuild.text = "Loại công trình: Khai thác";
+        countProduct.text = "Mỗi ngày: " + build.CountProduct.ToString() + " " +build.nameProduct;
+        typeBuild.text = "Loại công trình: " + build.loaiCongTrinh.ToString();
         
         if (build.ComboItemNeedBuild.Count > 0)
         {

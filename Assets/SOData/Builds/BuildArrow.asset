@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 173e30f180e143a5a853782d5a757522, type: 3}
+  m_Name: BuildArrow
+  m_EditorClassIdentifier: 
+  NamedBuildTarget: "Doanh tr\u1EA1i cung th\u1EE7"
+  Decliption: "Nh\u1EEFng cung ti\u1EC5n m\u1EA1nh nh\u1EA5t ra \u0111\u1EDDi t\u1EEB
+    \u0111\xE2y"
+  CountProduct: 2
+  nameProduct: "Cung th\u1EE7"
+  typeObj: 1
+  ItemType: 1
+  SolierType: 1
+  loaiCongTrinh: "Hu\u1EA5n luy\u1EC7n"
+  btnSprite: {fileID: 21300000, guid: 8f908a0041a1aee4c8b02d9449ebd224, type: 3}
+  buildSprite: {fileID: 21300000, guid: 5198335602a80b14690b9a5b63e8a74e, type: 3}
+  ComboItemNeedBuild:
+  - ItemType: 0
+    Count: 18
+  - ItemType: 1
+    Count: 80
+  - ItemType: 2
+    Count: 1200
+  ComboSoliderNeedBuild: []
+  ComboItemNeedCreateProduct: []
+  ComboSoliderNeedCreateProduct: []
+  ComboItemSell: []
+  ComboSoliderSell: []

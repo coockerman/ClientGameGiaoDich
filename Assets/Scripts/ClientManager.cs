@@ -49,6 +49,11 @@ public class ClientManager : MonoBehaviour
                     case PacketType.ResponseFindOpponent:
                         
                         break;
+                    
+                    case PacketType.ResponsePlayerCanAttack:
+                        GameManager.instance.HandleUpdateUIPlayerCanAttack(packet.infoPlayers);
+                        break;
+                    
                     case PacketType.ResponseNamePlayer:
                         GameManager.instance.HandleGetNamePlayer(packet.namePlayer);
                         break;
@@ -64,10 +69,12 @@ public class ClientManager : MonoBehaviour
             catch (JsonException jsonEx)
             {
                 Debug.LogError("Lỗi khi deserialize JSON: " + jsonEx.Message);
+                GameManager.instance.HandleFailDeserializeJson();
             }
             catch (Exception ex)
             {
                 Debug.LogError("Lỗi xảy ra trong OnMessage: " + ex.Message);
+                GameManager.instance.HandleFailGetMessage();
             }
             
         };
@@ -75,8 +82,8 @@ public class ClientManager : MonoBehaviour
 
         ws.OnError += (sender, e) =>
         {
-            //Todo error
             Debug.LogError("WebSocket Error: " + e.Message);
+            GameManager.instance.HandleFailConnection();
         };
 
         ws.OnClose += (sender, e) =>

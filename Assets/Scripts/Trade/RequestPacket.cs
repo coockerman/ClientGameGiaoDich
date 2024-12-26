@@ -8,7 +8,7 @@ public class RequestPacket
         public UpdateStoreData updateStoreData;
         public string namePlayer;
         public string messagePlayer;
-        public float dayPlay;
+        public string dayPlay;
         public SoldierData soldierData;
         public bool isRegisterPlayer;
         public List<InfoPlayer> infoPlayers;
@@ -37,7 +37,7 @@ public class RequestPacket
                 this.messagePlayer = messagePlayer;
         }
 
-        public RequestPacket(PacketType packetType, float dayPlay, SoldierData soldierData)
+        public RequestPacket(PacketType packetType, string dayPlay, SoldierData soldierData)
         {
                 this.packetType = packetType;
                 this.dayPlay = dayPlay;
