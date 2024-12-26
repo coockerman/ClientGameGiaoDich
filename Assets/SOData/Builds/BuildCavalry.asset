@@ -21,9 +21,9 @@ MonoBehaviour:
   ItemType: 1
   SolierType: 2
   loaiCongTrinh: "Hu\u1EA5n luy\u1EC7n"
-  timeBuild: 6
-  btnSprite: {fileID: 21300000, guid: 18a653081ed639b4cb6d977c1d6eec8c, type: 3}
-  buildSprite: {fileID: 21300000, guid: 2140eb696087f504fb45b4434b31ee9f, type: 3}
+  timeBuild: 10
+  btnSprite: {fileID: 21300000, guid: 52f47be2dd41c864c9792c2bbcb1fa78, type: 3}
+  buildSprite: {fileID: 21300000, guid: 28ec5e16692baea47af09bc91050cb77, type: 3}
   ComboItemNeedBuild:
   - ItemType: 0
     Count: 60

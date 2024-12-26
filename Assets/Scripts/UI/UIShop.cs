@@ -267,12 +267,14 @@ public class UIShop : MonoBehaviour
     
     void BuyItem(ItemType itemType, float price, float count)
     {
+        SoundManager.instance.PlaySoundBuy();
         GameManager.instance.RequestBuy(true, itemType, (int) price, (int)count);
     }
 
     
     void SellItem(ItemType itemType, float price, float count)
     {
+        SoundManager.instance.PlaySoundSell();
         GameManager.instance.RequestSell(true, itemType, (int) price, (int)count);
     }
     

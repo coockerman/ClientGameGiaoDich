@@ -114,7 +114,9 @@ public class UIManager : MonoBehaviour
                 uiViewListGround.OnUIViewListGround();
                 builder.OnBuilder();
                 OnUIViewItem();
-
+                SoundManager.instance.PlayMusicInGame();
+                
+                OnUIHuongDan();
                 btnHuongDan.onClick.AddListener(OnUIHuongDan);
                 btnCloseHuongDan.onClick.AddListener(OffUIHuongDan);
                 btnOnShop.onClick.AddListener(OnUIShop);

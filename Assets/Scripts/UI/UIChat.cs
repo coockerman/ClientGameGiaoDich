@@ -62,6 +62,9 @@ public class UIChat : MonoBehaviour
         else
         {
             AddChatSefl(txtMessage);
+            
+            SoundManager.instance.PlayChatSound();
+            
             messageField.text = "";
             messageField.ActivateInputField();
         }

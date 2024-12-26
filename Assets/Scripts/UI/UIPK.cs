@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UIPK : MonoBehaviour
@@ -23,8 +24,8 @@ public class UIPK : MonoBehaviour
     public ParticleSystem player1PK;
     public ParticleSystem player2PK;
     
-    public ParticleSystem player1Win;
-    public ParticleSystem player2Win;
+    [FormerlySerializedAs("player1Win")] public ParticleSystem player1Die;
+    [FormerlySerializedAs("player2Win")] public ParticleSystem player2Die;
 
     public TextMeshProUGUI txtResult;
     
@@ -95,28 +96,36 @@ public class UIPK : MonoBehaviour
         player1PK.gameObject.SetActive(true);
         player2PK.gameObject.SetActive(true);
         
+        SoundManager.instance.PlayPKSound();
+        
         yield return new WaitForSeconds(4f);
         if (result > 0)
         {
             player2PK.gameObject.SetActive(false);
-            player2Win.gameObject.SetActive(true);
+            player2Die.gameObject.SetActive(true);
         }else if (result < 0)
         {
             player1PK.gameObject.SetActive(false);
-            player1Win.gameObject.SetActive(true);
+            player1Die.gameObject.SetActive(true);
         }
+        
+        SoundManager.instance.PlayChiMangSound();
         
         yield return new WaitForSeconds(1f);
         player1PK.gameObject.SetActive(false);
         player2PK.gameObject.SetActive(false);
         
-        player1Win.gameObject.SetActive(false);
-        player2Win.gameObject.SetActive(false);
+        player1Die.gameObject.SetActive(false);
+        player2Die.gameObject.SetActive(false);
         
         yield return new WaitForSeconds(0.8f);
         
         objViewPK.SetActive(false);
         objResult.SetActive(true);
+        
+        if(result > 0) SoundManager.instance.PlayWinSound();
+        else if(result < 0) SoundManager.instance.PlayLoseSound();
+        
         yield return new WaitForSeconds(4f);
         objResult.SetActive(false);
         ClosePK();

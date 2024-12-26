@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
         day += 1;
         UIManager.instance.uiInformation.UpdateDayPlayer(day);
         UIManager.instance.UpdateUIViewItems();
+        SoundManager.instance.PlayDaySound();
         
         SoldierData soldierData = new SoldierData(
             assetPlayer.GetSolierAmount(SolierType.Melee),

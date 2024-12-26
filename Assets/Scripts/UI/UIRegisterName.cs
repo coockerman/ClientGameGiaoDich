@@ -29,16 +29,26 @@ public class UIRegisterName : MonoBehaviour
 
     void RegisterNamePlayer()
     {
-        if (namePlayerInputField.text.Length > 4 && namePlayerInputField.text.Length < 16)
+        string playerName = namePlayerInputField.text;
+
+        // Kiểm tra độ dài
+        if (playerName.Length < 5 || playerName.Length > 15)
         {
-            GameManager.instance.RequestRegisterPlayer(namePlayerInputField.text);
-        }
-        else
-        {
-            
             SetTextDialogRegister("Tên dài từ 5 - 15 kí tự", Color.yellow);
+            return;
         }
+
+        // Kiểm tra khoảng trắng
+        if (playerName.Contains(" "))
+        {
+            SetTextDialogRegister("Tên không được chứa khoảng trắng", Color.yellow);
+            return;
+        }
+
+        // Nếu hợp lệ, gửi yêu cầu đăng ký
+        GameManager.instance.RequestRegisterPlayer(playerName);
     }
+
 
     public void SetTextDialogRegister(string textDialog, Color textColor)
     {

@@ -8,7 +8,7 @@ public class UIInformation : MonoBehaviour
 {
     public TextMeshProUGUI txtNamePlayer;
     public TextMeshProUGUI txtDayPlayer;
-
+    public ParticleSystem effectDayUp;
     public void Init(string namePlayer, int dayPlayer)
     {
         txtNamePlayer.text = namePlayer;
@@ -18,6 +18,14 @@ public class UIInformation : MonoBehaviour
     public void UpdateDayPlayer(int dayPlayer)
     {
         txtDayPlayer.text = "Ngày: " + dayPlayer.ToString();
+        StartCoroutine(IEUpdateDayPlayer());
+    }
+
+    IEnumerator IEUpdateDayPlayer()
+    {
+        effectDayUp.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        effectDayUp.gameObject.SetActive(false);
     }
 
     public void OnUIInformation()

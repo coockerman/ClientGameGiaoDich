@@ -105,6 +105,8 @@ public class UITransformBuild : MonoBehaviour
                 handleBuilding.gameObject.SetActive(true);
                 countTimeBuild = scriptableBuild.timeBuild;
                 
+                SoundManager.instance.PlayBuidingSound();
+                
                 yield return new WaitForSeconds(scriptableBuild.timeBuild);
                 
                 handleBuilding.gameObject.SetActive(false);
@@ -115,6 +117,8 @@ public class UITransformBuild : MonoBehaviour
                 btnHaveBuild.gameObject.GetComponent<Image>().sprite = this.scriptableBuild.buildSprite;
                 btnHaveBuild.onClick.AddListener(ChangeStatusDestroy);
                 btnHaveBuild.gameObject.SetActive(true);
+                
+                SoundManager.instance.PlayFinishBuildSound();
                 
                 btnDestroyBuild.onClick.AddListener(ClearBuild);
                 yield return new WaitForSeconds(1f);
