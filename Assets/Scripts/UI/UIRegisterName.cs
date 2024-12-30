@@ -46,7 +46,7 @@ public class UIRegisterName : MonoBehaviour
         }
 
         // Nếu hợp lệ, gửi yêu cầu đăng ký
-        GameManager.instance.RequestRegisterPlayer(playerName);
+        GameManager.instance.RequestRegisterName(playerName);
     }
 
 

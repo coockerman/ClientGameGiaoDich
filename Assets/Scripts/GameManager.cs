@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -40,13 +41,36 @@ public class GameManager : MonoBehaviour
             mainThreadActions.Enqueue(action);
         }
     }
-
+    // Các hàm Handle...
     public void HandelConnection(string urlConnect)
     {
-        Player.instance.InitResourcePlayer();
-        UIManager.instance.FinishConnectionUI(urlConnect);
+        RunOnMainThread(() =>
+        {
+            UIManager.instance.FinishConnectionUI(urlConnect);
+        });
     }
-    // Các hàm Handle...
+
+    public void HandelLoginTrue()
+    {
+        RunOnMainThread(() =>
+        {
+            UIManager.instance.uiAuth.UILoginSuccess();
+        });
+    }
+    public void HandelRegisterFail(string dialog)
+    {
+        RunOnMainThread(() =>
+        {
+            UIManager.instance.uiAuth.UIRegisterFailed(dialog);
+        });
+    }
+    public void HandelLoginFail(string dialog)
+    {
+        RunOnMainThread(() =>
+        {
+            UIManager.instance.uiAuth.UILoginFailed(dialog);
+        });
+    }
     public void HandleBuy(AbstractData data)
     {
         RunOnMainThread(() =>
@@ -151,51 +175,67 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    public void RequestRegister(string username, string password)
+    {
+        AuthData authData = new AuthData(null, username, password);
+        RequestPacket requestPacket = new RequestPacket(TypeRequest.REGISTER_NEW_PLAYER, authData);
+        ClientManager.Instance.HandelDataAndSend(requestPacket, false);
+    }
+    public void RequestLogin(string username, string password)
+    {
+        AuthData authData = new AuthData(null, username, password);
+        RequestPacket requestPacket = new RequestPacket(TypeRequest.LOGIN_PLAYER,authData);
+        ClientManager.Instance.HandelDataAndSend(requestPacket, false);
+    }
+    public void RequestRegisterName(string namePlayer)
+    {
+        //Todo fix
+        PlayerInfo playerInfo = new PlayerInfo("nghai1234",namePlayer);
+        RequestPacket requestPacket = new RequestPacket(TypeRequest.REGISTER_NAME, playerInfo);
+        ClientManager.Instance.HandelDataAndSend(requestPacket, false);
+    }
     // Các hàm Request gửi yêu cầu
     public void RequestBuy(bool status, ItemType itemType, int price, int count)
     {
         AbstractData newBuy = new AbstractData(status, itemType, count, price);
-        RequestPacket newRequest = new RequestPacket(PacketType.Buy, newBuy);
+        RequestPacket1 newRequest = new RequestPacket1(PacketType.Buy, newBuy);
         ClientManager.Instance.HandelDataAndSend(newRequest, true);
     }
     public void RequestSell(bool status, ItemType itemType, int price, int count)
     {
         AbstractData newSell = new AbstractData(status, itemType, count, price);
-        RequestPacket newRequest = new RequestPacket(PacketType.Sell, newSell);
+        RequestPacket1 newRequest = new RequestPacket1(PacketType.Sell, newSell);
         ClientManager.Instance.HandelDataAndSend(newRequest, true);
     }
     public void RequestUpdateStore()
     {
-        RequestPacket request = new RequestPacket(PacketType.UpdateStore);
+        RequestPacket1 request = new RequestPacket1(PacketType.UpdateStore);
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
     public void RequestMessage(string namePlayer, string message)
     {
-        RequestPacket request = new RequestPacket(PacketType.MessagePlayer, namePlayer, message);
+        RequestPacket1 request = new RequestPacket1(PacketType.MessagePlayer, namePlayer, message);
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
 
     public void RequestFindPlayerCanAttack()
     {
-        RequestPacket request = new RequestPacket(PacketType.FindPlayerCanAttack);
+        RequestPacket1 request = new RequestPacket1(PacketType.FindPlayerCanAttack);
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
 
     public void RequestDayPlay(float dayPlay, SoldierData soldier)
     {
-        RequestPacket request = new RequestPacket(PacketType.DayPlay, "" + dayPlay, soldier);
+        RequestPacket1 request = new RequestPacket1(PacketType.DayPlay, "" + dayPlay, soldier);
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
 
     public void RequestAttackPlayer()
     {
-        RequestPacket request = new RequestPacket(PacketType.AttackPlayer);
+        RequestPacket1 request = new RequestPacket1(PacketType.AttackPlayer);
         ClientManager.Instance.HandelDataAndSend(request, false);
     }
 
-    public void RequestRegisterPlayer(string namePlayer)
-    {
-        RequestPacket request = new RequestPacket(PacketType.RegisterPlayer, namePlayer);
-        ClientManager.Instance.HandelDataAndSend(request, true);
-    }
+    
 }

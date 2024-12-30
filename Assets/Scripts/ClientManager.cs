@@ -8,13 +8,14 @@ public class ClientManager : MonoBehaviour
     public static ClientManager Instance;
     public StateTrade stateGame = StateTrade.Idle;
     private WebSocket ws;
+    public float timeWait = 5;
+    public float count = 0;
     
     private void Awake()
     {
         Instance = this;
-        
     }
-    
+
     public void InitConnection(string serverURL)
     {
         ws = new WebSocket(serverURL);
@@ -28,53 +29,48 @@ public class ClientManager : MonoBehaviour
         {
             try
             {
-                RequestPacket packet = RequestPacket.fromJson(e.Data);
+                ResponsePacket packetResponse = JsonUtils.FromJson<ResponsePacket>(e.Data);
                 // Xử lý dữ liệu theo packetType
-                switch (packet.packetType)
+                switch (packetResponse.typeResponse)
                 {
-                    case PacketType.ResponseBuy:
-                        GameManager.instance.HandleBuy(packet.abstractData);
-                        stateGame = StateTrade.Idle;
-                        break;
-            
-                    case PacketType.ResponseSell:
-                        GameManager.instance.HandleSell(packet.abstractData);
-                        stateGame = StateTrade.Idle;
-                        break;
-            
-                    case PacketType.ResponseUpdateStore:
-                        GameManager.instance.HandleUpdateStore(packet.updateStoreData);
+                    case TypeResponse.RESPONSE_REGISTER_TRUE:
+                        GameManager.instance.HandelLoginTrue();
+                        Debug.Log(packetResponse.callbackResult);
                         break;
                     
-                    case PacketType.ResponseFindOpponent:
-                        
+                    case TypeResponse.RESPONSE_REGISTER_FALSE:
+                        GameManager.instance.HandelRegisterFail(packetResponse.callbackResult);
+                        Debug.Log(packetResponse.callbackResult);
                         break;
                     
-                    case PacketType.ResponsePlayerCanAttack:
-                        GameManager.instance.HandleUpdateUIPlayerCanAttack(packet.infoPlayers);
+                    case TypeResponse.RESPONSE_LOGIN_TRUE:
+                        GameManager.instance.HandelLoginTrue();
+                        Debug.Log(packetResponse.callbackResult);
                         break;
                     
-                    case PacketType.ResponseNamePlayer:
-                        GameManager.instance.HandleGetNamePlayer(packet.namePlayer);
+                    case TypeResponse.RESPONSE_LOGIN_FALSE:
+                        GameManager.instance.HandelLoginFail(packetResponse.callbackResult);
+                        Debug.Log(packetResponse.callbackResult);
                         break;
-                    case PacketType.ResponseMessagePlayer:
-                        GameManager.instance.HandleMessagePlayer(packet.namePlayer, packet.messagePlayer);
+                    
+                    case TypeResponse.RESPONSE_LOGOUT_TRUE:
+                        Debug.Log(packetResponse.callbackResult);
                         break;
-                    case PacketType.ResponseRegisterPlayer:
-                        GameManager.instance.HandleRegisterPlayer(packet.namePlayer, packet.isRegisterPlayer);
-                        stateGame = StateTrade.Idle;
+                    
+                    case TypeResponse.RESPONSE_LOGOUT_FALSE:
+                        Debug.Log(packetResponse.callbackResult);
                         break;
                 }
             }
             catch (JsonException jsonEx)
             {
                 Debug.LogError("Lỗi khi deserialize JSON: " + jsonEx.Message);
-                GameManager.instance.HandleFailDeserializeJson();
+                //GameManager.instance.HandleFailDeserializeJson();
             }
             catch (Exception ex)
             {
                 Debug.LogError("Lỗi xảy ra trong OnMessage: " + ex.Message);
-                GameManager.instance.HandleFailGetMessage();
+                //GameManager.instance.HandleFailGetMessage();
             }
             
         };
@@ -83,19 +79,33 @@ public class ClientManager : MonoBehaviour
         ws.OnError += (sender, e) =>
         {
             Debug.LogError("WebSocket Error: " + e.Message);
-            GameManager.instance.HandleFailConnection();
+            //GameManager.instance.HandleFailConnection();
         };
 
         ws.OnClose += (sender, e) =>
         {
-            
             Debug.Log("Connection closed: " + e.Reason);
         };
         
         ws.Connect();
+        
+        
     }
     
     // Đóng gói tập tin và chuẩn bị gửi
+    public void HandelDataAndSend(RequestPacket1 requestPacket1, bool isLock)
+    {
+        if (isLock)
+        {
+            if (stateGame == StateTrade.Waiting)
+            {
+                Debug.Log("Waiting for request");
+                return;
+            }
+            stateGame = StateTrade.Waiting;
+        }
+        SendDataToServer(RequestPacket1.toJson(requestPacket1));
+    }
     public void HandelDataAndSend(RequestPacket requestPacket, bool isLock)
     {
         if (isLock)
@@ -107,7 +117,7 @@ public class ClientManager : MonoBehaviour
             }
             stateGame = StateTrade.Waiting;
         }
-        SendDataToServer(RequestPacket.toJson(requestPacket));
+        SendDataToServer(JsonUtils.ToJson(requestPacket));
     }
 
     // Gửi dữ liệu JSON đến server qua WebSocket

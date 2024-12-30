@@ -31,6 +31,7 @@ public class UIManager : MonoBehaviour
         public UIViewListGround uiViewListGround;
         public UIInfoVP uiInfoVp;
         public UIPK uiPK;
+        public UIAuth uiAuth;
         public Builder builder;
         
         public TextMeshProUGUI uiInfoConnectText;
@@ -51,9 +52,9 @@ public class UIManager : MonoBehaviour
 
         public void FinishConnectionUI(string urlConnect)
         {
-                UpdateUIViewItems();
+                //UpdateUIViewItems();
                 uiConnection.CloseConnectionUI();
-                uiRegisterName.OnRegisterNameUI();
+                uiAuth.OnAuthUI();
                 uiInfoConnectText.text = "Địa chỉ máy chủ: " + urlConnect;
         }
         public void UpdateUIViewItems()
