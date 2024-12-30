@@ -34,7 +34,7 @@ public class ClientManager : MonoBehaviour
                 switch (packetResponse.typeResponse)
                 {
                     case TypeResponse.RESPONSE_REGISTER_TRUE:
-                        GameManager.instance.HandelLoginTrue();
+                        GameManager.instance.HandelRegisterTrue();
                         Debug.Log(packetResponse.callbackResult);
                         break;
                     

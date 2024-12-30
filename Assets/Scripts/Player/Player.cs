@@ -6,7 +6,8 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     public static Player instance;
-
+    private string username;
+    private string usernameWaitRegister;
     [SerializeField] private float countGoldDefault = 10;
     [SerializeField] private float countIronDefault = 50;
     [SerializeField] private float countFoodDefault = 350;
@@ -15,15 +16,19 @@ public class Player : MonoBehaviour
     private AssetPlayer assetPlayer;
     private string namePlayer;
     private int day = 1;
+    public string Username { get => username; }
+    public string UsernameWaitRegister { get => usernameWaitRegister; set => usernameWaitRegister = value; }
     public int Day { get { return day; } }
     public string NamePlayer {get {return namePlayer; }}
     private void Awake()
     {
         instance = this;
-        
-        
     }
 
+    public void InitName()
+    {
+        username = usernameWaitRegister;
+    }
     public void InitResourcePlayer()
     {
         // Khởi tạo tài nguyên ban đầu cho người chơi

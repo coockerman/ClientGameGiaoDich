@@ -50,11 +50,22 @@ public class GameManager : MonoBehaviour
         });
     }
 
+    public void HandelRegisterTrue()
+    {
+        RunOnMainThread(() =>
+        {
+            Player.instance.InitName();
+            UIManager.instance.uiAuth.UIRegisterSucess();
+            
+        });
+    }
     public void HandelLoginTrue()
     {
         RunOnMainThread(() =>
         {
+            Player.instance.InitName();
             UIManager.instance.uiAuth.UILoginSuccess();
+            //Todo get data login
         });
     }
     public void HandelRegisterFail(string dialog)
@@ -178,6 +189,7 @@ public class GameManager : MonoBehaviour
 
     public void RequestRegister(string username, string password)
     {
+        Player.instance.UsernameWaitRegister = username;
         AuthData authData = new AuthData(null, username, password);
         RequestPacket requestPacket = new RequestPacket(TypeRequest.REGISTER_NEW_PLAYER, authData);
         ClientManager.Instance.HandelDataAndSend(requestPacket, false);

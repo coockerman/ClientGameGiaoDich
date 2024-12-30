@@ -35,10 +35,14 @@ public class UIAuth : MonoBehaviour
         }
     }
 
-    public void UILoginSuccess()
+    public void UIRegisterSucess()
     {
         OffAuthUI();
         UIManager.instance.uiRegisterName.OnRegisterNameUI();
+    }
+    public void UILoginSuccess()
+    {
+        OffAuthUI();
     }
 
     public void UIRegisterFailed(string dialog)
@@ -80,6 +84,7 @@ public class UIAuth : MonoBehaviour
         AuthData authData = new AuthData();
         authData.userName = strNameRegister;
         authData.password = strPassResgister;
+        
         GameManager.instance.RequestRegister(strNameRegister, strPassResgister);
     }
 
