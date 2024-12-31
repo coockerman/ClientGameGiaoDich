@@ -38,7 +38,7 @@ public class UIAuth : MonoBehaviour
     public void UIRegisterSucess()
     {
         OffAuthUI();
-        UIManager.instance.uiRegisterName.OnRegisterNameUI();
+        //UIManager.instance.uiRegisterName.OnRegisterNameUI();
     }
     public void UILoginSuccess()
     {

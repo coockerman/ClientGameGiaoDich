@@ -39,7 +39,7 @@ public class ClientManager : MonoBehaviour
                         break;
                     
                     case TypeResponse.RESPONSE_REGISTER_FALSE:
-                        GameManager.instance.HandelRegisterFail(packetResponse.callbackResult);
+                        GameManager.instance.HandleRegisterFail(packetResponse.callbackResult);
                         Debug.Log(packetResponse.callbackResult);
                         break;
                     
@@ -49,15 +49,27 @@ public class ClientManager : MonoBehaviour
                         break;
                     
                     case TypeResponse.RESPONSE_LOGIN_FALSE:
-                        GameManager.instance.HandelLoginFail(packetResponse.callbackResult);
+                        GameManager.instance.HandleLoginFail(packetResponse.callbackResult);
                         Debug.Log(packetResponse.callbackResult);
                         break;
                     
                     case TypeResponse.RESPONSE_LOGOUT_TRUE:
+                        //Todo logout true
                         Debug.Log(packetResponse.callbackResult);
                         break;
                     
                     case TypeResponse.RESPONSE_LOGOUT_FALSE:
+                        //Todo logout false
+                        Debug.Log(packetResponse.callbackResult);
+                        break;
+                    
+                    case TypeResponse.RESPONSE_REGISTER_NAME_TRUE:
+                        GameManager.instance.HandleRegisterNameTrue(packetResponse.callbackResult);
+                        Debug.Log(packetResponse.callbackResult);
+                        break;
+                    
+                    case TypeResponse.RESPONSE_REGISTER_NAME_FALSE:
+                        GameManager.instance.HandleRegisterNameFail(packetResponse.callbackResult);
                         Debug.Log(packetResponse.callbackResult);
                         break;
                 }

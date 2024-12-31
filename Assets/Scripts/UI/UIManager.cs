@@ -109,7 +109,7 @@ public class UIManager : MonoBehaviour
                 
                 OnUIChat();
                 
-                uiRegisterName.SetTextDialogRegister("Đăng kí thành công", Color.green);
+                //uiRegisterName.SetTextDialogRegister("Đăng kí thành công", Color.green);
                 uiRegisterName.CloseUIRegister(1.5f);
                 uiInformation.OnUIInformation();
                 uiViewListGround.OnUIViewListGround();

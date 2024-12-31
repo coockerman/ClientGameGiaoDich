@@ -14,20 +14,33 @@ public class Player : MonoBehaviour
     [SerializeField] private float countMoneyDefault = 1000;
     
     private AssetPlayer assetPlayer;
+    
     private string namePlayer;
+    private string namePlayerWaitRegister;
+    
     private int day = 1;
-    public string Username { get => username; }
+    
+    public string Username => username;
+    public string NamePlayer => namePlayer;
+
     public string UsernameWaitRegister { get => usernameWaitRegister; set => usernameWaitRegister = value; }
-    public int Day { get { return day; } }
-    public string NamePlayer {get {return namePlayer; }}
+    public string NamePlayerWaitRegister { get => namePlayerWaitRegister; set => namePlayerWaitRegister = value; }
+    
+    public int Day => day;
+
     private void Awake()
     {
         instance = this;
     }
 
-    public void InitName()
+    public void InitUsername()
     {
         username = usernameWaitRegister;
+    }
+
+    public void InitNamePlayer()
+    {
+        namePlayer = namePlayerWaitRegister;
     }
     public void InitResourcePlayer()
     {

@@ -54,32 +54,50 @@ public class GameManager : MonoBehaviour
     {
         RunOnMainThread(() =>
         {
-            Player.instance.InitName();
+            Player.instance.InitUsername();
             UIManager.instance.uiAuth.UIRegisterSucess();
-            
+            UIManager.instance.uiRegisterName.OnRegisterNameUI();
         });
     }
     public void HandelLoginTrue()
     {
         RunOnMainThread(() =>
         {
-            Player.instance.InitName();
+            Player.instance.InitUsername();
             UIManager.instance.uiAuth.UILoginSuccess();
-            //Todo get data login
+            //Todo get data player
         });
     }
-    public void HandelRegisterFail(string dialog)
+    public void HandleRegisterFail(string dialog)
     {
         RunOnMainThread(() =>
         {
             UIManager.instance.uiAuth.UIRegisterFailed(dialog);
         });
     }
-    public void HandelLoginFail(string dialog)
+    public void HandleLoginFail(string dialog)
     {
         RunOnMainThread(() =>
         {
             UIManager.instance.uiAuth.UILoginFailed(dialog);
+        });
+    }
+
+    public void HandleRegisterNameTrue(string dialog)
+    {
+        RunOnMainThread(() =>
+        {
+            Player.instance.InitNamePlayer();
+            UIManager.instance.uiRegisterName.SetTextDialogRegisterNameTrue(dialog);
+            UIManager.instance.uiRegisterName.CloseUIRegister(3f);
+            //Todo get data player
+        });
+    }
+    public void HandleRegisterNameFail(string dialog)
+    {
+        RunOnMainThread(() =>
+        {
+            UIManager.instance.uiRegisterName.SetTextDialogRegisterNameFalse(dialog);
         });
     }
     public void HandleBuy(AbstractData data)
@@ -167,7 +185,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                UIManager.instance.uiRegisterName.SetTextDialogRegister("Tên người chơi đã tồn tại", Color.red);
+                //UIManager.instance.uiRegisterName.SetTextDialogRegister("Tên người chơi đã tồn tại", Color.red);
             }
         });
     }
@@ -190,6 +208,7 @@ public class GameManager : MonoBehaviour
     public void RequestRegister(string username, string password)
     {
         Player.instance.UsernameWaitRegister = username;
+        
         AuthData authData = new AuthData(null, username, password);
         RequestPacket requestPacket = new RequestPacket(TypeRequest.REGISTER_NEW_PLAYER, authData);
         ClientManager.Instance.HandelDataAndSend(requestPacket, false);
@@ -202,8 +221,9 @@ public class GameManager : MonoBehaviour
     }
     public void RequestRegisterName(string namePlayer)
     {
-        //Todo fix
-        PlayerInfo playerInfo = new PlayerInfo("nghai1234",namePlayer);
+        Player.instance.NamePlayerWaitRegister = namePlayer;
+        
+        PlayerInfo playerInfo = new PlayerInfo(Player.instance.Username,namePlayer);
         RequestPacket requestPacket = new RequestPacket(TypeRequest.REGISTER_NAME, playerInfo);
         ClientManager.Instance.HandelDataAndSend(requestPacket, false);
     }

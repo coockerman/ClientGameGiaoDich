@@ -49,8 +49,15 @@ public class UIRegisterName : MonoBehaviour
         GameManager.instance.RequestRegisterName(playerName);
     }
 
-
-    public void SetTextDialogRegister(string textDialog, Color textColor)
+    public void SetTextDialogRegisterNameTrue(string textDialog)
+    {
+        SetTextDialogRegister(textDialog, Color.green);
+    }
+    public void SetTextDialogRegisterNameFalse(string textDialog)
+    {
+        SetTextDialogRegister(textDialog, Color.red);
+    }
+    void SetTextDialogRegister(string textDialog, Color textColor)
     {
         dialogRegister.text = textDialog;
         dialogRegister.color = textColor;
