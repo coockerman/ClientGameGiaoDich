@@ -6,7 +6,9 @@ public class ResponsePacket
 {
     public string typeResponse;
     public string callbackResult;
-
+    public PlayerInfo playerInfo;
+    public UpdateStoreData updateStoreData;
+    
     public ResponsePacket()
     {
         

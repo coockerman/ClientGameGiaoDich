@@ -57,46 +57,30 @@ public class UIManager : MonoBehaviour
                 uiAuth.OnAuthUI();
                 uiInfoConnectText.text = "Địa chỉ máy chủ: " + urlConnect;
         }
-        public void UpdateUIViewItems()
+        public void UpdateUIViewItems(AssetData assetData)
         {
                 if (isInitUIViewItems == false)
                 {
-                        foreach (ScriptableObj scriptableObj in scriptableObjs)
-                        {
-                                if (scriptableObj.typeObj == TypeObj.Item)
-                                {
-                                        UIViewItemPrefab newViewItem = Instantiate(UiViewItemPrefab, UIViewItemContent);
-                                        ItemType itemType = scriptableObj.itemType;
-                                        newViewItem.Init(TypeObj.Item, itemType, scriptableObj.nameObj, scriptableObj.sprite, (int) Player.instance.GetResourceAmount(itemType));
-                                        uiViewItemPrefabs.Add(newViewItem);
-                                }else if (scriptableObj.typeObj == TypeObj.Solier)
-                                {
-                                        UIViewItemPrefab newViewItem = Instantiate(UiViewItemPrefab, UIViewItemContent);
-                                        SolierType solierType = scriptableObj.solierType;
-                                        newViewItem.Init(TypeObj.Solier, solierType, scriptableObj.nameObj, scriptableObj.sprite, (int) Player.instance.GetSolierAmount(solierType));
-                                        uiViewItemPrefabs.Add(newViewItem);
-                                }
-                        }
+                        UIViewItemPrefab itemFood = Instantiate(UiViewItemPrefab, UIViewItemContent);
+                        itemFood.Init(ItemType.Food, scriptableObjs[0].nameObj, scriptableObjs[0].sprite, assetData.countFood);
+                        uiViewItemPrefabs.Add(itemFood);
+                        
+                        UIViewItemPrefab itemIron = Instantiate(UiViewItemPrefab, UIViewItemContent);
+                        itemIron.Init(ItemType.Iron, scriptableObjs[1].nameObj,scriptableObjs[1].sprite, assetData.countIron);
+                        uiViewItemPrefabs.Add(itemIron);
+                        
+                        uiViewMoney.Init(assetData.countMoney);
                         isInitUIViewItems = true;
                 }
-                else if(isInitUIViewItems)
+                else
                 {
-                        foreach (UIViewItemPrefab uiViewItemPrefab in uiViewItemPrefabs)
-                        {
-                                if (uiViewItemPrefab.typeObj == TypeObj.Item)
-                                {
-                                        int count = (int)Player.instance.GetResourceAmount(uiViewItemPrefab.itemType);
-                                        uiViewItemPrefab.Init(count);
-                                }else if (uiViewItemPrefab.typeObj == TypeObj.Solier)
-                                {
-                                        int count = (int)Player.instance.GetSolierAmount(uiViewItemPrefab.solierType);
-                                        uiViewItemPrefab.Init(count);
-                                }
-                        }
+                        uiViewItemPrefabs[0].Init(ItemType.Food, "Vàng",scriptableObjs[0].sprite, assetData.countFood);
+                        uiViewItemPrefabs[1].Init(ItemType.Iron, "Sắt",scriptableObjs[1].sprite, assetData.countIron);
+                        
+                        uiViewMoney.Init(assetData.countMoney);
                 }
-                uiViewMoney.Init((int) Player.instance.GetMoneyAmount());
         }
-
+        
         public void OnUIOpenBuild(string order, string title, string status, UnityAction callback)
         {
                 UiOpenBuild.gameObject.SetActive(true);

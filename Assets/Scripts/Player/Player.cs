@@ -8,18 +8,12 @@ public class Player : MonoBehaviour
     public static Player instance;
     private string username;
     private string usernameWaitRegister;
-    [SerializeField] private float countGoldDefault = 10;
-    [SerializeField] private float countIronDefault = 50;
-    [SerializeField] private float countFoodDefault = 350;
-    [SerializeField] private float countMoneyDefault = 1000;
-    
-    private AssetPlayer assetPlayer;
     
     private string namePlayer;
     private string namePlayerWaitRegister;
     
-    private int day = 1;
-    
+    private int day = 0;
+    private AssetData assetData;
     public string Username => username;
     public string NamePlayer => namePlayer;
 
@@ -28,6 +22,11 @@ public class Player : MonoBehaviour
     
     public int Day => day;
 
+    private AssetPlayer assetPlayer;
+    [SerializeField] private float countGoldDefault = 10;
+    [SerializeField] private float countIronDefault = 50;
+    [SerializeField] private float countFoodDefault = 350;
+    [SerializeField] private float countMoneyDefault = 1000;
     private void Awake()
     {
         instance = this;
@@ -42,29 +41,41 @@ public class Player : MonoBehaviour
     {
         namePlayer = namePlayerWaitRegister;
     }
-    public void InitResourcePlayer()
+
+    public void UpdateInformationPlayer(string namePlayerGet, int dayPlayerGet)
+    {
+        this.namePlayer = namePlayerGet;
+        this.day = dayPlayerGet;
+        UIManager.instance.uiInformation.Init(namePlayer, day);
+        //Todo update 
+    }
+
+    public void UpdateResourcePlayer(AssetData assetData)
+    {
+        this.assetData = assetData;
+        UIManager.instance.UpdateUIViewItems(assetData);
+    }
+    public void InitResourcePlayer(AssetData assetData)
     {
         // Khởi tạo tài nguyên ban đầu cho người chơi
-        var initialResources = new Dictionary<ItemType, float>
+        var initialResources = new Dictionary<ItemType, int>
         {
-            { ItemType.Gold, countGoldDefault },
-            { ItemType.Iron, countIronDefault },
-            { ItemType.Food, countFoodDefault }
+            { ItemType.Food, assetData.countFood },
+            { ItemType.Iron, assetData.countIron },
+            { ItemType.Gold, assetData.countGold },
+            { ItemType.Melee, assetData.countMelee },
+            { ItemType.Arrow, assetData.countArrow },
+            { ItemType.Cavalry, assetData.countCavalry },
+            { ItemType.Citizen, assetData.countCitizen },
         };
-        var solierResources = new Dictionary<SolierType, float>
-        {
-            { SolierType.Melee, 0 },
-            { SolierType.Arrow, 0 },
-            { SolierType.Cavalry, 0 },
-            { SolierType.Citizen, 0 }
-        };
-        assetPlayer = new AssetPlayer(countMoneyDefault, initialResources, solierResources); // 10000 là số tiền khởi đầu
+        
+        assetPlayer = new AssetPlayer(assetData.countMoney, initialResources);
     }
     public void UpDayPlayer()
     {
         day += 1;
         UIManager.instance.uiInformation.UpdateDayPlayer(day);
-        UIManager.instance.UpdateUIViewItems();
+        //UIManager.instance.UpdateUIViewItems();
         SoundManager.instance.PlayDaySound();
         
         SoldierData soldierData = new SoldierData(
@@ -126,21 +137,20 @@ public class Player : MonoBehaviour
 
 public class AssetPlayer
 {
-    private float money; // Tiền của người chơi
-    private Dictionary<ItemType, float> resources; // Lưu trữ tài nguyên
+    private float money;
+    private Dictionary<ItemType, int> resources; // Lưu trữ tài nguyên
     private Dictionary<SolierType, float> soliers;
-    public AssetPlayer(float money, Dictionary<ItemType, float> initialResources, Dictionary<SolierType, float> soliderResources)
+    public AssetPlayer(int money, Dictionary<ItemType, int> initialResources)
     {
         this.money = money;
-        this.resources = new Dictionary<ItemType, float>(initialResources);
-        this.soliers = new Dictionary<SolierType, float>(soliderResources);
+        this.resources = new Dictionary<ItemType, int>(initialResources);
     }
 
     public float Money => money;
 
     public void AddMoney(float amount)
     {
-        UIManager.instance.UpdateUIViewItems();
+        //UIManager.instance.UpdateUIViewItems();
         money += amount;
     }
 
@@ -152,13 +162,13 @@ public class AssetPlayer
         money -= price * amount;
         if (resources.ContainsKey(itemType))
         {
-            resources[itemType] += amount;
+            //resources[itemType] += amount;
         }
         else
         {
-            resources[itemType] = amount; // Nếu tài nguyên chưa tồn tại
+            //resources[itemType] = amount; // Nếu tài nguyên chưa tồn tại
         }
-        UIManager.instance.UpdateUIViewItems();
+        //UIManager.instance.UpdateUIViewItems();
         return true;
     }
 
@@ -169,9 +179,9 @@ public class AssetPlayer
         // Kiểm tra tồn tại tài nguyên và đủ số lượng để bán
         if (resources.ContainsKey(itemType) && resources[itemType] >= amount)
         {
-            resources[itemType] -= amount;
+            //resources[itemType] -= amount;
             money += price * amount;
-            UIManager.instance.UpdateUIViewItems();
+            //UIManager.instance.UpdateUIViewItems();
             return true;
         }
         return false;
@@ -187,7 +197,7 @@ public class AssetPlayer
         {
             soliers[solierType] = amount; // Nếu tài nguyên chưa tồn tại
         }
-        UIManager.instance.UpdateUIViewItems();
+        //UIManager.instance.UpdateUIViewItems();
         return true;
     }
 
@@ -198,7 +208,7 @@ public class AssetPlayer
             if (soliers[solierType] >= amount)
             {
                 soliers[solierType] -= amount;
-                UIManager.instance.UpdateUIViewItems();
+               // UIManager.instance.UpdateUIViewItems();
                 return true;
             }
             return false;

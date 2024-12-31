@@ -10,9 +10,17 @@ public class UIViewItemPrefab : MonoBehaviour, IPointerEnterHandler, IPointerExi
     public TypeObj typeObj;
     public ItemType itemType;
     public SolierType solierType;
-    public string nameVP = "";
+    public string nameVP = "Tiền";
     public Image img;
     public TextMeshProUGUI countText;
+    
+    public void Init(ItemType itemType, string nameVP, Sprite sprite, int count)
+    {
+        this.itemType = itemType;
+        this.nameVP = nameVP;
+        img.sprite = sprite;
+        countText.text = count.ToString();
+    }
     
     public void Init(TypeObj typeObj, ItemType itemType, string nameVP, Sprite sprite, int count)
     {

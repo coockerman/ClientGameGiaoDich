@@ -30,47 +30,49 @@ public class ClientManager : MonoBehaviour
             try
             {
                 ResponsePacket packetResponse = JsonUtils.FromJson<ResponsePacket>(e.Data);
+                Debug.Log(packetResponse.callbackResult);
                 // Xử lý dữ liệu theo packetType
                 switch (packetResponse.typeResponse)
                 {
                     case TypeResponse.RESPONSE_REGISTER_TRUE:
                         GameManager.instance.HandelRegisterTrue();
-                        Debug.Log(packetResponse.callbackResult);
+                        
                         break;
                     
                     case TypeResponse.RESPONSE_REGISTER_FALSE:
                         GameManager.instance.HandleRegisterFail(packetResponse.callbackResult);
-                        Debug.Log(packetResponse.callbackResult);
                         break;
                     
                     case TypeResponse.RESPONSE_LOGIN_TRUE:
                         GameManager.instance.HandelLoginTrue();
-                        Debug.Log(packetResponse.callbackResult);
                         break;
                     
                     case TypeResponse.RESPONSE_LOGIN_FALSE:
                         GameManager.instance.HandleLoginFail(packetResponse.callbackResult);
-                        Debug.Log(packetResponse.callbackResult);
                         break;
                     
                     case TypeResponse.RESPONSE_LOGOUT_TRUE:
                         //Todo logout true
-                        Debug.Log(packetResponse.callbackResult);
                         break;
                     
                     case TypeResponse.RESPONSE_LOGOUT_FALSE:
                         //Todo logout false
-                        Debug.Log(packetResponse.callbackResult);
                         break;
                     
                     case TypeResponse.RESPONSE_REGISTER_NAME_TRUE:
                         GameManager.instance.HandleRegisterNameTrue(packetResponse.callbackResult);
-                        Debug.Log(packetResponse.callbackResult);
                         break;
                     
                     case TypeResponse.RESPONSE_REGISTER_NAME_FALSE:
                         GameManager.instance.HandleRegisterNameFail(packetResponse.callbackResult);
-                        Debug.Log(packetResponse.callbackResult);
+                        break;
+                    
+                    case TypeResponse.RESPONSE_GET_DATA_PLAYER:
+                        GameManager.instance.HandleGetDataPlayer(packetResponse.playerInfo);
+                        break;
+                    
+                    case TypeResponse.RESPONSE_GET_DATA_SHOP:
+                        GameManager.instance.HandleGetDataShop(packetResponse.updateStoreData);
                         break;
                 }
             }

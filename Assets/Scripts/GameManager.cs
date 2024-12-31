@@ -65,7 +65,8 @@ public class GameManager : MonoBehaviour
         {
             Player.instance.InitUsername();
             UIManager.instance.uiAuth.UILoginSuccess();
-            //Todo get data player
+            
+            RequestGetAllDataPlayer();
         });
     }
     public void HandleRegisterFail(string dialog)
@@ -90,7 +91,8 @@ public class GameManager : MonoBehaviour
             Player.instance.InitNamePlayer();
             UIManager.instance.uiRegisterName.SetTextDialogRegisterNameTrue(dialog);
             UIManager.instance.uiRegisterName.CloseUIRegister(3f);
-            //Todo get data player
+            
+            RequestGetAllDataPlayer();
         });
     }
     public void HandleRegisterNameFail(string dialog)
@@ -98,6 +100,24 @@ public class GameManager : MonoBehaviour
         RunOnMainThread(() =>
         {
             UIManager.instance.uiRegisterName.SetTextDialogRegisterNameFalse(dialog);
+        });
+    }
+    public void HandleGetDataPlayer(PlayerInfo playerInfo)
+    {
+        RunOnMainThread(() =>
+        {
+            Player.instance.UpdateInformationPlayer(playerInfo.namePlayer, playerInfo.dayPlayer);
+            Player.instance.UpdateResourcePlayer(playerInfo.assetData);
+        });
+    }
+    public void HandleGetDataShop(UpdateStoreData data)
+    {
+        RunOnMainThread(() =>
+        {
+            if (data != null)
+            {
+                UIManager.instance.UpdateStoreData(data);
+            }
         });
     }
     public void HandleBuy(AbstractData data)
@@ -126,16 +146,7 @@ public class GameManager : MonoBehaviour
         });
     }
 
-    public void HandleUpdateStore(UpdateStoreData data)
-    {
-        RunOnMainThread(() =>
-        {
-            if (data != null)
-            {
-                UIManager.instance.UpdateStoreData(data);
-            }
-        });
-    }
+    
 
     public void HandleGetNamePlayer(string namePlayer)
     {
@@ -215,6 +226,8 @@ public class GameManager : MonoBehaviour
     }
     public void RequestLogin(string username, string password)
     {
+        Player.instance.UsernameWaitRegister = username;
+        
         AuthData authData = new AuthData(null, username, password);
         RequestPacket requestPacket = new RequestPacket(TypeRequest.LOGIN_PLAYER,authData);
         ClientManager.Instance.HandelDataAndSend(requestPacket, false);
@@ -226,6 +239,18 @@ public class GameManager : MonoBehaviour
         PlayerInfo playerInfo = new PlayerInfo(Player.instance.Username,namePlayer);
         RequestPacket requestPacket = new RequestPacket(TypeRequest.REGISTER_NAME, playerInfo);
         ClientManager.Instance.HandelDataAndSend(requestPacket, false);
+    }
+
+    public void RequestGetAllDataPlayer()
+    {
+        PlayerInfo playerInfo = new PlayerInfo(Player.instance.Username);
+        Debug.Log(playerInfo.userName + " " + playerInfo.namePlayer);
+        RequestPacket requestPacket = new RequestPacket(TypeRequest.GET_ALL_DATA_PLAYER, playerInfo);
+        ClientManager.Instance.HandelDataAndSend(requestPacket, false);
+    }
+    public void RequestGetDataPlayer()
+    {
+        //PlayerInfo playerInfo = new PlayerInfo()
     }
     // Các hàm Request gửi yêu cầu
     public void RequestBuy(bool status, ItemType itemType, int price, int count)

@@ -26,8 +26,11 @@ public enum ItemType
 {
     Gold = 0, 
     Iron = 1, 
-    Food = 2
-    
+    Food = 2,
+    Melee = 3,
+    Arrow = 4,
+    Cavalry = 5,
+    Citizen = 6
 }
 
 public enum SolierType
