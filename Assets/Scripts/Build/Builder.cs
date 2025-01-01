@@ -34,7 +34,7 @@ public class Builder : MonoBehaviour
                         if (uiTransform.scriptableBuild != null)
                         {
                                 Player.instance.CheckAddAsset(
-                                        uiTransform.scriptableBuild.ItemType,
+                                        uiTransform.scriptableBuild.itemType,
                                         0,
                                         uiTransform.scriptableBuild.CountProduct
                                 );

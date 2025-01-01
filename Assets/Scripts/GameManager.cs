@@ -106,9 +106,9 @@ public class GameManager : MonoBehaviour
     {
         RunOnMainThread(() =>
         {
-            
             Player.instance.UpdateInformationPlayer(playerInfo.namePlayer, playerInfo.dayPlayer);
             Player.instance.UpdateResourcePlayer(playerInfo.assetData);
+            Player.instance.UpdateBuildPlayer(playerInfo.buildData);
         });
     }
     public void HandleGetDataShop(UpdateStoreData data)

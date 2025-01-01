@@ -5,6 +5,7 @@ public class TypeRequest
     public const string LOGOUT_PLAYER = "logoutPlayer";
     public const string REGISTER_NAME = "registerName";
     public const string GET_ALL_DATA_PLAYER = "getAllDataPlayer";
+    public const string OPEN_BUILD = "openBuild";
     public const string GET_DATA_PLAYER = "getDataPlayer";
     public const string GET_DATA_SHOP = "getDataShop";
     public const string BUY = "buy";

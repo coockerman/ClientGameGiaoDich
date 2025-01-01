@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
 {
         public static UIManager instance;
         [SerializeField] List<ScriptableObj> scriptableObjs;
+        public List<ScriptableBuild> scriptableBuilds;
         public UIOpenBuild UiOpenBuild;
         public UIViewItemPrefab UiViewItemPrefab;
         public Transform UIViewItemContent;

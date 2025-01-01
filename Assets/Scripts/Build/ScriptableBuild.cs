@@ -10,7 +10,7 @@ public class ScriptableBuild : ScriptableObject
         public int CountProduct;
         public string nameProduct;
         
-        public ItemType ItemType;
+        public ItemType itemType;
 
         public string loaiCongTrinh;
         public float timeBuild;

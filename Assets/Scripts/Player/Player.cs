@@ -57,6 +57,11 @@ public class Player : MonoBehaviour
         InitResourcePlayer(assetData);
         UIManager.instance.UpdateUIViewItems(assetData);
     }
+
+    public void UpdateBuildPlayer(BuildData buildData)
+    {
+        UIManager.instance.uiViewListGround.UpdateListView(buildData);
+    }
     void InitResourcePlayer(AssetData assetData)
     {
         // Khởi tạo tài nguyên ban đầu cho người chơi

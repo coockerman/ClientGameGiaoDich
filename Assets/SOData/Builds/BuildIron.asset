@@ -17,9 +17,7 @@ MonoBehaviour:
     n\u1EC1n t\u1EA3ng cho x\xE2y d\u1EF1ng v\xE0 ch\u1EBF t\u1EA1o."
   CountProduct: 8
   nameProduct: "S\u1EAFt"
-  typeObj: 0
-  ItemType: 1
-  SolierType: 0
+  itemType: 1
   loaiCongTrinh: "Khai th\xE1c"
   timeBuild: 3
   btnSprite: {fileID: 21300000, guid: 063703ff804797b49a7fe3e19f377d27, type: 3}
@@ -31,8 +29,5 @@ MonoBehaviour:
     Count: 50
   - ItemType: 2
     Count: 400
-  ComboSoliderNeedBuild: []
   ComboItemNeedCreateProduct: []
-  ComboSoliderNeedCreateProduct: []
   ComboItemSell: []
-  ComboSoliderSell: []

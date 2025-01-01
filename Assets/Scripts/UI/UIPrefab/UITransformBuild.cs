@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -9,7 +10,6 @@ using UnityEngine.UI;
 public class UITransformBuild : MonoBehaviour
 {
         public int order;
-        public bool isOpen = false;
         public List<ComboItemNeed> listComboItemOpenBuild = new List<ComboItemNeed>();
         public ScriptableBuild scriptableBuild = null;
         public Button btnClickOpenKey;
@@ -22,12 +22,7 @@ public class UITransformBuild : MonoBehaviour
         public ParticleSystem finishBuild;
         
         private float countTimeBuild = 0;
-        private void Start()
-        {
-                UpdateUIBuild();
-                
-        }
-
+        
         private void Update()
         {
                 if (countTimeBuild > 0 && scriptableBuild == null)
@@ -41,22 +36,13 @@ public class UITransformBuild : MonoBehaviour
                 }
         }
 
-        void UpdateUIBuild()
+        
+        public void UpdateUIBuild(ComboBuilder comboBuilder)
         {
-                if (isOpen)
-                {
-                        btnClickOpenKey.gameObject.SetActive(false);
-
-                        btnClickBuilding.gameObject.SetActive(true);
-                        btnClickBuilding.onClick.RemoveAllListeners();
-                        btnClickBuilding.onClick.AddListener(() =>
-                        {
-                                UIManager.instance.uiBuilding.OnUIBuilding(this);
-                        });
-                }
-                else
+                if (comboBuilder.statusBuild == TypeStatusGround.NOT_OPEN)
                 {
                         btnClickBuilding.gameObject.SetActive(false);
+                        btnHaveBuild.gameObject.SetActive(false);
                         
                         btnClickOpenKey.gameObject.SetActive(true);
                         btnClickOpenKey.onClick.RemoveAllListeners();
@@ -80,16 +66,46 @@ public class UITransformBuild : MonoBehaviour
                                                 });
                                 }
                         });
-                }
-        }
-        public void GetProduct()
-        {
-                if (isOpen && scriptableBuild != null)
+                }else if (comboBuilder.statusBuild == TypeStatusGround.OPEN)
                 {
+                        btnClickOpenKey.gameObject.SetActive(false);
+                        btnHaveBuild.gameObject.SetActive(false);
+
+                        btnClickBuilding.gameObject.SetActive(true);
+                        btnClickBuilding.onClick.RemoveAllListeners();
+                        btnClickBuilding.onClick.AddListener(() =>
+                        {
+                                UIManager.instance.uiBuilding.OnUIBuilding(this);
+                        });
+                }else if (comboBuilder.statusBuild == TypeStatusGround.HAVE_BUILD)
+                {
+                        btnClickBuilding.onClick.RemoveAllListeners();
+                        btnClickBuilding.gameObject.SetActive(false);
+                        btnClickOpenKey.gameObject.SetActive(false);
+                        
+                        ScriptableBuild scBuild = getTypeBuild(comboBuilder.typeBuild);
+                        
+                        this.scriptableBuild = scBuild;
+                        
+                        btnHaveBuild.gameObject.GetComponent<Image>().sprite = this.scriptableBuild.buildSprite;
+                        btnHaveBuild.onClick.AddListener(ChangeStatusDestroy);
+                        btnHaveBuild.gameObject.SetActive(true);
+                        
+                        btnDestroyBuild.onClick.AddListener(ClearBuild);
                         
                 }
         }
-
+        
+        ScriptableBuild getTypeBuild(string typeBuild)
+        {
+                ItemType itemType = TypeObject.StringToEnum(typeBuild);
+                foreach (ScriptableBuild scBuild in UIManager.instance.scriptableBuilds)
+                {
+                        if(scBuild.itemType == itemType) return scBuild;
+                }
+                Debug.Log("Ko tìm thấy");
+                return null;
+        }
         void ChangeStatusDestroy()
         {
                 btnDestroyBuild.gameObject.SetActive(!btnDestroyBuild.isActiveAndEnabled);
@@ -147,9 +163,7 @@ public class UITransformBuild : MonoBehaviour
                 {
                         Player.instance.CheckRemoveAsset(comboItemNeed.ItemType, 0, comboItemNeed.Count);
                 }
-                isOpen = true;
                 UIManager.instance.OffUIOpenBuild();
-                UpdateUIBuild();
         }
         bool CheckOpenCanBuild()
         {
