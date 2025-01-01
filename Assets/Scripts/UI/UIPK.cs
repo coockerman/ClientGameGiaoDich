@@ -31,22 +31,22 @@ public class UIPK : MonoBehaviour
     
     private List<UIPrefabAttackPlayer> listAttackPlayer = new List<UIPrefabAttackPlayer>();
 
-    public void InitUI(List<InfoPlayer> listInfo)
+    public void InitUI(List<PlayerInfo> listInfo)
     {
         CleanListPlayer();
         if (listInfo.Count > 0)
         {
             int count = 0;
-            foreach (InfoPlayer infoPlayer in listInfo)
+            foreach (PlayerInfo playerInfo in listInfo)
             {
-                if (infoPlayer.namePlayer != Player.instance.NamePlayer)
+                if (playerInfo.namePlayer != Player.instance.NamePlayer)
                 {
                     count++;
                 
                     UIPrefabAttackPlayer newPlayer = Instantiate(prefabAttackPlayer, contentAttackPlayer);
-                    newPlayer.Init(count, infoPlayer.namePlayer, infoPlayer.dayPlayer, () =>
+                    newPlayer.Init(count, playerInfo.namePlayer, playerInfo.dayPlayer.ToString(), () =>
                     {
-                        StartCoroutine(IEAttack(infoPlayer));
+                        StartCoroutine(IEAttack(playerInfo));
                     });
                     listAttackPlayer.Add(newPlayer);
                 }
@@ -54,36 +54,29 @@ public class UIPK : MonoBehaviour
         }
     }
 
-    IEnumerator IEAttack(InfoPlayer infoPlayer2)
+    IEnumerator IEAttack(PlayerInfo playerInfo)
     {
         objFindPlayer.SetActive(false);
         objViewPK.SetActive(true);
 
-        SoldierData soldierDataPlayer1 = new SoldierData(
-            Player.instance.GetSolierAmount(SolierType.Melee),
-            Player.instance.GetSolierAmount(SolierType.Arrow),
-            Player.instance.GetSolierAmount(SolierType.Cavalry)
-        );
-        InfoPlayer infoPlayer1 = new InfoPlayer(
-            null,
+        PlayerInfo playerInfoSelf = new PlayerInfo(
             Player.instance.NamePlayer,
-            Player.instance.Day.ToString(),
-            soldierDataPlayer1
+            Player.instance.Day
         );
         
-        uiPlayerPKplayer1.InitUI(infoPlayer1);
-        uiPlayerPKplayer2.InitUI(infoPlayer2);
+        uiPlayerPKplayer1.InitUI(playerInfoSelf);
+        uiPlayerPKplayer2.InitUI(playerInfo);
 
-        float result = TinhToan(infoPlayer1.soldierData, infoPlayer2.soldierData);
+        float result = 1;
         
         if (result > 0)
         {
             float amountResult = 50 + 5 * Player.instance.Day;
             Player.instance.AddMoneyAmount(amountResult);
-            txtResult.text = "Bạn đã chiến thắng " + infoPlayer2.namePlayer + " nhận được " + amountResult + " xu";
+            txtResult.text = "Bạn đã chiến thắng " + playerInfo.namePlayer + " nhận được " + amountResult + " xu";
         } else if (result < 0)
         {
-            txtResult.text = "Bạn đã thua " + infoPlayer2.namePlayer;
+            txtResult.text = "Bạn đã thua " + playerInfo.namePlayer;
         }
         else
         {

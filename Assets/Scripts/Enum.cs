@@ -33,19 +33,6 @@ public enum ItemType
     Citizen = 6
 }
 
-public enum SolierType
-{
-    Melee = 0,
-    Arrow = 1,
-    Cavalry = 2,    
-    Citizen = 3
-}
-
-public enum TypeObj
-{
-    Item = 0,
-    Solier = 1
-}
 public enum StateTrade
 {
     Idle = 0, 

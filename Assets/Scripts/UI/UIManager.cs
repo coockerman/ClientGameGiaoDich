@@ -59,23 +59,26 @@ public class UIManager : MonoBehaviour
         }
         public void UpdateUIViewItems(AssetData assetData)
         {
+                
                 if (isInitUIViewItems == false)
                 {
-                        UIViewItemPrefab itemFood = Instantiate(UiViewItemPrefab, UIViewItemContent);
-                        itemFood.Init(ItemType.Food, scriptableObjs[0].nameObj, scriptableObjs[0].sprite, assetData.countFood);
-                        uiViewItemPrefabs.Add(itemFood);
-                        
-                        UIViewItemPrefab itemIron = Instantiate(UiViewItemPrefab, UIViewItemContent);
-                        itemIron.Init(ItemType.Iron, scriptableObjs[1].nameObj,scriptableObjs[1].sprite, assetData.countIron);
-                        uiViewItemPrefabs.Add(itemIron);
-                        
+                        foreach (ComboItem combo in assetData.assets)
+                        {
+                                UIViewItemPrefab item = Instantiate(UiViewItemPrefab, UIViewItemContent);
+                                ItemType itemType = TypeObject.StringToEnum(combo.Type);
+                                item.Init(itemType, GetImageObjByType(itemType).nameObj ,GetImageObjByType(itemType).sprite,combo.Count);
+                                uiViewItemPrefabs.Add(item);
+                        }
                         uiViewMoney.Init(assetData.countMoney);
                         isInitUIViewItems = true;
                 }
                 else
                 {
-                        uiViewItemPrefabs[0].Init(ItemType.Food, "Vàng",scriptableObjs[0].sprite, assetData.countFood);
-                        uiViewItemPrefabs[1].Init(ItemType.Iron, "Sắt",scriptableObjs[1].sprite, assetData.countIron);
+                        for (int i = 0; i < uiViewItemPrefabs.Count; i++)
+                        {
+                                ItemType itemType = TypeObject.StringToEnum(assetData.assets[i].Type);
+                                uiViewItemPrefabs[i].Init(itemType, GetImageObjByType(itemType).nameObj,GetImageObjByType(itemType).sprite, assetData.assets[i].Count);
+                        }
                         
                         uiViewMoney.Init(assetData.countMoney);
                 }
@@ -125,52 +128,16 @@ public class UIManager : MonoBehaviour
         }
 
         
-        public ScriptableObj GetImageObjByType(TypeObj typeObj, ItemType itemType, SolierType solierType)
-        {
-                if (typeObj == TypeObj.Solier)
-                {
-                        foreach (ScriptableObj scriptableObj in scriptableObjs)
-                        {
-                                if (scriptableObj.typeObj == TypeObj.Solier)
-                                {
-                                        if(scriptableObj.solierType == solierType) return scriptableObj;
-                                }
-                        }
-                }else if (typeObj == TypeObj.Item)
-                {
-                        foreach (ScriptableObj scriptableObj in scriptableObjs)
-                        {
-                                if (scriptableObj.typeObj == TypeObj.Item)
-                                {
-                                        if(scriptableObj.itemType == itemType) return scriptableObj;
-                                }
-                        }
-                }
-
-                return null;
-        }
+        
         public ScriptableObj GetImageObjByType(ItemType itemType)
         {
                 foreach (ScriptableObj scriptableObj in scriptableObjs)
                 {
-                        if (scriptableObj.typeObj == TypeObj.Item)
-                        {
-                                if(scriptableObj.itemType == itemType) return scriptableObj;
-                        }
+                        if(scriptableObj.itemType == itemType) return scriptableObj;
                 }
                 return null;
         }
-        public ScriptableObj GetImageObjByType(SolierType solierType)
-        {
-                foreach (ScriptableObj scriptableObj in scriptableObjs)
-                {
-                        if (scriptableObj.typeObj == TypeObj.Solier)
-                        {
-                                if(scriptableObj.solierType == solierType) return scriptableObj;
-                        }
-                }
-                return null;
-        }
+        
         // Hàm xử lý hiệu ứng trượt từ trên xuống
         private void SlideFromTop(GameObject uiElement)
         {

@@ -10,9 +10,7 @@ public class ScriptableBuild : ScriptableObject
         public int CountProduct;
         public string nameProduct;
         
-        public TypeObj typeObj;
         public ItemType ItemType;
-        public SolierType SolierType;
 
         public string loaiCongTrinh;
         public float timeBuild;
@@ -20,13 +18,10 @@ public class ScriptableBuild : ScriptableObject
         public Sprite buildSprite;
         
         public List<ComboItemNeed> ComboItemNeedBuild;
-        public List<ComboSoliderNeed> ComboSoliderNeedBuild;
         
         public List<ComboItemNeed> ComboItemNeedCreateProduct;
-        public List<ComboSoliderNeed> ComboSoliderNeedCreateProduct;
         
         public List<ComboItemNeed> ComboItemSell;
-        public List<ComboSoliderNeed> ComboSoliderSell;
 }
 
 [System.Serializable]
@@ -36,9 +31,3 @@ public class ComboItemNeed
         public int Count;
 }
 
-[System.Serializable]
-public class ComboSoliderNeed
-{
-        public SolierType SolierType;
-        public int Count;
-}

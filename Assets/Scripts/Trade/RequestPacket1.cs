@@ -6,7 +6,7 @@ public class RequestPacket
         public string typeRequest;
         public AuthData authData;
         public PlayerInfo playerInfo;
-        
+        public Trade trade;
         public RequestPacket()
         {
                 
@@ -22,6 +22,12 @@ public class RequestPacket
                 this.typeRequest = typeRequest;
                 this.playerInfo = playerInfo;
         }
+
+        public RequestPacket(string typeRequest, Trade trade)
+        {
+                this.typeRequest = typeRequest;
+                this.trade = trade;
+        }
 }
 
 public class RequestPacket1
@@ -36,7 +42,7 @@ public class RequestPacket1
         public string dayPlay;
         public SoldierData soldierData;
         public bool isRegisterPlayer;
-        public List<InfoPlayer> infoPlayers;
+        //public List<InfoPlayer> infoPlayers;
         
         public RequestPacket1()
         {

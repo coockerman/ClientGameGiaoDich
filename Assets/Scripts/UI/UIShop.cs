@@ -18,7 +18,7 @@ public class UIShop : MonoBehaviour
     private TypeItemTrade typeTrade = TypeItemTrade.Buy;
     private List<UIPrefabItemShop> itemShopListBuy = new List<UIPrefabItemShop>();
     private List<UIPrefabItemShop> itemShopListSell = new List<UIPrefabItemShop>();
-    private UpdateStoreData dataStore;
+    //private UpdateStoreData dataStore;
     private List<ScriptableObj> listImgItem = new List<ScriptableObj>();
 
     private void Start()
@@ -30,14 +30,13 @@ public class UIShop : MonoBehaviour
     public void UpdateStoreData(UpdateStoreData data, List<ScriptableObj> listImgItem)
     {
         this.listImgItem = listImgItem;
-        dataStore = data;
-        InitUIData();
+        //dataStore = data;
+        InitUIData(data);
     }
     
     public void UpdateStoreData(UpdateStoreData data)
     {
-        dataStore = data;
-        UpdateUIData();
+        UpdateUIData(data);
     }
 
     void OnShopListBuy()
@@ -53,19 +52,19 @@ public class UIShop : MonoBehaviour
         shopListBuy.gameObject.SetActive(false);
         shopListSell.gameObject.SetActive(true);
     }
-    void InitUIData()
+    void InitUIData(UpdateStoreData data)
     {
-        InitDataBuy();
-        InitDataSell();
+        InitDataBuy(data);
+        InitDataSell(data);
     }
 
-    void UpdateUIData()
+    void UpdateUIData(UpdateStoreData dataStore)
     {
-        UpdateDataBuy();
-        UpdateDataSell();
+        UpdateDataBuy(dataStore);
+        UpdateDataSell(dataStore);
     }
 
-    void UpdateDataBuy()
+    void UpdateDataBuy(UpdateStoreData dataStore)
     {
         // Tạo danh sách các cặp ItemType và vị trí tương ứng trong itemShopList
         var itemTypes = new (ItemType type, int index)[]
@@ -114,15 +113,15 @@ public class UIShop : MonoBehaviour
                         objFind.nameObj,
                         countInStock,
                         priceBuy,
-                        () => BuyItem(type, priceBuy, 1),
-                        () => BuyItem(type, priceBuy, 10)
+                        () => BuyItem(type, 1),
+                        () => BuyItem(type, 10)
                     );
                 }
             }
         }
     }
 
-    void UpdateDataSell()
+    void UpdateDataSell(UpdateStoreData dataStore)
     {
         // Tạo danh sách các cặp ItemType và vị trí tương ứng trong itemShopList
         var itemTypes = new (ItemType type, int index)[]
@@ -167,8 +166,8 @@ public class UIShop : MonoBehaviour
                         objFind.nameObj,
                         type,
                         priceSell,
-                        () => SellItem(type, priceSell, 1),
-                        () => SellItem(type, priceSell, 10)
+                        () => SellItem(type, 1),
+                        () => SellItem(type, 10)
                     );
                 }
             }
@@ -178,36 +177,30 @@ public class UIShop : MonoBehaviour
     {
         foreach (ScriptableObj obj in listImgItem)
         {
-            if (obj.typeObj == TypeObj.Item)
+            if (obj.itemType == itemType)
             {
-                if (obj.itemType == itemType)
-                {
-                    return obj;
-                }
+                return obj;
             }
         }
         return null; // Trả về null nếu không tìm thấy
     }
 
-    void InitDataBuy()
+    void InitDataBuy(UpdateStoreData dataStore)
     {
         foreach (ScriptableObj itemImg in listImgItem)
         {
-            if (itemImg.typeObj == TypeObj.Item)
+            // Tìm ScriptableObj tương ứng để khởi tạo
+            if (itemImg.itemType == ItemType.Gold)
             {
-                // Tìm ScriptableObj tương ứng để khởi tạo
-                if (itemImg.itemType == ItemType.Gold)
-                {
-                    CreateBuyItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemGold.priceBuy, dataStore.itemGold.countInStock, ItemType.Gold);
-                }
-                else if (itemImg.itemType == ItemType.Iron)
-                {
-                    CreateBuyItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemIron.priceBuy, dataStore.itemIron.countInStock, ItemType.Iron);
-                }
-                else if (itemImg.itemType == ItemType.Food)
-                {
-                    CreateBuyItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemFood.priceBuy, dataStore.itemFood.countInStock, ItemType.Food);
-                }
+                CreateBuyItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemGold.priceBuy, dataStore.itemGold.countInStock, ItemType.Gold);
+            }
+            else if (itemImg.itemType == ItemType.Iron)
+            {
+                CreateBuyItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemIron.priceBuy, dataStore.itemIron.countInStock, ItemType.Iron);
+            }
+            else if (itemImg.itemType == ItemType.Food)
+            {
+                CreateBuyItemShopUI(TypeItemTrade.Buy, itemImg, dataStore.itemFood.priceBuy, dataStore.itemFood.countInStock, ItemType.Food);
             }
         }
     }
@@ -221,31 +214,28 @@ public class UIShop : MonoBehaviour
             itemImg.nameObj, 
             countInStock, 
             price, 
-            () => BuyItem(itemType, price, 1),
-            () => BuyItem(itemType, price, 10)
+            () => BuyItem(itemType,  1),
+            () => BuyItem(itemType, 10)
         );
         itemShopListBuy.Add(itemShop);
     }
 
-    void InitDataSell()
+    void InitDataSell(UpdateStoreData dataStore)
     {
         foreach (ScriptableObj itemImg in listImgItem)
         {
-            if (itemImg.typeObj == TypeObj.Item)
+            // Tìm ScriptableObj tương ứng để khởi tạo
+            if (itemImg.itemType == ItemType.Gold)
             {
-                // Tìm ScriptableObj tương ứng để khởi tạo
-                if (itemImg.itemType == ItemType.Gold)
-                {
-                    CreateSellItemShopUI(TypeItemTrade.Sell, itemImg, dataStore.itemGold.priceSell, ItemType.Gold);
-                }
-                else if (itemImg.itemType == ItemType.Iron)
-                {
-                    CreateSellItemShopUI(TypeItemTrade.Sell, itemImg, dataStore.itemIron.priceSell, ItemType.Iron);
-                }
-                else if (itemImg.itemType == ItemType.Food)
-                {
-                    CreateSellItemShopUI(TypeItemTrade.Sell, itemImg, dataStore.itemFood.priceSell, ItemType.Food);
-                }
+                CreateSellItemShopUI(TypeItemTrade.Sell, itemImg, dataStore.itemGold.priceSell, ItemType.Gold);
+            }
+            else if (itemImg.itemType == ItemType.Iron)
+            {
+                CreateSellItemShopUI(TypeItemTrade.Sell, itemImg, dataStore.itemIron.priceSell, ItemType.Iron);
+            }
+            else if (itemImg.itemType == ItemType.Food)
+            {
+                CreateSellItemShopUI(TypeItemTrade.Sell, itemImg, dataStore.itemFood.priceSell, ItemType.Food);
             }
         }
     }
@@ -259,23 +249,23 @@ public class UIShop : MonoBehaviour
             itemImg.nameObj, 
             itemType, 
             priceSell, 
-            () => SellItem(itemType, priceSell, 1),
-            () => SellItem(itemType, priceSell, 10)
+            () => SellItem(itemType, 1),
+            () => SellItem(itemType, 10)
         );
         itemShopListSell.Add(itemShop);
     }
     
-    void BuyItem(ItemType itemType, float price, float count)
+    void BuyItem(ItemType itemType, float count)
     {
         SoundManager.instance.PlaySoundBuy();
-        GameManager.instance.RequestBuy(true, itemType, (int) price, (int)count);
+        GameManager.instance.RequestBuy(itemType, (int)count);
     }
 
     
-    void SellItem(ItemType itemType, float price, float count)
+    void SellItem(ItemType itemType, float count)
     {
         SoundManager.instance.PlaySoundSell();
-        GameManager.instance.RequestSell(true, itemType, (int) price, (int)count);
+        GameManager.instance.RequestSell(itemType, (int)count);
     }
     
     public void OnShop()

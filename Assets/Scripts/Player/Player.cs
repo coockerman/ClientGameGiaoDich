@@ -21,7 +21,8 @@ public class Player : MonoBehaviour
     public string NamePlayerWaitRegister { get => namePlayerWaitRegister; set => namePlayerWaitRegister = value; }
     
     public int Day => day;
-
+    public Dictionary<ItemType, int> initialResources = new Dictionary<ItemType, int>();
+    
     private AssetPlayer assetPlayer;
     [SerializeField] private float countGoldDefault = 10;
     [SerializeField] private float countIronDefault = 50;
@@ -53,23 +54,25 @@ public class Player : MonoBehaviour
     public void UpdateResourcePlayer(AssetData assetData)
     {
         this.assetData = assetData;
+        InitResourcePlayer(assetData);
         UIManager.instance.UpdateUIViewItems(assetData);
     }
-    public void InitResourcePlayer(AssetData assetData)
+    void InitResourcePlayer(AssetData assetData)
     {
         // Khởi tạo tài nguyên ban đầu cho người chơi
-        var initialResources = new Dictionary<ItemType, int>
+        initialResources = new Dictionary<ItemType, int>
         {
-            { ItemType.Food, assetData.countFood },
-            { ItemType.Iron, assetData.countIron },
-            { ItemType.Gold, assetData.countGold },
-            { ItemType.Melee, assetData.countMelee },
-            { ItemType.Arrow, assetData.countArrow },
-            { ItemType.Cavalry, assetData.countCavalry },
-            { ItemType.Citizen, assetData.countCitizen },
+            { ItemType.Food, assetData.GetAssetCountByType(TypeObject.FOOD) },
+            { ItemType.Iron, assetData.GetAssetCountByType(TypeObject.IRON) },
+            { ItemType.Gold, assetData.GetAssetCountByType(TypeObject.GOLD) },
+            { ItemType.Melee, assetData.GetAssetCountByType(TypeObject.MELEE) },
+            { ItemType.Arrow, assetData.GetAssetCountByType(TypeObject.ARROW) },
+            { ItemType.Cavalry, assetData.GetAssetCountByType(TypeObject.CAVALRY) },
+            { ItemType.Citizen, assetData.GetAssetCountByType(TypeObject.CITIZEN) },
+
         };
         
-        assetPlayer = new AssetPlayer(assetData.countMoney, initialResources);
+        //assetPlayer = new AssetPlayer(assetData.countMoney, initialResources);
     }
     public void UpDayPlayer()
     {
@@ -77,15 +80,8 @@ public class Player : MonoBehaviour
         UIManager.instance.uiInformation.UpdateDayPlayer(day);
         //UIManager.instance.UpdateUIViewItems();
         SoundManager.instance.PlayDaySound();
-        
-        SoldierData soldierData = new SoldierData(
-            assetPlayer.GetSolierAmount(SolierType.Melee),
-            assetPlayer.GetSolierAmount(SolierType.Arrow),
-            assetPlayer.GetSolierAmount(SolierType.Cavalry)
-            );
-        Debug.Log(soldierData.Melee + " " + soldierData.Arrow + " " +soldierData.Cavalry);
-        GameManager.instance.RequestDayPlay(day, soldierData);
     }
+    
     public void SetupNamePlayer(string namePlayer)
     {
         this.namePlayer = namePlayer;
@@ -100,28 +96,11 @@ public class Player : MonoBehaviour
         bool result = assetPlayer.RemoveItem(itemType, price, amount);
         return result;
     }
-
-    public bool CheckAddAsset(SolierType solierType, float amount)
-    {
-        bool result = assetPlayer.AddSolider(solierType, amount);
-        return result;
-    }
-    public bool CheckRemoveAsset(SolierType solierType, float amount)
-    {
-        bool result = assetPlayer.RemoveSolider(solierType, amount);
-        return result;
-    }
-
+    
     public float GetResourceAmount(ItemType itemType)
     {
         return assetPlayer.GetResourceAmount(itemType);
     }
-
-    public float GetSolierAmount(SolierType solierType)
-    {
-        return assetPlayer.GetSolierAmount(solierType);
-    }
-
     public void AddMoneyAmount(float amount)
     {
         assetPlayer.AddMoney(amount);
@@ -139,7 +118,6 @@ public class AssetPlayer
 {
     private float money;
     private Dictionary<ItemType, int> resources; // Lưu trữ tài nguyên
-    private Dictionary<SolierType, float> soliers;
     public AssetPlayer(int money, Dictionary<ItemType, int> initialResources)
     {
         this.money = money;
@@ -186,48 +164,12 @@ public class AssetPlayer
         }
         return false;
     }
-    public bool AddSolider(SolierType solierType, float amount)
-    {
-        // Trừ tiền và thêm tài nguyên
-        if (soliers.ContainsKey(solierType))
-        {
-            soliers[solierType] += amount;
-        }
-        else
-        {
-            soliers[solierType] = amount; // Nếu tài nguyên chưa tồn tại
-        }
-        //UIManager.instance.UpdateUIViewItems();
-        return true;
-    }
-
-    public bool RemoveSolider(SolierType solierType, float amount)
-    {
-        if (soliers.ContainsKey(solierType))
-        {
-            if (soliers[solierType] >= amount)
-            {
-                soliers[solierType] -= amount;
-               // UIManager.instance.UpdateUIViewItems();
-                return true;
-            }
-            return false;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
+    
     public float GetResourceAmount(ItemType itemType)
     {
         return resources.ContainsKey(itemType) ? resources[itemType] : 0f;
     }
 
-    public float GetSolierAmount(SolierType solierType)
-    {
-        return soliers.ContainsKey(solierType) ? soliers[solierType] : 0f;
-    }
     public override string ToString()
     {
         string resourceInfo = string.Join(", ", resources.Select(r => $"{r.Key}: {r.Value}"));

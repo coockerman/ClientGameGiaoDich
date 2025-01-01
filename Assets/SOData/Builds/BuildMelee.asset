@@ -16,9 +16,7 @@ MonoBehaviour:
   Decliption: "N\u01A1i t\u1EA1o ra nh\u1EEFng binh s\u0129 h\xF9ng m\u1EA1nh"
   CountProduct: 2
   nameProduct: "Binh s\u0129"
-  typeObj: 1
-  ItemType: 1
-  SolierType: 0
+  ItemType: 3
   loaiCongTrinh: "Hu\u1EA5n luy\u1EC7n"
   timeBuild: 4
   btnSprite: {fileID: 21300000, guid: b2ac17bf89c193a48b1a62c2ddaf25f8, type: 3}
@@ -30,8 +28,5 @@ MonoBehaviour:
     Count: 40
   - ItemType: 2
     Count: 400
-  ComboSoliderNeedBuild: []
   ComboItemNeedCreateProduct: []
-  ComboSoliderNeedCreateProduct: []
   ComboItemSell: []
-  ComboSoliderSell: []

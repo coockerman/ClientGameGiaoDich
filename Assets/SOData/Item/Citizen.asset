@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63fc7cae7cca40ef8c60f4a464835a75, type: 3}
   m_Name: Citizen
   m_EditorClassIdentifier: 
-  typeObj: 1
-  itemType: 1
-  solierType: 3
+  itemType: 6
   sprite: {fileID: 21300000, guid: f9a15baf55ab0a944b04febff5f868ce, type: 3}
   nameObj: "Ng\u01B0\u1EDDi d\xE2n"

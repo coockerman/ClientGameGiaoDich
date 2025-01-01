@@ -23,5 +23,10 @@ public class PlayerInfo
         this.namePlayer = namePlayer;
     }
 
-    
+    public PlayerInfo(string namePlayer, int dayPlayer)
+    {
+        this.namePlayer = namePlayer;
+        this.dayPlayer = dayPlayer;
+    }
+
 }

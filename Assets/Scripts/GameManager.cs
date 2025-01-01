@@ -106,6 +106,7 @@ public class GameManager : MonoBehaviour
     {
         RunOnMainThread(() =>
         {
+            
             Player.instance.UpdateInformationPlayer(playerInfo.namePlayer, playerInfo.dayPlayer);
             Player.instance.UpdateResourcePlayer(playerInfo.assetData);
         });
@@ -120,57 +121,14 @@ public class GameManager : MonoBehaviour
             }
         });
     }
-    public void HandleBuy(AbstractData data)
+
+    public void HandleUpdateUIPlayerCanAttack(List<PlayerInfo> playerInfo)
     {
         RunOnMainThread(() =>
         {
-            if (data.isStatus)
+            if (playerInfo != null)
             {
-                Player.instance.CheckAddAsset(data.itemType, data.price, data.count);
-            }
-            else
-            {
-                Debug.Log("Hết đồ");
-            }
-        });
-    }
-
-    public void HandleSell(AbstractData data)
-    {
-        RunOnMainThread(() =>
-        {
-            if (data.isStatus)
-            {
-                Player.instance.CheckRemoveAsset(data.itemType, data.price, data.count);
-            }
-        });
-    }
-
-    
-
-    public void HandleGetNamePlayer(string namePlayer)
-    {
-        RunOnMainThread(() =>
-        {
-            if (!string.IsNullOrEmpty(namePlayer))
-            {
-                Player.instance.SetupNamePlayer(namePlayer);
-                
-            }
-            else
-            {
-                Debug.Log("Can't get name player");
-            }
-        });
-    }
-
-    public void HandleUpdateUIPlayerCanAttack(List<InfoPlayer> listInfo)
-    {
-        RunOnMainThread(() =>
-        {
-            if (listInfo != null)
-            {
-                UIManager.instance.uiPK.InitUI(listInfo);
+                UIManager.instance.uiPK.InitUI(playerInfo);
             }
         });
     }
@@ -183,37 +141,6 @@ public class GameManager : MonoBehaviour
                 UIManager.instance.uiChat.CheckAddMessageOpponent(namePlayer, message);
             }
         });
-    }
-
-    public void HandleRegisterPlayer(string namePlayer, bool isRegister)
-    {
-        RunOnMainThread(() =>
-        {
-            if (isRegister)
-            {
-                Player.instance.SetupNamePlayer(namePlayer);
-                UIManager.instance.HandleUpdateUIRegisterFinish(namePlayer);
-            }
-            else
-            {
-                //UIManager.instance.uiRegisterName.SetTextDialogRegister("Tên người chơi đã tồn tại", Color.red);
-            }
-        });
-    }
-
-    public void HandleFailConnection()
-    {
-        //Load lại game
-        SceneManager.LoadScene(0);
-    }
-
-    public void HandleFailDeserializeJson()
-    {
-        
-    }
-    public void HandleFailGetMessage()
-    {
-        
     }
 
     public void RequestRegister(string username, string password)
@@ -244,26 +171,27 @@ public class GameManager : MonoBehaviour
     public void RequestGetAllDataPlayer()
     {
         PlayerInfo playerInfo = new PlayerInfo(Player.instance.Username);
-        Debug.Log(playerInfo.userName + " " + playerInfo.namePlayer);
         RequestPacket requestPacket = new RequestPacket(TypeRequest.GET_ALL_DATA_PLAYER, playerInfo);
         ClientManager.Instance.HandelDataAndSend(requestPacket, false);
     }
     public void RequestGetDataPlayer()
     {
-        //PlayerInfo playerInfo = new PlayerInfo()
+        PlayerInfo playerInfo = new PlayerInfo(Player.instance.Username);
+        
     }
     // Các hàm Request gửi yêu cầu
-    public void RequestBuy(bool status, ItemType itemType, int price, int count)
+    public void RequestBuy(ItemType itemType, int count)
     {
-        AbstractData newBuy = new AbstractData(status, itemType, count, price);
-        RequestPacket1 newRequest = new RequestPacket1(PacketType.Buy, newBuy);
-        ClientManager.Instance.HandelDataAndSend(newRequest, true);
+        Trade trade = new Trade(Player.instance.Username, TypeObject.EnumToString(itemType), count);
+        Debug.Log(trade.username);
+        RequestPacket newRequest = new RequestPacket(TypeRequest.BUY, trade);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
-    public void RequestSell(bool status, ItemType itemType, int price, int count)
+    public void RequestSell(ItemType itemType, int count)
     {
-        AbstractData newSell = new AbstractData(status, itemType, count, price);
-        RequestPacket1 newRequest = new RequestPacket1(PacketType.Sell, newSell);
-        ClientManager.Instance.HandelDataAndSend(newRequest, true);
+        Trade trade = new Trade(Player.instance.Username, TypeObject.EnumToString(itemType), count);
+        RequestPacket newRequest = new RequestPacket(TypeRequest.SELL, trade);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
     public void RequestUpdateStore()
     {

@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63fc7cae7cca40ef8c60f4a464835a75, type: 3}
   m_Name: Melee
   m_EditorClassIdentifier: 
-  typeObj: 1
-  itemType: 1
-  solierType: 0
+  itemType: 3
   sprite: {fileID: 21300000, guid: 3df27f27068d35e42ab9a71760623543, type: 3}
   nameObj: "Chi\u1EBFn binh"
