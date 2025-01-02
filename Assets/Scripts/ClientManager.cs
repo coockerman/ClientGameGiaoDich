@@ -52,7 +52,7 @@ public class ClientManager : MonoBehaviour
                         break;
                     
                     case TypeResponse.RESPONSE_LOGOUT_TRUE:
-                        //Todo logout true
+                        GameManager.instance.HandleLogoutTrue();
                         break;
                     
                     case TypeResponse.RESPONSE_LOGOUT_FALSE:
@@ -73,6 +73,10 @@ public class ClientManager : MonoBehaviour
                     
                     case TypeResponse.RESPONSE_GET_DATA_SHOP:
                         GameManager.instance.HandleGetDataShop(packetResponse.updateStoreData);
+                        break;
+                    
+                    case TypeResponse.RESPONSE_MESSAGE:
+                        GameManager.instance.HandleMessagePlayer(packetResponse.chatMessage);
                         break;
                 }
             }

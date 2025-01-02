@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
         public GameObject UIViewListBtn;
         public GameObject UIViewItem;
         public GameObject UIHuongDan;
+        public GameObject UISetting;
         
         public bool isInitUIViewItems = false;
         
@@ -33,7 +34,7 @@ public class UIManager : MonoBehaviour
         public UIInfoVP uiInfoVp;
         public UIPK uiPK;
         public UIAuth uiAuth;
-        public Builder builder;
+        
         
         public TextMeshProUGUI uiInfoConnectText;
 
@@ -41,10 +42,14 @@ public class UIManager : MonoBehaviour
         public Button btnCloseHuongDan;
         public Button btnOnShop;
         public Button btnOnPK;
+        public Button btnOnSetting;
+        public Button btnCloseSetting;
+        public Button btnLogout;
+        public Button btnChangeStatusMusic;
         
         private List<UIViewItemPrefab> uiViewItemPrefabs = new List<UIViewItemPrefab>();
         private bool isInitImgShop = false;
-        
+        public bool isBuilding = false;
         private void Awake()
         {
                 instance = this;
@@ -66,8 +71,8 @@ public class UIManager : MonoBehaviour
                         foreach (ComboItem combo in assetData.assets)
                         {
                                 UIViewItemPrefab item = Instantiate(UiViewItemPrefab, UIViewItemContent);
-                                ItemType itemType = TypeObject.StringToEnum(combo.Type);
-                                item.Init(itemType, GetImageObjByType(itemType).nameObj ,GetImageObjByType(itemType).sprite,combo.Count);
+                                ItemType itemType = TypeObject.StringToEnum(combo.type);
+                                item.Init(itemType, GetImageObjByType(itemType).nameObj ,GetImageObjByType(itemType).sprite,combo.count);
                                 uiViewItemPrefabs.Add(item);
                         }
                         uiViewMoney.Init(assetData.countMoney);
@@ -77,8 +82,8 @@ public class UIManager : MonoBehaviour
                 {
                         for (int i = 0; i < uiViewItemPrefabs.Count; i++)
                         {
-                                ItemType itemType = TypeObject.StringToEnum(assetData.assets[i].Type);
-                                uiViewItemPrefabs[i].Init(itemType, GetImageObjByType(itemType).nameObj,GetImageObjByType(itemType).sprite, assetData.assets[i].Count);
+                                ItemType itemType = TypeObject.StringToEnum(assetData.assets[i].type);
+                                uiViewItemPrefabs[i].Init(itemType, GetImageObjByType(itemType).nameObj,GetImageObjByType(itemType).sprite, assetData.assets[i].count);
                         }
                         
                         uiViewMoney.Init(assetData.countMoney);
@@ -91,33 +96,51 @@ public class UIManager : MonoBehaviour
                 UiOpenBuild.Init(order, title, status, callback);
         }
 
-        public void HandleUpdateUIRegisterFinish(string namePlayer)
+        public void HandleUpdateUIRegisterFinish(bool isOnHuongDan)
         {
-                uiInformation.Init(namePlayer, 1);
-                
                 OnUIChat();
                 
-                //uiRegisterName.SetTextDialogRegister("Đăng kí thành công", Color.green);
-                uiRegisterName.CloseUIRegister(1.5f);
                 uiInformation.OnUIInformation();
                 uiViewListGround.OnUIViewListGround();
-                builder.OnBuilder();
                 OnUIViewItem();
                 SoundManager.instance.PlayMusicInGame();
                 
-                OnUIHuongDan();
+                if(isOnHuongDan) OnUIHuongDan();
+                
+                btnOnSetting.onClick.AddListener(() => { OnUISetting(); });
+                btnCloseSetting.onClick.AddListener(() => {OffUISetting(); });
+                
                 btnHuongDan.onClick.AddListener(OnUIHuongDan);
                 btnCloseHuongDan.onClick.AddListener(OffUIHuongDan);
+                
                 btnOnShop.onClick.AddListener(OnUIShop);
                 btnOnPK.onClick.AddListener(OnUIPK);
-                
+                btnLogout.onClick.AddListener(Logout);
                 OnUIListBtn();
+        }
+        public void UpdateUILogout()
+        {
+                uiAuth.OnAuthUI();
+                SoundManager.instance.PlayMusicLogin();
+                UISetting.SetActive(false);
+                
+                btnOnSetting.onClick.RemoveAllListeners();
+                btnCloseSetting.onClick.RemoveAllListeners();
+                btnHuongDan.onClick.RemoveAllListeners();
+                btnCloseHuongDan.onClick.RemoveAllListeners();
+                btnOnShop.onClick.RemoveAllListeners();
+                btnOnPK.onClick.RemoveAllListeners();
+                btnLogout.onClick.RemoveAllListeners();
+        }
+
+        void Logout()
+        {
+                GameManager.instance.RequestLogout();
         }
         public void OffUIOpenBuild()
         {
                 UiOpenBuild.OffOpenBuild();
         }
-
         void OnUIViewItem()
         {
                 SlideFromTop(UIViewItem);
@@ -128,7 +151,15 @@ public class UIManager : MonoBehaviour
                 SlideFromTop(UIViewListBtn);
         }
 
-        
+        void OnUISetting()
+        {
+                UISetting.SetActive(true);
+        }
+        void OffUISetting()
+        {
+                UISetting.SetActive(false);
+        }
+
         
         public ScriptableObj GetImageObjByType(ItemType itemType)
         {
@@ -196,10 +227,5 @@ public class UIManager : MonoBehaviour
                 }
                 else 
                         uiShop.UpdateStoreData(data);
-        }
-
-        public void SendUpdateStore()
-        {
-                GameManager.instance.RequestUpdateStore();
         }
 }

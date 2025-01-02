@@ -7,6 +7,8 @@ public class RequestPacket
         public AuthData authData;
         public PlayerInfo playerInfo;
         public Trade trade;
+        public BuildGround buildGround;
+        public ChatMessage chatMessage;
         public RequestPacket()
         {
                 
@@ -27,6 +29,18 @@ public class RequestPacket
         {
                 this.typeRequest = typeRequest;
                 this.trade = trade;
+        }
+
+        public RequestPacket(string typeRequest, BuildGround buildGround)
+        {
+                this.typeRequest = typeRequest;
+                this.buildGround = buildGround;
+        }
+
+        public RequestPacket(string typeRequest, ChatMessage chatMessage)
+        {
+                this.typeRequest = typeRequest;
+                this.chatMessage = chatMessage;
         }
 }
 

@@ -21,6 +21,5 @@ public class TypeResponse
     public const string RESPONSE_GET_DATA_PLAYER = "responseGetDataPlayer";
     public const string RESPONSE_GET_DATA_SHOP = "responseGetDataShop";
 
-    public const string RESPONSE_BUY = "responseBuy";
-    public const string RESPONSE_SELL = "responseSell";
+    public const string RESPONSE_MESSAGE = "responseMessage";
 }

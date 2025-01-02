@@ -17,11 +17,11 @@ public class ScriptableBuild : ScriptableObject
         public Sprite btnSprite;
         public Sprite buildSprite;
         
-        public List<ComboItemNeed> ComboItemNeedBuild;
+        public List<ComboItem> ComboItemNeedBuild;
         
-        public List<ComboItemNeed> ComboItemNeedCreateProduct;
+        public List<ComboItem> ComboItemNeedCreateProduct;
         
-        public List<ComboItemNeed> ComboItemSell;
+        public List<ComboItem> ComboItemSell;
 }
 
 [System.Serializable]

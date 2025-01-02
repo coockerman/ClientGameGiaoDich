@@ -18,22 +18,17 @@ MonoBehaviour:
     x\xE2y d\u1EF1ng \u0111\u1EBF ch\u1EBF h\xF9ng m\u1EA1nh."
   CountProduct: 3
   nameProduct: "V\xE0ng"
-  typeObj: 0
-  ItemType: 0
-  SolierType: 0
+  itemType: 0
   loaiCongTrinh: "Khai th\xE1c"
   timeBuild: 10
   btnSprite: {fileID: 21300000, guid: 3a656decd8fae2e4192e1829435a71f6, type: 3}
   buildSprite: {fileID: 21300000, guid: 2037ee71d7dbbab40bd933eb336e3484, type: 3}
   ComboItemNeedBuild:
-  - ItemType: 0
-    Count: 35
-  - ItemType: 1
-    Count: 180
-  - ItemType: 2
-    Count: 1000
-  ComboSoliderNeedBuild: []
+  - type: food
+    count: 2
+  - type: iron
+    count: 2
+  - type: gold
+    count: 2
   ComboItemNeedCreateProduct: []
-  ComboSoliderNeedCreateProduct: []
   ComboItemSell: []
-  ComboSoliderSell: []

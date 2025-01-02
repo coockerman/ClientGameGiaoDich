@@ -24,11 +24,11 @@ MonoBehaviour:
   btnSprite: {fileID: 21300000, guid: 348eac80f01b478418bc18621fce239f, type: 3}
   buildSprite: {fileID: 21300000, guid: 9eb4f18ca8a9102418922b364aa7a7f3, type: 3}
   ComboItemNeedBuild:
-  - ItemType: 0
-    Count: 3
-  - ItemType: 1
-    Count: 15
-  - ItemType: 2
-    Count: 100
+  - type: food
+    count: 2
+  - type: iron
+    count: 2
+  - type: gold
+    count: 2
   ComboItemNeedCreateProduct: []
   ComboItemSell: []

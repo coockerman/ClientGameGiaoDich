@@ -72,7 +72,7 @@ public class UIPK : MonoBehaviour
         if (result > 0)
         {
             float amountResult = 50 + 5 * Player.instance.Day;
-            Player.instance.AddMoneyAmount(amountResult);
+            //Player.instance.AddMoneyAmount(amountResult);
             txtResult.text = "Bạn đã chiến thắng " + playerInfo.namePlayer + " nhận được " + amountResult + " xu";
         } else if (result < 0)
         {
@@ -137,7 +137,7 @@ public class UIPK : MonoBehaviour
     }
     void UpdatePlayerCanAttack()
     {
-        GameManager.instance.RequestFindPlayerCanAttack();
+        //GameManager.instance.RequestFindPlayerCanAttack();
     }
     
     public void OnPK()

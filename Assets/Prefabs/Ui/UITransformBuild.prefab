@@ -688,14 +688,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order: 0
-  isOpen: 0
   listComboItemOpenBuild:
-  - ItemType: 0
-    Count: 3
-  - ItemType: 1
-    Count: 4
-  - ItemType: 2
-    Count: 5
+  - type: food
+    count: 1
+  - type: iron
+    count: 1
+  - type: gold
+    count: 1
   scriptableBuild: {fileID: 0}
   btnClickOpenKey: {fileID: 1938252997767240279}
   btnClickBuilding: {fileID: 7950815460340029979}

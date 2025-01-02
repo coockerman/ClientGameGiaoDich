@@ -67,6 +67,7 @@ public class UIChat : MonoBehaviour
             
             messageField.text = "";
             messageField.ActivateInputField();
+            
         }
     }
     public void ClearListMessages()
@@ -97,7 +98,7 @@ public class UIChat : MonoBehaviour
         string namePlayer = Player.instance.NamePlayer;
         newMessage.InitMessage(PlayerRole.Self, Color.yellow, namePlayer, value);
         
-        GameManager.instance.RequestMessage(namePlayer, value);
+        GameManager.instance.RequestChatMessageAll(value);
 
         UpdateSizeContent();
     }

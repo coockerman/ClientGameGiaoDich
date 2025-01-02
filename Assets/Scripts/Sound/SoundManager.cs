@@ -31,6 +31,11 @@ public class SoundManager : MonoBehaviour
         sourceChat,
         sourceMusic;
 
+    public void PlayMusicLogin()
+    {
+        sourceMusic.clip = nhacNen1;
+        sourceMusic.Play();
+    }
     public void PlayMusicInGame()
     {
         sourceMusic.clip = nhacNen2;

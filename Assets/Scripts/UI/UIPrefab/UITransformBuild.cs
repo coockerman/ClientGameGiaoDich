@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class UITransformBuild : MonoBehaviour
 {
         public int order;
-        public List<ComboItemNeed> listComboItemOpenBuild = new List<ComboItemNeed>();
+        public List<ComboItem> listComboItemOpenBuild = new List<ComboItem>();
         public ScriptableBuild scriptableBuild = null;
         public Button btnClickOpenKey;
         public Button btnClickBuilding;
@@ -39,6 +39,7 @@ public class UITransformBuild : MonoBehaviour
         
         public void UpdateUIBuild(ComboBuilder comboBuilder)
         {
+                ClearBuild();
                 if (comboBuilder.statusBuild == TypeStatusGround.NOT_OPEN)
                 {
                         btnClickBuilding.gameObject.SetActive(false);
@@ -53,7 +54,7 @@ public class UITransformBuild : MonoBehaviour
                                         UIManager.instance.OnUIOpenBuild("Khu đất thứ: " + order.ToString(), 
                                                 GetItemOpenBuild(), 
                                                 "Bạn có thể mở ô đất",
-                                                () => { OpenBuild(); });
+                                                () => { OpenBuild(order); });
                                 }
                                 else
                                 {
@@ -91,7 +92,7 @@ public class UITransformBuild : MonoBehaviour
                         btnHaveBuild.onClick.AddListener(ChangeStatusDestroy);
                         btnHaveBuild.gameObject.SetActive(true);
                         
-                        btnDestroyBuild.onClick.AddListener(ClearBuild);
+                        btnDestroyBuild.onClick.AddListener(DestoyBuild);
                         
                 }
         }
@@ -112,11 +113,14 @@ public class UITransformBuild : MonoBehaviour
         }
         public void Building(ScriptableBuild scriptableBuild)
         {
+                if (UIManager.instance.isBuilding) return;
                 StartCoroutine(IEBuilding(scriptableBuild));
         }
 
         IEnumerator IEBuilding(ScriptableBuild scriptableBuild)
         {
+                UIManager.instance.isBuilding = true;
+                
                 btnClickBuilding.onClick.RemoveAllListeners();
                 handleBuilding.gameObject.SetActive(true);
                 countTimeBuild = scriptableBuild.timeBuild;
@@ -136,9 +140,20 @@ public class UITransformBuild : MonoBehaviour
                 
                 SoundManager.instance.PlayFinishBuildSound();
                 
-                btnDestroyBuild.onClick.AddListener(ClearBuild);
+                btnDestroyBuild.onClick.AddListener(DestoyBuild);
+                
+                GameManager.instance.RequestBuilding(scriptableBuild.ComboItemNeedBuild, 
+                                                        TypeObject.EnumToString(scriptableBuild.itemType),
+                                                        order);
+                
                 yield return new WaitForSeconds(1f);
                 finishBuild.gameObject.SetActive(false);
+                UIManager.instance.isBuilding = false;
+        }
+
+        void DestoyBuild()
+        {
+                GameManager.instance.RequestCleanBuild(order);
         }
         void ClearBuild()
         {
@@ -155,23 +170,21 @@ public class UITransformBuild : MonoBehaviour
                 
                 btnDestroyBuild.onClick.RemoveAllListeners();
                 btnDestroyBuild.gameObject.SetActive(false);
+                
         }
 
-        void OpenBuild()
+        void OpenBuild(int stt)
         {
-                foreach (ComboItemNeed comboItemNeed in listComboItemOpenBuild)
-                {
-                        Player.instance.CheckRemoveAsset(comboItemNeed.ItemType, 0, comboItemNeed.Count);
-                }
-                UIManager.instance.OffUIOpenBuild();
+                UIManager.instance.UiOpenBuild.OffOpenBuild();
+                GameManager.instance.RequestOpenBuild( listComboItemOpenBuild, stt);
         }
         bool CheckOpenCanBuild()
         {
                 if (listComboItemOpenBuild.Count > 0)
                 {
-                        foreach (ComboItemNeed comboItemNeed in listComboItemOpenBuild)
+                        foreach (ComboItem comboItemNeed in listComboItemOpenBuild)
                         {
-                                if (comboItemNeed.Count > Player.instance.GetResourceAmount(comboItemNeed.ItemType))
+                                if (comboItemNeed.count > Player.instance.GetResourceAmount(TypeObject.StringToEnum(comboItemNeed.type)))
                                 {
                                         return false;
                                 }
@@ -186,9 +199,9 @@ public class UITransformBuild : MonoBehaviour
                 string txt = "";
                 if (listComboItemOpenBuild.Count > 0)
                 {
-                        foreach (ComboItemNeed comboItemNeed in listComboItemOpenBuild)
+                        foreach (ComboItem comboItemNeed in listComboItemOpenBuild)
                         {
-                                txt += comboItemNeed.ItemType.ToString() + ": " + comboItemNeed.Count + " | ";
+                                txt += comboItemNeed.type.ToString() + ": " + comboItemNeed.count + " | ";
                         }
                 }
                 return txt;

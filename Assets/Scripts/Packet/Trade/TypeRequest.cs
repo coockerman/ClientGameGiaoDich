@@ -6,8 +6,9 @@ public class TypeRequest
     public const string REGISTER_NAME = "registerName";
     public const string GET_ALL_DATA_PLAYER = "getAllDataPlayer";
     public const string OPEN_BUILD = "openBuild";
-    public const string GET_DATA_PLAYER = "getDataPlayer";
-    public const string GET_DATA_SHOP = "getDataShop";
+    public const string BUILDING = "building";
+    public const string CLEAN_BUILD = "cleanBuild";
+    public const string MESSAGE = "message";
     public const string BUY = "buy";
     public const string SELL = "sell";
 }

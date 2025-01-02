@@ -75,12 +75,12 @@ public class UIBuilding : MonoBehaviour
         
         if (build.ComboItemNeedBuild.Count > 0)
         {
-            foreach (ComboItemNeed comboItemNeed in build.ComboItemNeedBuild)
+            foreach (ComboItem comboItemNeed in build.ComboItemNeedBuild)
             {
                 GameObject newComboItem = Instantiate(prefabComboItemNeed, boxComboItemNeed);
-                ScriptableObj findObj = UIManager.instance.GetImageObjByType(comboItemNeed.ItemType);
+                ScriptableObj findObj = UIManager.instance.GetImageObjByType(TypeObject.StringToEnum(comboItemNeed.type));
                 newComboItem.gameObject.GetComponent<Image>().sprite = findObj.sprite;
-                newComboItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = comboItemNeed.Count.ToString();
+                newComboItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = comboItemNeed.count.ToString();
                 comboItems.Add(newComboItem);
             }
         }
@@ -90,8 +90,6 @@ public class UIBuilding : MonoBehaviour
             building.gameObject.SetActive(true);
             building.onClick.AddListener(() =>
             {
-                RemoveAssetToBuild(build.ComboItemNeedBuild);
-                
                 transformBuild.Building(build);
                 
                 OffUIBuilding();
@@ -107,18 +105,11 @@ public class UIBuilding : MonoBehaviour
         
     }
 
-    void RemoveAssetToBuild(List<ComboItemNeed> comboItemNeeds)
-    {
-        foreach (ComboItemNeed comboItem in comboItemNeeds)
-        {
-            Player.instance.CheckRemoveAsset(comboItem.ItemType, 0, comboItem.Count);
-        }
-    }
     bool CheckBuilding(ScriptableBuild build)
     {
-        foreach (ComboItemNeed comboItem in build.ComboItemNeedBuild)
+        foreach (ComboItem comboItem in build.ComboItemNeedBuild)
         {
-            if (comboItem.Count > Player.instance.GetResourceAmount(comboItem.ItemType))
+            if (comboItem.count > Player.instance.GetResourceAmount(TypeObject.StringToEnum(comboItem.type)))
             {
                 return false;
             }

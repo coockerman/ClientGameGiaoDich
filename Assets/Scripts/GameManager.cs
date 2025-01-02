@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -57,6 +56,7 @@ public class GameManager : MonoBehaviour
             Player.instance.InitUsername();
             UIManager.instance.uiAuth.UIRegisterSucess();
             UIManager.instance.uiRegisterName.OnRegisterNameUI();
+            
         });
     }
     public void HandelLoginTrue()
@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
             UIManager.instance.uiAuth.UILoginSuccess();
             
             RequestGetAllDataPlayer();
+            UIManager.instance.HandleUpdateUIRegisterFinish(false);
         });
     }
     public void HandleRegisterFail(string dialog)
@@ -92,6 +93,7 @@ public class GameManager : MonoBehaviour
             UIManager.instance.uiRegisterName.SetTextDialogRegisterNameTrue(dialog);
             UIManager.instance.uiRegisterName.CloseUIRegister(3f);
             
+            UIManager.instance.HandleUpdateUIRegisterFinish(true);
             RequestGetAllDataPlayer();
         });
     }
@@ -100,6 +102,15 @@ public class GameManager : MonoBehaviour
         RunOnMainThread(() =>
         {
             UIManager.instance.uiRegisterName.SetTextDialogRegisterNameFalse(dialog);
+        });
+    }
+
+    public void HandleLogoutTrue()
+    {
+        RunOnMainThread(() =>
+        {
+            Player.instance.LogoutPlayer();
+            UIManager.instance.UpdateUILogout();
         });
     }
     public void HandleGetDataPlayer(PlayerInfo playerInfo)
@@ -132,17 +143,20 @@ public class GameManager : MonoBehaviour
             }
         });
     }
-    public void HandleMessagePlayer(string namePlayer, string message)
+    public void HandleMessagePlayer(ChatMessage chatMessage)
     {
         RunOnMainThread(() =>
         {
-            if (namePlayer != Player.instance.NamePlayer)
+            if (chatMessage.namePlayer != Player.instance.NamePlayer)
             {
-                UIManager.instance.uiChat.CheckAddMessageOpponent(namePlayer, message);
+                UIManager.instance.uiChat.CheckAddMessageOpponent(chatMessage.namePlayer, chatMessage.message);
             }
         });
     }
-
+    
+    
+    
+    // Các hàm Request gửi yêu cầu
     public void RequestRegister(string username, string password)
     {
         Player.instance.UsernameWaitRegister = username;
@@ -167,19 +181,20 @@ public class GameManager : MonoBehaviour
         RequestPacket requestPacket = new RequestPacket(TypeRequest.REGISTER_NAME, playerInfo);
         ClientManager.Instance.HandelDataAndSend(requestPacket, false);
     }
-
+    public void RequestLogout()
+    {
+        AuthData authData = new AuthData(null, Player.instance.Username, "");
+        RequestPacket newRequest = new RequestPacket(TypeRequest.LOGOUT_PLAYER, authData);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
+    }
     public void RequestGetAllDataPlayer()
     {
         PlayerInfo playerInfo = new PlayerInfo(Player.instance.Username);
         RequestPacket requestPacket = new RequestPacket(TypeRequest.GET_ALL_DATA_PLAYER, playerInfo);
         ClientManager.Instance.HandelDataAndSend(requestPacket, false);
     }
-    public void RequestGetDataPlayer()
-    {
-        PlayerInfo playerInfo = new PlayerInfo(Player.instance.Username);
-        
-    }
-    // Các hàm Request gửi yêu cầu
+    
+    
     public void RequestBuy(ItemType itemType, int count)
     {
         Trade trade = new Trade(Player.instance.Username, TypeObject.EnumToString(itemType), count);
@@ -193,34 +208,45 @@ public class GameManager : MonoBehaviour
         RequestPacket newRequest = new RequestPacket(TypeRequest.SELL, trade);
         ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
-    public void RequestUpdateStore()
+
+    public void RequestOpenBuild(List<ComboItem> combos, int stt)
     {
-        RequestPacket1 request = new RequestPacket1(PacketType.UpdateStore);
-        ClientManager.Instance.HandelDataAndSend(request, false);
+        BuildGround buildGround = new BuildGround();
+        buildGround.username = Player.instance.Username;
+        buildGround.comboItemList = combos;
+        buildGround.position = stt;
+        RequestPacket newRequest = new RequestPacket(TypeRequest.OPEN_BUILD, buildGround);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
-    public void RequestMessage(string namePlayer, string message)
+    public void RequestBuilding(List<ComboItem> combos, string typeBuild ,int stt)
     {
-        RequestPacket1 request = new RequestPacket1(PacketType.MessagePlayer, namePlayer, message);
-        ClientManager.Instance.HandelDataAndSend(request, false);
+        BuildGround buildGround = new BuildGround();
+        buildGround.username = Player.instance.Username;
+        buildGround.typeBuild = typeBuild;
+        buildGround.comboItemList = combos;
+        buildGround.position = stt;
+        RequestPacket newRequest = new RequestPacket(TypeRequest.BUILDING, buildGround);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
 
-    public void RequestFindPlayerCanAttack()
+    public void RequestCleanBuild(int stt)
     {
-        RequestPacket1 request = new RequestPacket1(PacketType.FindPlayerCanAttack);
-        ClientManager.Instance.HandelDataAndSend(request, false);
+        BuildGround buildGround = new BuildGround();
+        buildGround.username = Player.instance.Username;
+        buildGround.position = stt;
+        RequestPacket newRequest = new RequestPacket(TypeRequest.CLEAN_BUILD, buildGround);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
 
-    public void RequestDayPlay(float dayPlay, SoldierData soldier)
+    public void RequestChatMessageAll(string message)
     {
-        RequestPacket1 request = new RequestPacket1(PacketType.DayPlay, "" + dayPlay, soldier);
-        ClientManager.Instance.HandelDataAndSend(request, false);
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.namePlayer = Player.instance.NamePlayer;
+        chatMessage.message = message;
+        RequestPacket newRequest = new RequestPacket(TypeRequest.MESSAGE, chatMessage);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
 
-    public void RequestAttackPlayer()
-    {
-        RequestPacket1 request = new RequestPacket1(PacketType.AttackPlayer);
-        ClientManager.Instance.HandelDataAndSend(request, false);
-    }
-
+    
     
 }
