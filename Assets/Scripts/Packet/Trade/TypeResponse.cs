@@ -16,10 +16,15 @@ public class TypeResponse
     public const string RESPONSE_REGISTER_NAME_TRUE = "responseRegisterNameTrue";
     public const string RESPONSE_REGISTER_NAME_FALSE = "responseRegisterNameFalse";
     
+    public const string RESPONSE_PASSWORD_RESET_TRUE = "responsePasswordResetTrue";
+    public const string RESPONSE_PASSWORD_RESET_FALSE = "responsePasswordResetFalse";
+    
     public const string RESPONSE_ERROR = "responseError";
     
     public const string RESPONSE_GET_DATA_PLAYER = "responseGetDataPlayer";
     public const string RESPONSE_GET_DATA_SHOP = "responseGetDataShop";
 
     public const string RESPONSE_MESSAGE = "responseMessage";
+    
+    public const string RESPONSE_UPDAY = "responseUpday";
 }

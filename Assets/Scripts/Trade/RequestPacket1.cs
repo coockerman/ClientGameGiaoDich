@@ -9,6 +9,7 @@ public class RequestPacket
         public Trade trade;
         public BuildGround buildGround;
         public ChatMessage chatMessage;
+        public PasswordReset passwordReset;
         public RequestPacket()
         {
                 
@@ -41,6 +42,12 @@ public class RequestPacket
         {
                 this.typeRequest = typeRequest;
                 this.chatMessage = chatMessage;
+        }
+
+        public RequestPacket(string typeRequest, PasswordReset passwordReset)
+        {
+                this.typeRequest = typeRequest;
+                this.passwordReset = passwordReset;
         }
 }
 

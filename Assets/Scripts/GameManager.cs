@@ -104,6 +104,20 @@ public class GameManager : MonoBehaviour
             UIManager.instance.uiRegisterName.SetTextDialogRegisterNameFalse(dialog);
         });
     }
+    public void HandleResetPasswordTrue(string dialog)
+    {
+        RunOnMainThread(() =>
+        {
+            UIManager.instance.uiUpdatePassword.UpdatePassTrue(dialog);
+        });
+    }
+    public void HandleResetPasswordFalse(string dialog)
+    {
+        RunOnMainThread(() =>
+        {
+            UIManager.instance.uiUpdatePassword.UpdatePassFalse(dialog);
+        });
+    }
 
     public void HandleLogoutTrue()
     {
@@ -120,6 +134,13 @@ public class GameManager : MonoBehaviour
             Player.instance.UpdateInformationPlayer(playerInfo.namePlayer, playerInfo.dayPlayer);
             Player.instance.UpdateResourcePlayer(playerInfo.assetData);
             Player.instance.UpdateBuildPlayer(playerInfo.buildData);
+        });
+    }
+    public void HandleUpday()
+    {
+        RunOnMainThread(() =>
+        {
+            RequestGetAllDataPlayer();
         });
     }
     public void HandleGetDataShop(UpdateStoreData data)
@@ -185,6 +206,20 @@ public class GameManager : MonoBehaviour
     {
         AuthData authData = new AuthData(null, Player.instance.Username, "");
         RequestPacket newRequest = new RequestPacket(TypeRequest.LOGOUT_PLAYER, authData);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
+    }
+
+    public void RequestForgetPassword(string username)
+    {
+        AuthData authData = new AuthData(null, username, "");
+        RequestPacket newRequest = new RequestPacket(TypeRequest.FORGET_PASSWORD, authData);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
+    }
+
+    public void RequestResetPassword(string passwordOld, string passwordNew)
+    {
+        PasswordReset passwordReset = new PasswordReset(Player.instance.Username, passwordOld, passwordNew);
+        RequestPacket newRequest = new RequestPacket(TypeRequest.PASSWORD_RESET, passwordReset);
         ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
     public void RequestGetAllDataPlayer()

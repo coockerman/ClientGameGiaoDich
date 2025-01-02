@@ -10,7 +10,7 @@ public class UIAuth : MonoBehaviour
     [SerializeField] TMP_InputField userNameRegister, passwordRegister, passwordRegisterRe;
     [SerializeField] TMP_InputField userNameLogin, passwordLogin;
     [SerializeField] GameObject registerPanel, loginPanel;
-    [SerializeField] private Button loginBtn, registerBtn, onLoginBtn, onRegisterBtn;
+    [SerializeField] private Button loginBtn, registerBtn, onLoginBtn, onRegisterBtn, forgetPasswordBtn;
     [SerializeField] TextMeshProUGUI dialogRegister, dialogLogin;
 
     private float maxTimeWaitTxt = 5f;
@@ -22,6 +22,7 @@ public class UIAuth : MonoBehaviour
         loginBtn.onClick.AddListener(PlayerLogin);
         onLoginBtn.onClick.AddListener(ChangeOnLoginUI);
         onRegisterBtn.onClick.AddListener(ChangeOnRegisterUI);
+        forgetPasswordBtn.onClick.AddListener(ForgetPassword);
     }
 
     private void Update()
@@ -65,6 +66,20 @@ public class UIAuth : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    void ForgetPassword()
+    {
+        if (userNameLogin.text != "")
+        {
+            OnDialogRegister("Đã gửi thông tin về email của bạn", Color.green);
+            GameManager.instance.RequestForgetPassword(userNameLogin.text);
+        }
+        else
+        {
+            OnDialogRegister("Không được để trống", Color.red);
+        }
+        
+        
+    }
     void PlayerRegister()
     {
         string strNameRegister = userNameRegister.text;
@@ -74,6 +89,11 @@ public class UIAuth : MonoBehaviour
         {
             OnDialogRegister("Không được để trống", Color.red);
             return;
+        }
+
+        if (strPassResgister.Length < 6)
+        {
+            OnDialogRegister("Mật khẩu ít nhất 6 kí tự", Color.yellow);
         }
         
         if (strPassResgister != strPassResgisterRe)

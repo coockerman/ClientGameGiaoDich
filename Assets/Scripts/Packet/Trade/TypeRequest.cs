@@ -4,6 +4,8 @@ public class TypeRequest
     public const string LOGIN_PLAYER = "loginPlayer";
     public const string LOGOUT_PLAYER = "logoutPlayer";
     public const string REGISTER_NAME = "registerName";
+    public const string FORGET_PASSWORD = "forgetPassword";
+    public const string PASSWORD_RESET = "passwordReset";
     public const string GET_ALL_DATA_PLAYER = "getAllDataPlayer";
     public const string OPEN_BUILD = "openBuild";
     public const string BUILDING = "building";

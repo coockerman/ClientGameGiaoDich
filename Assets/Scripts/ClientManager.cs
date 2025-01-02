@@ -59,6 +59,14 @@ public class ClientManager : MonoBehaviour
                         //Todo logout false
                         break;
                     
+                    case TypeResponse.RESPONSE_PASSWORD_RESET_TRUE:
+                        GameManager.instance.HandleResetPasswordTrue(packetResponse.callbackResult);
+                        break;
+                    
+                    case TypeResponse.RESPONSE_PASSWORD_RESET_FALSE:
+                        GameManager.instance.HandleResetPasswordFalse(packetResponse.callbackResult);
+                        break;
+                    
                     case TypeResponse.RESPONSE_REGISTER_NAME_TRUE:
                         GameManager.instance.HandleRegisterNameTrue(packetResponse.callbackResult);
                         break;
@@ -77,6 +85,10 @@ public class ClientManager : MonoBehaviour
                     
                     case TypeResponse.RESPONSE_MESSAGE:
                         GameManager.instance.HandleMessagePlayer(packetResponse.chatMessage);
+                        break;
+                    
+                    case TypeResponse.RESPONSE_UPDAY:
+                        GameManager.instance.HandleUpday();
                         break;
                 }
             }

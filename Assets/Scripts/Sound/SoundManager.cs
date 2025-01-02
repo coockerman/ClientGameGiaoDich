@@ -6,7 +6,7 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
-
+    private bool isStatusMusic = true;
     private void Awake()
     {
         instance = this;
@@ -31,6 +31,19 @@ public class SoundManager : MonoBehaviour
         sourceChat,
         sourceMusic;
 
+    public string ChangeStatusMusic()
+    {
+        sourcePK.mute = isStatusMusic;
+        sourceShopee.mute = isStatusMusic;
+        sourceBuild.mute = isStatusMusic;
+        sourceChat.mute = isStatusMusic;
+        sourceMusic.mute = isStatusMusic;
+        isStatusMusic = !isStatusMusic;
+        if (isStatusMusic) return "Tắt âm";
+        else return "Bật âm";
+
+
+    }
     public void PlayMusicLogin()
     {
         sourceMusic.clip = nhacNen1;

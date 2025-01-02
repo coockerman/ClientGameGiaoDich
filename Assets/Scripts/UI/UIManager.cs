@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour
         public UIInfoVP uiInfoVp;
         public UIPK uiPK;
         public UIAuth uiAuth;
-        
+        public UIUpdatePassword uiUpdatePassword;
         
         public TextMeshProUGUI uiInfoConnectText;
 
@@ -46,6 +46,7 @@ public class UIManager : MonoBehaviour
         public Button btnCloseSetting;
         public Button btnLogout;
         public Button btnChangeStatusMusic;
+        public Button btnResetPassword;
         
         private List<UIViewItemPrefab> uiViewItemPrefabs = new List<UIViewItemPrefab>();
         private bool isInitImgShop = false;
@@ -116,6 +117,8 @@ public class UIManager : MonoBehaviour
                 btnOnShop.onClick.AddListener(OnUIShop);
                 btnOnPK.onClick.AddListener(OnUIPK);
                 btnLogout.onClick.AddListener(Logout);
+                btnResetPassword.onClick.AddListener(OnUIResetPassword);
+                btnChangeStatusMusic.onClick.AddListener(ChangeStatusMusic);
                 OnUIListBtn();
         }
         public void UpdateUILogout()
@@ -131,6 +134,8 @@ public class UIManager : MonoBehaviour
                 btnOnShop.onClick.RemoveAllListeners();
                 btnOnPK.onClick.RemoveAllListeners();
                 btnLogout.onClick.RemoveAllListeners();
+                btnResetPassword.onClick.RemoveAllListeners();
+                btnChangeStatusMusic.onClick.RemoveAllListeners();
         }
 
         void Logout()
@@ -140,6 +145,11 @@ public class UIManager : MonoBehaviour
         public void OffUIOpenBuild()
         {
                 UiOpenBuild.OffOpenBuild();
+        }
+
+        void OnUIResetPassword()
+        {
+                uiUpdatePassword.OnUpdatePass();
         }
         void OnUIViewItem()
         {
@@ -151,6 +161,11 @@ public class UIManager : MonoBehaviour
                 SlideFromTop(UIViewListBtn);
         }
 
+        void ChangeStatusMusic()
+        {
+                string getStatusString = SoundManager.instance.ChangeStatusMusic();
+                btnChangeStatusMusic.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = getStatusString;
+        }
         void OnUISetting()
         {
                 UISetting.SetActive(true);
