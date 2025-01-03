@@ -29,4 +29,10 @@ public class PlayerInfo
         this.dayPlayer = dayPlayer;
     }
 
+    public PlayerInfo(string namePlayer, int dayPlayer, AssetData assetData)
+    {
+        this.namePlayer = namePlayer;
+        this.dayPlayer = dayPlayer;
+        this.assetData = assetData;
+    }
 }

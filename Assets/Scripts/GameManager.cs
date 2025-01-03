@@ -84,7 +84,13 @@ public class GameManager : MonoBehaviour
             UIManager.instance.uiAuth.UILoginFailed(dialog);
         });
     }
-
+    public void HandleGetPlayerCanAttack(List<PlayerInfo> listPlayerInfo)
+    {
+        RunOnMainThread(() =>
+        {
+            UIManager.instance.uiPK.InitUI(listPlayerInfo);
+        });
+    }
     public void HandleRegisterNameTrue(string dialog)
     {
         RunOnMainThread(() =>
@@ -154,16 +160,7 @@ public class GameManager : MonoBehaviour
         });
     }
 
-    public void HandleUpdateUIPlayerCanAttack(List<PlayerInfo> playerInfo)
-    {
-        RunOnMainThread(() =>
-        {
-            if (playerInfo != null)
-            {
-                UIManager.instance.uiPK.InitUI(playerInfo);
-            }
-        });
-    }
+    
     public void HandleMessagePlayer(ChatMessage chatMessage)
     {
         RunOnMainThread(() =>
@@ -244,22 +241,15 @@ public class GameManager : MonoBehaviour
         ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
 
-    public void RequestOpenBuild(List<ComboItem> combos, int stt)
+    public void RequestOpenBuild(List<ComboItem> combos, int stt, int reward)
     {
-        BuildGround buildGround = new BuildGround();
-        buildGround.username = Player.instance.Username;
-        buildGround.comboItemList = combos;
-        buildGround.position = stt;
+        BuildGround buildGround = new BuildGround(Player.instance.Username, stt, "",reward, combos);
         RequestPacket newRequest = new RequestPacket(TypeRequest.OPEN_BUILD, buildGround);
         ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
-    public void RequestBuilding(List<ComboItem> combos, string typeBuild ,int stt)
+    public void RequestBuilding(List<ComboItem> combos, string typeBuild ,int stt, int reward)
     {
-        BuildGround buildGround = new BuildGround();
-        buildGround.username = Player.instance.Username;
-        buildGround.typeBuild = typeBuild;
-        buildGround.comboItemList = combos;
-        buildGround.position = stt;
+        BuildGround buildGround = new BuildGround(Player.instance.Username, stt, typeBuild,reward, combos);
         RequestPacket newRequest = new RequestPacket(TypeRequest.BUILDING, buildGround);
         ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
@@ -282,6 +272,11 @@ public class GameManager : MonoBehaviour
         ClientManager.Instance.HandelDataAndSend(newRequest, false);
     }
 
+    public void RequestGetPlayerCanAttack()
+    {
+        RequestPacket newRequest = new RequestPacket(TypeRequest.GET_PLAYER_ATTACK);
+        ClientManager.Instance.HandelDataAndSend(newRequest, false);
+    }
     
     
 }

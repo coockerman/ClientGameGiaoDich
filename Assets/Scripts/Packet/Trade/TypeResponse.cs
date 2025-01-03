@@ -27,4 +27,6 @@ public class TypeResponse
     public const string RESPONSE_MESSAGE = "responseMessage";
     
     public const string RESPONSE_UPDAY = "responseUpday";
+    
+    public const string RESPONSE_PLAYER_ATTACK = "responsePlayerAttack";
 }

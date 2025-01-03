@@ -67,6 +67,16 @@ public class UIRegisterName : MonoBehaviour
     public void OnRegisterNameUI()
     {
         gameObject.SetActive(true);
+        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup != null)
+        {
+            canvasGroup.DOFade(1, 1).OnComplete(() => gameObject.SetActive(true));
+        }
+        else
+        {
+            // Nếu không có CanvasGroup, chỉ tắt sau một khoảng thời gian
+            DOVirtual.DelayedCall(0.5f, () => gameObject.SetActive(true));
+        }
     }
 
     public void CloseUIRegister(float timeClose)

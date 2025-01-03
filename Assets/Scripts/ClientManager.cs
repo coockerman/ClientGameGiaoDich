@@ -89,6 +89,12 @@ public class ClientManager : MonoBehaviour
                     
                     case TypeResponse.RESPONSE_UPDAY:
                         GameManager.instance.HandleUpday();
+                        Debug.Log(packetResponse.chatMessage);
+                        break;
+                    
+                    case TypeResponse.RESPONSE_PLAYER_ATTACK:
+                        GameManager.instance.HandleGetPlayerCanAttack(packetResponse.titleAllPlayer);
+                        Debug.Log(packetResponse.chatMessage);
                         break;
                 }
             }

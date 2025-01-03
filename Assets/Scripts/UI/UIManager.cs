@@ -47,6 +47,7 @@ public class UIManager : MonoBehaviour
         public Button btnLogout;
         public Button btnChangeStatusMusic;
         public Button btnResetPassword;
+        public Button btnOnRegisterNamePlayer;
         
         private List<UIViewItemPrefab> uiViewItemPrefabs = new List<UIViewItemPrefab>();
         private bool isInitImgShop = false;
@@ -55,6 +56,23 @@ public class UIManager : MonoBehaviour
         {
                 instance = this;
                 
+        }
+
+        private void Start()
+        {
+                btnOnRegisterNamePlayer.onClick.AddListener(OnRegisterNamePlayer);
+                
+                btnOnSetting.onClick.AddListener(() => { OnUISetting(); });
+                btnCloseSetting.onClick.AddListener(() => {OffUISetting(); });
+                
+                btnHuongDan.onClick.AddListener(OnUIHuongDan);
+                btnCloseHuongDan.onClick.AddListener(OffUIHuongDan);
+                
+                btnOnShop.onClick.AddListener(OnUIShop);
+                btnOnPK.onClick.AddListener(OnUIPK);
+                btnLogout.onClick.AddListener(Logout);
+                btnResetPassword.onClick.AddListener(OnUIResetPassword);
+                btnChangeStatusMusic.onClick.AddListener(ChangeStatusMusic);
         }
 
         public void FinishConnectionUI(string urlConnect)
@@ -108,17 +126,7 @@ public class UIManager : MonoBehaviour
                 
                 if(isOnHuongDan) OnUIHuongDan();
                 
-                btnOnSetting.onClick.AddListener(() => { OnUISetting(); });
-                btnCloseSetting.onClick.AddListener(() => {OffUISetting(); });
-                
-                btnHuongDan.onClick.AddListener(OnUIHuongDan);
-                btnCloseHuongDan.onClick.AddListener(OffUIHuongDan);
-                
-                btnOnShop.onClick.AddListener(OnUIShop);
-                btnOnPK.onClick.AddListener(OnUIPK);
-                btnLogout.onClick.AddListener(Logout);
-                btnResetPassword.onClick.AddListener(OnUIResetPassword);
-                btnChangeStatusMusic.onClick.AddListener(ChangeStatusMusic);
+                //btnOnRegisterNamePlayer.onClick.AddListener(OnRegisterNamePlayer);
                 OnUIListBtn();
         }
         public void UpdateUILogout()
@@ -127,15 +135,16 @@ public class UIManager : MonoBehaviour
                 SoundManager.instance.PlayMusicLogin();
                 UISetting.SetActive(false);
                 
-                btnOnSetting.onClick.RemoveAllListeners();
-                btnCloseSetting.onClick.RemoveAllListeners();
-                btnHuongDan.onClick.RemoveAllListeners();
-                btnCloseHuongDan.onClick.RemoveAllListeners();
-                btnOnShop.onClick.RemoveAllListeners();
-                btnOnPK.onClick.RemoveAllListeners();
-                btnLogout.onClick.RemoveAllListeners();
-                btnResetPassword.onClick.RemoveAllListeners();
-                btnChangeStatusMusic.onClick.RemoveAllListeners();
+                // btnOnSetting.onClick.RemoveAllListeners();
+                // btnCloseSetting.onClick.RemoveAllListeners();
+                // btnHuongDan.onClick.RemoveAllListeners();
+                // btnCloseHuongDan.onClick.RemoveAllListeners();
+                // btnOnShop.onClick.RemoveAllListeners();
+                // btnOnPK.onClick.RemoveAllListeners();
+                // btnLogout.onClick.RemoveAllListeners();
+                // btnResetPassword.onClick.RemoveAllListeners();
+                // btnChangeStatusMusic.onClick.RemoveAllListeners();
+                //btnOnRegisterNamePlayer.onClick.RemoveAllListeners();
         }
 
         void Logout()
@@ -147,6 +156,10 @@ public class UIManager : MonoBehaviour
                 UiOpenBuild.OffOpenBuild();
         }
 
+        void OnRegisterNamePlayer()
+        {
+                uiRegisterName.OnRegisterNameUI();
+        }
         void OnUIResetPassword()
         {
                 uiUpdatePassword.OnUpdatePass();

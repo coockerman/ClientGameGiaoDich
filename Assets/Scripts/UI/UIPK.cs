@@ -61,19 +61,28 @@ public class UIPK : MonoBehaviour
 
         PlayerInfo playerInfoSelf = new PlayerInfo(
             Player.instance.NamePlayer,
-            Player.instance.Day
+            Player.instance.Day,
+            Player.instance.AssetData
         );
         
         uiPlayerPKplayer1.InitUI(playerInfoSelf);
         uiPlayerPKplayer2.InitUI(playerInfo);
 
-        float result = 1;
+        SoldierData player1 = new SoldierData(playerInfoSelf.assetData.GetAssetCountByType(TypeObject.MELEE),
+            playerInfoSelf.assetData.GetAssetCountByType(TypeObject.ARROW),
+            playerInfoSelf.assetData.GetAssetCountByType(TypeObject.CAVALRY)
+            );
+        SoldierData player2 = new SoldierData(playerInfo.assetData.GetAssetCountByType(TypeObject.MELEE),
+            playerInfo.assetData.GetAssetCountByType(TypeObject.ARROW),
+            playerInfo.assetData.GetAssetCountByType(TypeObject.CAVALRY)
+        );
+        float result = TinhToan(player1, player2);
         
         if (result > 0)
         {
             float amountResult = 50 + 5 * Player.instance.Day;
             //Player.instance.AddMoneyAmount(amountResult);
-            txtResult.text = "Bạn đã chiến thắng " + playerInfo.namePlayer + " nhận được " + amountResult + " xu";
+            txtResult.text = "Bạn đã chiến thắng " + playerInfo.namePlayer+ "(tạm thời chưa có quà)" ;
         } else if (result < 0)
         {
             txtResult.text = "Bạn đã thua " + playerInfo.namePlayer;
@@ -137,7 +146,7 @@ public class UIPK : MonoBehaviour
     }
     void UpdatePlayerCanAttack()
     {
-        //GameManager.instance.RequestFindPlayerCanAttack();
+        GameManager.instance.RequestGetPlayerCanAttack();
     }
     
     public void OnPK()

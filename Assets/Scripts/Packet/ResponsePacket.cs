@@ -9,7 +9,7 @@ public class ResponsePacket
     public PlayerInfo playerInfo;
     public UpdateStoreData updateStoreData;
     public ChatMessage chatMessage;
-    
+    public List<PlayerInfo> titleAllPlayer;
     public ResponsePacket()
     {
         

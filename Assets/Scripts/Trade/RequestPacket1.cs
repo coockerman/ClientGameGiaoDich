@@ -14,6 +14,12 @@ public class RequestPacket
         {
                 
         }
+
+        public RequestPacket(string typeRequest)
+        {
+                this.typeRequest = typeRequest;
+        }
+
         public RequestPacket(string typeRequest, AuthData authData)
         {
                 this.typeRequest = typeRequest;

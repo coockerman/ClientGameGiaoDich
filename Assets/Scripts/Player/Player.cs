@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
 
     public string UsernameWaitRegister { get => usernameWaitRegister; set => usernameWaitRegister = value; }
     public string NamePlayerWaitRegister { get => namePlayerWaitRegister; set => namePlayerWaitRegister = value; }
-    
+    public AssetData AssetData { get => assetData;}
     public int Day => day;
     public Dictionary<ItemType, int> initialResources = new Dictionary<ItemType, int>();
     

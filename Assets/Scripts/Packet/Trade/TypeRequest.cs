@@ -13,4 +13,5 @@ public class TypeRequest
     public const string MESSAGE = "message";
     public const string BUY = "buy";
     public const string SELL = "sell";
+    public const string GET_PLAYER_ATTACK = "getPlayerAttack";
 }

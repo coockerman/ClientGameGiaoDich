@@ -24,10 +24,10 @@ MonoBehaviour:
   buildSprite: {fileID: 21300000, guid: 7732e135b2a67514aa8f0ad487b30192, type: 3}
   ComboItemNeedBuild:
   - type: food
-    count: 2
+    count: 250
   - type: iron
-    count: 2
+    count: 50
   - type: gold
-    count: 2
+    count: 10
   ComboItemNeedCreateProduct: []
   ComboItemSell: []

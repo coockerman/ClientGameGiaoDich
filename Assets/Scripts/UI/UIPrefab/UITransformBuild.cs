@@ -54,7 +54,7 @@ public class UITransformBuild : MonoBehaviour
                                         UIManager.instance.OnUIOpenBuild("Khu đất thứ: " + order.ToString(), 
                                                 GetItemOpenBuild(), 
                                                 "Bạn có thể mở ô đất",
-                                                () => { OpenBuild(order); });
+                                                () => { OpenBuild(order, 0); });
                                 }
                                 else
                                 {
@@ -144,7 +144,8 @@ public class UITransformBuild : MonoBehaviour
                 
                 GameManager.instance.RequestBuilding(scriptableBuild.ComboItemNeedBuild, 
                                                         TypeObject.EnumToString(scriptableBuild.itemType),
-                                                        order);
+                                                        order,
+                                                        scriptableBuild.CountProduct);
                 
                 yield return new WaitForSeconds(1f);
                 finishBuild.gameObject.SetActive(false);
@@ -173,10 +174,10 @@ public class UITransformBuild : MonoBehaviour
                 
         }
 
-        void OpenBuild(int stt)
+        void OpenBuild(int stt, int reward)
         {
                 UIManager.instance.UiOpenBuild.OffOpenBuild();
-                GameManager.instance.RequestOpenBuild( listComboItemOpenBuild, stt);
+                GameManager.instance.RequestOpenBuild( listComboItemOpenBuild, stt, reward);
         }
         bool CheckOpenCanBuild()
         {
